@@ -41,7 +41,8 @@ namespace CodeExecutor
         # region 外部状态
         public Coroutine CurrentThread { get; set; }
         public InfoHookMode Mode { get; set; } = InfoHookMode.Normal;
-        public bool MatchBreakpoint { get; private set; }
+        public bool MatchedBreakpoint { get; private set; }
+        public bool StatementChanged { get; private set; }
         # endregion
 
         # region IDebugger接口方法
@@ -63,9 +64,11 @@ namespace CodeExecutor
                 CurrentCharEnd = sourceref.ToChar,
             });
             
-            MatchBreakpoint = sourceref.Breakpoint;
-            if (MatchBreakpoint && Mode == InfoHookMode.LineBreakPoint) CurrentThread.AutoYieldCounter = 0;
-            if (Mode == InfoHookMode.NextLine) CurrentThread.AutoYieldCounter = 0;
+            MatchedBreakpoint |= sourceref.Breakpoint;
+            StatementChanged |= sourceref.IsStepStop;
+            
+            if (MatchedBreakpoint && Mode == InfoHookMode.LineBreakPoint) CurrentThread.AutoYieldCounter = 0;
+            if (StatementChanged && Mode == InfoHookMode.NextLine) CurrentThread.AutoYieldCounter = 0;
             
             return dbgAction;
         }
@@ -94,6 +97,12 @@ namespace CodeExecutor
             srcTuple.Item2.Clear();
             srcTuple.Item2.UnionWith(lines);
             dbgSvc.ResetBreakPoints(srcTuple.Item1, srcTuple.Item2);
+        }
+        public void RefreshState(Coroutine currentThread)
+        {
+            CurrentThread = currentThread;
+            MatchedBreakpoint = false;
+            StatementChanged = false;
         }
         public LuaVMInfoHook(HashSet<LuaVMRuntimeInfo> rtInfos) => runtimeInfos = rtInfos;
         # endregion
