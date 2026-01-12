@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Debugging;
 
-// Warning: for init accessor
-namespace System.Runtime.CompilerServices { internal static class IsExternalInit { } }
-
 namespace CodeExecutor
 {
     public readonly struct LuaVMRuntimeInfo : IEquatable<LuaVMRuntimeInfo>
