@@ -42,7 +42,8 @@ namespace CodeExecutor
         {
             if (!CouldResume())
                 throw new InvalidOperationException($"Invalid state: try to resume with state: {State.ToString()}");
-            
+
+            luaVM.Globals.Set("__ThreadID__", DynValue.NewNumber(userThread.ReferenceID));
             userThread.AutoYieldCounter = maxInstructionCount;
             luaVMInfoHook.RefreshState(userThread);
             try
