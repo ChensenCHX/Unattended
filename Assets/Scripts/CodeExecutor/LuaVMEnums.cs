@@ -1,6 +1,6 @@
 namespace CodeExecutor
 {
-    public enum RunningState
+    internal enum RunningState
     {
         Ready,          // ready to run
         Waiting,        // waiting for resume main thread
@@ -9,7 +9,7 @@ namespace CodeExecutor
         Terminated,     // terminated (probably by user) and should be discarded
     }
 
-    public enum InfoHookMode
+    internal enum InfoHookMode
     {
         Normal,         // normal mode
         NextLine,       // single line step-in
