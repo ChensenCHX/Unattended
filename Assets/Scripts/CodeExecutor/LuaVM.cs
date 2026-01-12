@@ -11,7 +11,7 @@ namespace CodeExecutor
         private readonly Script luaVM;
         private readonly LuaVMInfoHook luaVMInfoHook;
         private readonly LuaVMConfigurer luaVMConfigurer;
-        private readonly HashSet<Coroutine> userThreads = new();
+        private readonly Dictionary<int, Coroutine> userThreads = new();
         private readonly HashSet<LuaVMRuntimeInfo> runtimeInfos = new();
         # endregion
         
@@ -52,8 +52,7 @@ namespace CodeExecutor
                     var result = userThread.Resume();
                     if (result.Type != DataType.YieldRequest)
                     {
-                        userThreads.Remove(userThread);
-                        runtimeInfos.Remove(new LuaVMRuntimeInfo() { ThreadID = userThread.ReferenceID });
+                        TerminateThread(userThread.ReferenceID);
                         if (userThreads.Count == 0) State = RunningState.Finished;
                         return;
                     }
@@ -72,14 +71,14 @@ namespace CodeExecutor
         }
         public void ResumeUntilLimit(int maxInstructionCount)
         {
-            foreach (var userThread in userThreads) ResumeWithStep(userThread, maxInstructionCount);
+            foreach (var (_, userThread)  in userThreads) ResumeWithStep(userThread, maxInstructionCount);
         }
         /// 执行到下一语句 (最多执行maxStep条指令) <returns>是否到达下一语句</returns>
         public bool ResumeUntilNextStmt(int maxInstructionCount)
         {
             var statementChanged = false;
             luaVMInfoHook.Mode = InfoHookMode.NextLine;
-            foreach (var userThread in userThreads)
+            foreach (var (_, userThread) in userThreads)
             {
                 ResumeWithStep(userThread, maxInstructionCount);
                 statementChanged |= luaVMInfoHook.StatementChanged;
@@ -93,7 +92,7 @@ namespace CodeExecutor
         {
             var matchBreakPoint = false;
             luaVMInfoHook.Mode = InfoHookMode.LineBreakPoint;
-            foreach (var userThread in userThreads)
+            foreach (var (_, userThread) in userThreads)
             {
                 ResumeWithStep(userThread, LuaVMConfigurer.MaxInstructionPerResume);
                 matchBreakPoint |= luaVMInfoHook.MatchedBreakpoint;
@@ -113,6 +112,20 @@ namespace CodeExecutor
             => luaVMInfoHook.ResetLineBreakpoints(scriptName, lines);
         # endregion
         
+        # region 线程控制
+        public bool AttachThread(Coroutine userThread) => userThreads.TryAdd(userThread.ReferenceID, userThread);
+        public bool TerminateThread(int threadID)
+        {
+            var success = userThreads.Remove(threadID);
+            runtimeInfos.Remove(new LuaVMRuntimeInfo() { ThreadID = threadID });
+            return success;
+        }
+        public CoroutineState GetThreadState(int threadID)
+        {
+            return !userThreads.TryGetValue(threadID, out var thread) ? CoroutineState.Dead : thread.State;
+        }
+        # endregion
+
         # region 构造与析构
         public LuaVM(LuaVMConfigurer configurer, string scriptName, string scriptCode)
         {
@@ -139,7 +152,7 @@ namespace CodeExecutor
                 return;
             }
             
-            userThreads.Add(coroutine.Coroutine);
+            AttachThread(coroutine.Coroutine);
             luaVMInfoHook = new LuaVMInfoHook(runtimeInfos);
             luaVMConfigurer = configurer;
             
