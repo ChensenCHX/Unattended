@@ -8,7 +8,7 @@ namespace System.Runtime.CompilerServices { internal static class IsExternalInit
 
 namespace CodeExecutor
 {
-    internal readonly struct LuaVMRuntimeInfo : IEquatable<LuaVMRuntimeInfo>
+    public readonly struct LuaVMRuntimeInfo : IEquatable<LuaVMRuntimeInfo>
     {
         # region 属性
         public int ThreadID { get; init; }

@@ -1,6 +1,6 @@
 namespace CodeExecutor
 {
-    internal enum RunningState
+    public enum RunningState
     {
         Ready,          // ready to run
         Waiting,        // waiting for resume main thread
