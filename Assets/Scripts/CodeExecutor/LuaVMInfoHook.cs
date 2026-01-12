@@ -67,8 +67,8 @@ namespace CodeExecutor
             MatchedBreakpoint |= sourceref.Breakpoint;
             StatementChanged |= sourceref.IsStepStop;
             
-            if (MatchedBreakpoint && Mode == InfoHookMode.LineBreakPoint) CurrentThread.AutoYieldCounter = 0;
-            if (StatementChanged && Mode == InfoHookMode.NextLine) CurrentThread.AutoYieldCounter = 0;
+            if (MatchedBreakpoint && Mode == InfoHookMode.LineBreakPoint) CurrentThread.AutoYieldCounter = 1;
+            if (StatementChanged && Mode == InfoHookMode.NextLine) CurrentThread.AutoYieldCounter = 1;
             
             return dbgAction;
         }
