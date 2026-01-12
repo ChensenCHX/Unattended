@@ -43,7 +43,7 @@ namespace CodeExecutor
             if (!CouldResume())
                 throw new InvalidOperationException($"Invalid state: try to resume with state: {State.ToString()}");
 
-            luaVM.Globals.Set("__ThreadID__", DynValue.NewNumber(userThread.ReferenceID));
+            luaVMConfigurer.OnThreadSwitch(luaVM, userThread);
             userThread.AutoYieldCounter = maxInstructionCount;
             luaVMInfoHook.RefreshState(userThread);
             try
@@ -131,7 +131,7 @@ namespace CodeExecutor
         public LuaVM(LuaVMConfigurer configurer, string scriptName, string scriptCode)
         {
             luaVM = new Script(configurer.GetCoreModules());
-            configurer.CustomModify(luaVM);
+            configurer.OnStartVM(luaVM);
             
             DynValue userCode = null;
             try { userCode = luaVM.LoadString(scriptCode, luaVM.Globals, scriptName); }
@@ -161,7 +161,7 @@ namespace CodeExecutor
             luaVM.DebuggerEnabled = true;
             State = RunningState.Ready;
         }
-        public void Dispose() { State = RunningState.Terminated; luaVMConfigurer.CustomDispose(luaVM); }
+        public void Dispose() { State = RunningState.Terminated; luaVMConfigurer.OnDispose(luaVM); }
         ~LuaVM() { if (State != RunningState.Terminated) Dispose(); }
         # endregion
     }

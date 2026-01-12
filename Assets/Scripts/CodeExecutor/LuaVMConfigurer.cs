@@ -21,16 +21,21 @@ namespace CodeExecutor
         public static int MaxInstructionPerResume = 100;
         
         private readonly int coreModulesLevel;
-        public Action<Script> CustomModify { get; private set; }
-        public Action<Script> CustomDispose { get; private set; }
+        public Action<Script> OnStartVM { get; private set; }
+        public Action<Script> OnDispose { get; private set; }
+        public Action<Script, Coroutine> OnThreadSwitch { get; private set; }
+
         public CoreModules GetCoreModules() => STDList
             .Take(Math.Min(8, Math.Max(0, coreModulesLevel)))
             .Aggregate((all, self) => all | self);
-        public LuaVMConfigurer(int coreModulesLevel, Action<Script> modifier, Action<Script> disposer)
+        public LuaVMConfigurer(int coreModulesLevel, 
+            Action<Script> onStartVM, Action<Script> onDispose,
+            Action<Script, Coroutine> onThreadSwitch)
         {
             this.coreModulesLevel = coreModulesLevel;
-            CustomModify = modifier;
-            CustomDispose = disposer;
+            OnStartVM = onStartVM;
+            OnDispose = onDispose;
+            OnThreadSwitch = onThreadSwitch;
         }
     }
 }
