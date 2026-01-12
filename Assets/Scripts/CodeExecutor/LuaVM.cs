@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MoonSharp.Interpreter;
 
 namespace CodeExecutor
@@ -72,18 +73,19 @@ namespace CodeExecutor
         }
         public void ResumeUntilLimit(int maxInstructionCount)
         {
-            foreach (var (_, userThread)  in userThreads) ResumeWithStep(userThread, maxInstructionCount);
+            userThreads.ToList().ForEach(dictPair => ResumeWithStep(dictPair.Value, maxInstructionCount));
         }
-        /// 执行到下一语句 (最多执行maxStep条指令) <returns>是否到达下一语句</returns>
+        /// 执行到下一语句 (最多执行maxInstructionCount条指令) <returns>是否到达下一语句</returns>
         public bool ResumeUntilNextStmt(int maxInstructionCount)
         {
             var statementChanged = false;
             luaVMInfoHook.Mode = InfoHookMode.NextLine;
-            foreach (var (_, userThread) in userThreads)
-            {
-                ResumeWithStep(userThread, maxInstructionCount);
-                statementChanged |= luaVMInfoHook.StatementChanged;
-            }
+            userThreads
+                .ToList()
+                .ForEach(dictPair => {
+                    ResumeWithStep(dictPair.Value, maxInstructionCount);
+                    statementChanged |= luaVMInfoHook.StatementChanged;    
+                });
             luaVMInfoHook.Mode = InfoHookMode.Normal;
             
             return statementChanged;
@@ -93,11 +95,12 @@ namespace CodeExecutor
         {
             var matchBreakPoint = false;
             luaVMInfoHook.Mode = InfoHookMode.LineBreakPoint;
-            foreach (var (_, userThread) in userThreads)
-            {
-                ResumeWithStep(userThread, LuaVMConfigurer.MaxInstructionPerResume);
-                matchBreakPoint |= luaVMInfoHook.MatchedBreakpoint;
-            }
+            userThreads
+                .ToList()
+                .ForEach(dictPair => {
+                    ResumeWithStep(dictPair.Value, LuaVMConfigurer.MaxInstructionPerResume);
+                    matchBreakPoint |= luaVMInfoHook.MatchedBreakpoint; 
+                });
             luaVMInfoHook.Mode = InfoHookMode.Normal;
 
             return matchBreakPoint;

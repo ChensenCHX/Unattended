@@ -53,13 +53,16 @@ namespace CodeExecutor
         {
             if (sourceref is null) return dbgAction;
 
-            runtimeInfos.Add(new LuaVMRuntimeInfo() {
+            var runtimeInfo = new LuaVMRuntimeInfo()
+            {
                 ThreadID = CurrentThread.ReferenceID,
                 CurrentLineStart = sourceref.FromLine,
                 CurrentLineEnd = sourceref.ToLine,
                 CurrentCharStart = sourceref.FromChar,
                 CurrentCharEnd = sourceref.ToChar,
-            });
+            };
+            runtimeInfos.Remove(runtimeInfo);
+            runtimeInfos.Add(runtimeInfo);
             
             MatchedBreakpoint |= sourceref.Breakpoint;
             StatementChanged |= sourceref.IsStepStop;
