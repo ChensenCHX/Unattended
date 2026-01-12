@@ -20,6 +20,7 @@ namespace CodeExecutor
         public RunningState State { get; private set; }
         public InterpreterException ExceptionWhat { get; private set; }
         public IReadOnlyCollection<LuaVMRuntimeInfo> RuntimeInfos => runtimeInfos;
+        public Script GetLuaVM() => luaVM;
         # endregion
         
         # region 执行指令
@@ -44,7 +45,7 @@ namespace CodeExecutor
             if (!CouldResume())
                 throw new InvalidOperationException($"Invalid state: try to resume with state: {State.ToString()}");
 
-            luaVMConfigurer.OnThreadSwitch(luaVM, userThread);
+            luaVMConfigurer.OnThreadSwitch(this, userThread);
             userThread.AutoYieldCounter = maxInstructionCount;
             luaVMInfoHook.RefreshState(userThread);
             try
@@ -117,11 +118,17 @@ namespace CodeExecutor
         # endregion
         
         # region 线程控制
-        public bool AttachThread(Coroutine userThread) => userThreads.TryAdd(userThread.ReferenceID, userThread);
+        public bool AttachThread(Coroutine userThread)
+        {
+            if (LuaVMConfigurer.CurrentThreadCount >= LuaVMConfigurer.MaxThreadCount) return false;
+            LuaVMConfigurer.CurrentThreadCount += 1;
+            return userThreads.TryAdd(userThread.ReferenceID, userThread);
+        }
         public bool TerminateThread(int threadID)
         {
             var success = userThreads.Remove(threadID);
             runtimeInfos.Remove(new LuaVMRuntimeInfo() { ThreadID = threadID });
+            if (success) LuaVMConfigurer.CurrentThreadCount -= 1;
             return success;
         }
         public CoroutineState GetThreadState(int threadID)
@@ -134,7 +141,7 @@ namespace CodeExecutor
         public LuaVM(LuaVMConfigurer configurer, string scriptName, string scriptCode)
         {
             luaVM = new Script(configurer.GetCoreModules());
-            configurer.OnStartVM(luaVM);
+            configurer.OnStartVM(this);
             
             DynValue userCode = null;
             try { userCode = luaVM.LoadString(scriptCode, luaVM.Globals, scriptName); }
@@ -164,7 +171,7 @@ namespace CodeExecutor
             luaVM.DebuggerEnabled = true;
             State = RunningState.Ready;
         }
-        public void Dispose() { State = RunningState.Terminated; luaVMConfigurer.OnDispose(luaVM); }
+        public void Dispose() { State = RunningState.Terminated; luaVMConfigurer.OnDispose(this); }
         ~LuaVM() { if (State != RunningState.Terminated) Dispose(); }
         # endregion
     }
