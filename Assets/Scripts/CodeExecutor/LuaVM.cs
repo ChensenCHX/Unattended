@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MoonSharp.Interpreter;
+using Utils;
 
 namespace CodeExecutor
 {
@@ -74,7 +75,7 @@ namespace CodeExecutor
         }
         public void ResumeUntilLimit(int maxInstructionCount)
         {
-            userThreads.ToList().ForEach(dictPair => ResumeWithStep(dictPair.Value, maxInstructionCount));
+            userThreads.ToList().Shuffle().ForEach(dictPair => ResumeWithStep(dictPair.Value, maxInstructionCount));
         }
         /// 执行到下一语句 (最多执行maxInstructionCount条指令) <returns>是否到达下一语句</returns>
         public bool ResumeUntilNextStmt(int maxInstructionCount)
@@ -83,6 +84,7 @@ namespace CodeExecutor
             luaVMInfoHook.Mode = InfoHookMode.NextLine;
             userThreads
                 .ToList()
+                .Shuffle()
                 .ForEach(dictPair => {
                     ResumeWithStep(dictPair.Value, maxInstructionCount);
                     statementChanged |= luaVMInfoHook.StatementChanged;    
@@ -98,6 +100,7 @@ namespace CodeExecutor
             luaVMInfoHook.Mode = InfoHookMode.LineBreakPoint;
             userThreads
                 .ToList()
+                .Shuffle()
                 .ForEach(dictPair => {
                     ResumeWithStep(dictPair.Value, LuaVMConfigurer.MaxInstructionPerResume);
                     matchBreakPoint |= luaVMInfoHook.MatchedBreakpoint; 
