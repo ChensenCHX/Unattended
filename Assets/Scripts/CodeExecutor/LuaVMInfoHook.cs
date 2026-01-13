@@ -30,6 +30,7 @@ namespace CodeExecutor
         # region 内部量
         private readonly Dictionary<string, Tuple<SourceCode, HashSet<int>>> codes = new();
         private DebugService dbgSvc;
+        private Coroutine lastThread;
         private readonly DebuggerAction dbgAction = new DebuggerAction { Action = DebuggerAction.ActionType.StepIn };
         private readonly List<DynamicExpression> _dummyList = new List<DynamicExpression>();
         private readonly HashSet<LuaVMRuntimeInfo> runtimeInfos;
@@ -67,8 +68,10 @@ namespace CodeExecutor
             MatchedBreakpoint |= sourceref.Breakpoint;
             StatementChanged |= sourceref.IsStepStop;
             
-            if (MatchedBreakpoint && Mode == InfoHookMode.LineBreakPoint) CurrentThread.AutoYieldCounter = 1;
-            if (StatementChanged && Mode == InfoHookMode.NextLine) CurrentThread.AutoYieldCounter = 1;
+            if (lastThread != CurrentThread) { lastThread = CurrentThread; return dbgAction; }
+            
+            if (MatchedBreakpoint && Mode == InfoHookMode.LineBreakPoint) CurrentThread.AutoYieldCounter = 0;
+            if (StatementChanged && Mode == InfoHookMode.NextLine) CurrentThread.AutoYieldCounter = 0;
             
             return dbgAction;
         }
@@ -100,6 +103,7 @@ namespace CodeExecutor
         }
         public void RefreshState(Coroutine currentThread)
         {
+            lastThread = CurrentThread;
             CurrentThread = currentThread;
             MatchedBreakpoint = false;
             StatementChanged = false;
