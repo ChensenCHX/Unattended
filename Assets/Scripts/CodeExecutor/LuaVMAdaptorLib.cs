@@ -2,11 +2,11 @@
 
 namespace CodeExecutor
 {
-    public class LuaVMAdaptorLib
+    public static class LuaVMAdaptorLib
     {
         public static void NewThread(LuaVM luaVM){
             var vm = luaVM.GetLuaVM();
-            vm.Globals.Set("new_thread", DynValue.NewCallback((ctx, args) =>
+            vm.Globals.Set("new_thread", DynValue.NewCallback((_, args) =>
             {
                 var func = args.AsType(0, "new_thread", DataType.Function);
                 var thread = vm.CreateCoroutine(func).Coroutine;
@@ -16,7 +16,7 @@ namespace CodeExecutor
         }
         public static void CheckThread(LuaVM luaVM){
             var vm = luaVM.GetLuaVM();
-            vm.Globals.Set("check_thread", DynValue.NewCallback((ctx, args) =>
+            vm.Globals.Set("check_thread", DynValue.NewCallback((_, args) =>
             {
                 var threadID = args.AsInt(0, "check_thread");
                 var state = luaVM.GetThreadState(threadID);
@@ -25,7 +25,7 @@ namespace CodeExecutor
         }
         public static void HangupCurrentThread(LuaVM luaVM){
             var vm = luaVM.GetLuaVM();
-            vm.Globals.Set("hangup_current_thread", DynValue.NewCallback((ctx, args) =>
+            vm.Globals.Set("hangup_current_thread", DynValue.NewCallback((ctx, _) =>
             {
                 ctx.GetCallingCoroutine().AutoYieldCounter = 0;
                 return DynValue.Void;
@@ -34,7 +34,7 @@ namespace CodeExecutor
         public static void AtomicCAS(LuaVM luaVM)
         {
             var vm = luaVM.GetLuaVM();
-            vm.Globals.Set("atomic_compare_and_swap_at", DynValue.NewCallback((ctx, args) =>
+            vm.Globals.Set("atomic_compare_and_swap_at", DynValue.NewCallback((_, args) =>
             {
                 var table = args.AsType(0, "atomic_compare_and_swap_at", DataType.Table);
                 var key = args[1];
