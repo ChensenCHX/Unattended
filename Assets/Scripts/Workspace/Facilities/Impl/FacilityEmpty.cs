@@ -1,7 +1,7 @@
 ﻿using System;
 using MoonSharp.Interpreter;
 using UnityEngine;
-using Workspace.Items;
+using Items;
 
 namespace Workspace.Facilities.Impl
 {

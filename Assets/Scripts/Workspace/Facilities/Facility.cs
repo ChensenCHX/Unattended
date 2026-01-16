@@ -1,7 +1,5 @@
-﻿using System;
-using MoonSharp.Interpreter;
-using UnityEngine;
-using Workspace.Items;
+﻿using MoonSharp.Interpreter;
+using Items;
 
 namespace Workspace.Facilities
 {
