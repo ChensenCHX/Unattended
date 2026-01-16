@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Bots;
 using MoonSharp.Interpreter;
 using Utils;
 
@@ -124,6 +125,7 @@ namespace CodeExecutor
         public bool AttachThread(Coroutine userThread)
         {
             if (LuaVMConfigurer.CurrentThreadCount >= LuaVMConfigurer.MaxThreadCount) return false;
+            if (!BotManager.Instance.AllocBot(userThread.ReferenceID)) return false;
             LuaVMConfigurer.CurrentThreadCount += 1;
             return userThreads.TryAdd(userThread.ReferenceID, userThread);
         }
@@ -131,6 +133,7 @@ namespace CodeExecutor
         {
             var success = userThreads.Remove(threadID);
             runtimeInfos.Remove(new LuaVMRuntimeInfo() { ThreadID = threadID });
+            BotManager.Instance.ReleaseBot(threadID);
             if (success) LuaVMConfigurer.CurrentThreadCount -= 1;
             return success;
         }
@@ -167,6 +170,13 @@ namespace CodeExecutor
             }
             
             AttachThread(coroutine.Coroutine);
+            if (userThreads.Count == 0)
+            {
+                ExceptionWhat = new LuaVMException("Fatal error: can't attach user thread, vm internal error.");
+                State = RunningState.Faulted;
+                return;
+            }
+            
             luaVMInfoHook = new LuaVMInfoHook(runtimeInfos);
             luaVMConfigurer = configurer;
             
@@ -174,7 +184,13 @@ namespace CodeExecutor
             luaVM.DebuggerEnabled = true;
             State = RunningState.Ready;
         }
-        public void Dispose() { State = RunningState.Terminated; luaVMConfigurer.OnDispose(this); }
+
+        public void Dispose()
+        {
+            State = RunningState.Terminated;
+            BotManager.Instance.ReleaseAllBots();
+            luaVMConfigurer.OnDispose(this);
+        }
         ~LuaVM() { if (State != RunningState.Terminated) Dispose(); }
         # endregion
     }
