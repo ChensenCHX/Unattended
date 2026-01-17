@@ -26,14 +26,14 @@ namespace CodeExecutor
         
         public Action<LuaVM> OnStartVM { get; private set; }
         public Action<LuaVM> OnDispose { get; private set; }
-        public Action<LuaVM, Coroutine> OnThreadSwitch { get; private set; }
+        public Func<LuaVM, Coroutine, bool> OnThreadSwitch { get; private set; }
 
         public CoreModules GetCoreModules() => STDList
             .Take(Math.Min(8, Math.Max(0, coreModulesLevel)))
             .Aggregate((all, self) => all | self);
         public LuaVMConfigurer(int coreModulesLevel, 
             Action<LuaVM> onStartVM, Action<LuaVM> onDispose,
-            Action<LuaVM, Coroutine> onThreadSwitch)
+            Func<LuaVM, Coroutine, bool> onThreadSwitch)
         {
             this.coreModulesLevel = coreModulesLevel;
             OnStartVM = onStartVM;
