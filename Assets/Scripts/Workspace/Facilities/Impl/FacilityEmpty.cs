@@ -21,7 +21,7 @@ namespace Workspace.Facilities.Impl
             // TODO:: maybe some item have effect
             throw new System.NotImplementedException();
         }
-        public override DynValue Harvest() => DynValue.False;
+        public override void Harvest() { }
         public override DynValue CanHarvest() => DynValue.False;
         public void Init(int x, int y) => transform.position = new Vector3(x, 0, y);
     }

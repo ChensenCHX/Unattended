@@ -7,7 +7,6 @@ using Workspace.Facilities;
 
 namespace Workspace
 {
-    [Serializable]
     public class WorkspaceManager : SingletonMono<WorkspaceManager>
     {
         private List<Facility> facilities;

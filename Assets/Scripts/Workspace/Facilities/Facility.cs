@@ -22,7 +22,7 @@ namespace Workspace.Facilities
         public abstract DynValue InteractWith(DynValue argTuple);
         public abstract DynValue TryAddItem(ItemType item, int count);
         public abstract DynValue CanHarvest();
-        public abstract DynValue Harvest();
+        public abstract void Harvest();
         # endregion
     }
 }
