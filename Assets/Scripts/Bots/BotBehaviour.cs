@@ -26,9 +26,8 @@ namespace Bots
             if (finalPosition.z >= GlobalInfos.Instance.WorkspaceEdgeLength) finalPosition.z = 0;
             
             transform
-                .DOMove(direction, GlobalInfos.Instance.MoveTime)
+                .DOMove(finalPosition, GlobalInfos.Instance.MoveTime)
                 .SetEase(Ease.OutBack)
-                .SetRelative()
                 .OnComplete(() => BotIsWorking = false);
         }
         public DynValue CanHarvest()

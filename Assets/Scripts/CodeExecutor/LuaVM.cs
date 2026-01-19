@@ -47,7 +47,7 @@ namespace CodeExecutor
             if (!CouldResume())
                 throw new InvalidOperationException($"Invalid state: try to resume with state: {State.ToString()}");
 
-            if (!luaVMConfigurer.OnThreadSwitch(this, userThread)) { State = RunningState.Waiting; return; }
+            if (luaVMConfigurer.OnThreadSwitch(this, userThread)) { State = RunningState.Waiting; return; }
             userThread.AutoYieldCounter = maxInstructionCount;
             luaVMInfoHook.RefreshState(userThread);
             try
@@ -122,10 +122,10 @@ namespace CodeExecutor
         # endregion
         
         # region 线程控制
-        public bool AttachThread(Coroutine userThread)
+        public bool AttachThread(Coroutine userThread, int x=0, int y=0)
         {
             if (LuaVMConfigurer.CurrentThreadCount >= LuaVMConfigurer.MaxThreadCount) return false;
-            if (!BotManager.Instance.AllocBot(userThread.ReferenceID)) return false;
+            if (!BotManager.Instance.AllocBot(userThread.ReferenceID, x, y)) return false;
             LuaVMConfigurer.CurrentThreadCount += 1;
             return userThreads.TryAdd(userThread.ReferenceID, userThread);
         }

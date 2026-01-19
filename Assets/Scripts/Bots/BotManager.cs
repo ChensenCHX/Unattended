@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using GlobalSettings;
 using UnityEngine;
 using Utils;
 
@@ -11,9 +11,10 @@ namespace Bots
         private readonly Dictionary<int, BotBehaviour> usingBots = new();
         public GameObject BotPrefab;
         
-        public bool AllocBot(int id)
+        public bool AllocBot(int id, int x, int y)
         {
             usingBots[id] = Instantiate(BotPrefab).GetComponent<BotBehaviour>();
+            usingBots[id].transform.position = new Vector3(x, GlobalConsts.BotStanderYAxisValue, y);
             // 这里只需要is not即可 刚创建的瞬间它还不存在
             return usingBots[id] is not null;
         }
