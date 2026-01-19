@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using GlobalSettings;
+using UnityEngine;
 using Utils;
 using Workspace.Facilities;
 
 namespace Workspace
 {
     [Serializable]
-    public class WorkspaceManager : Singleton<WorkspaceManager>
+    public class WorkspaceManager : SingletonMono<WorkspaceManager>
     {
         private List<Facility> facilities;
         private int edgeLength;
@@ -29,14 +29,17 @@ namespace Workspace
         {
             if (newEdgeLength < 1 || newEdgeLength > GlobalConsts.MaxWorkspaceEdgeLength) return false;
             edgeLength = newEdgeLength;
-            facilities = new List<Facility> { Capacity = newEdgeLength * newEdgeLength };
-            for (var i = newEdgeLength * newEdgeLength - 1; i >= 0 ; i--) 
-                facilities[i] = FacilityFactory.CreateEmpty(i % newEdgeLength, i / newEdgeLength);
+            var totalCount = newEdgeLength * newEdgeLength;
+            facilities = new List<Facility>(totalCount);
+            for (var i = 0; i < totalCount ; i++) 
+                facilities.Add(FacilityFactory.CreateEmpty(i % newEdgeLength, i / newEdgeLength));
             return true;
         }
-        
-        public WorkspaceManager()
+
+        private void Start()
         {
+            ResourceManager<GameObject>.AddSearchPath("Facilities/Prefabs");
+            ResourceManager<GameObject>.LoadAll();
             edgeLength = GlobalInfos.Instance.WorkspaceEdgeLength;
             Resize(edgeLength);
         }

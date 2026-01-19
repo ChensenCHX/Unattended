@@ -1,9 +1,10 @@
 ﻿using MoonSharp.Interpreter;
 using Items;
+using UnityEngine;
 
 namespace Workspace.Facilities
 {
-    public abstract class Facility
+    public abstract class Facility : MonoBehaviour
     {
         # region 属性
         public abstract FacilityType Type { get; }

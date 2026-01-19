@@ -7,13 +7,10 @@ namespace Workspace.Facilities.Impl
 {
     public class FacilityEmpty : Facility
     {
-        // TODO:: add prefab here
-        // private GameObject obj = GameObject.Instantiate(??getPrefab, new Vector3Int(X, 0, Y), Quaternion.identity);
-        
         public override FacilityType Type { get; } = FacilityType.Empty;
         public override double Progress { get; } = 1;
-        public override int X { get; }
-        public override int Y { get; }
+        public override int X => Mathf.RoundToInt(transform.position.x);
+        public override int Y => Mathf.RoundToInt(transform.position.z);
 
         public override bool CanBuildOn(FacilityType type) => true;
 
@@ -26,9 +23,6 @@ namespace Workspace.Facilities.Impl
         }
         public override DynValue Harvest() => DynValue.False;
         public override DynValue CanHarvest() => DynValue.False;
-
-        public FacilityEmpty(int x, int y) { X = x; Y = y; }
-        // TODO:: enable after add prefab
-        // ~FacilityEmpty() { GameObject.Destroy(obj); }
+        public void Init(int x, int y) => transform.position = new Vector3(x, 0, y);
     }
 }
