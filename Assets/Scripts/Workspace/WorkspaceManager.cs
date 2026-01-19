@@ -17,11 +17,14 @@ namespace Workspace
             x = x % edgeLength; y = y % edgeLength;
             return facilities[x + y*edgeLength];
         }
-        public bool TrySetFacility(int x, int y, Facility facility)
+        public bool TrySetFacility(int x, int y, FacilityType newFacility)
         {
             var index = x + y * edgeLength;
             var oldFacility = facilities[index];
-            if (facility.CanBuildOn(oldFacility.Type)) facilities[index] = facility; else return false;
+            if (!FacilityFactory.CanBuildOn(newFacility, oldFacility.Type)) return false;
+
+            Destroy(facilities[index].gameObject);
+            facilities[index] = FacilityFactory.GetInstanceByType(newFacility, x, y);
             return true;
         }
         public bool Resize(int newEdgeLength)
@@ -29,7 +32,8 @@ namespace Workspace
             if (newEdgeLength < 1 || newEdgeLength > GlobalConsts.MaxWorkspaceEdgeLength) return false;
             edgeLength = newEdgeLength;
             var totalCount = newEdgeLength * newEdgeLength;
-            facilities = new List<Facility>(totalCount);
+            facilities.ForEach(Destroy); facilities.Clear();
+            if (facilities.Capacity < totalCount) facilities.Capacity = totalCount;
             for (var i = 0; i < totalCount ; i++) 
                 facilities.Add(FacilityFactory.CreateEmpty(i % newEdgeLength, i / newEdgeLength));
             return true;

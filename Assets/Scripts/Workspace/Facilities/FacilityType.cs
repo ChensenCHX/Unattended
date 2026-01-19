@@ -2,6 +2,6 @@
 {
     public enum FacilityType
     {
-        Empty,
+        Empty = 0b00000000,
     }
 }

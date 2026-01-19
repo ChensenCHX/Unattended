@@ -8,8 +8,7 @@ namespace Workspace.Facilities
     {
         public static Facility CreateEmpty(int x, int y)
         {
-            // ReSharper disable once AccessToStaticMemberViaDerivedType
-            var obj = GameObject.Instantiate(
+            var obj = Object.Instantiate(
                 ResourceManager<GameObject>.GetResource("FacilityEmpty"), 
                 WorkspaceManager.Instance.transform);
             var facility = obj.GetComponent<FacilityEmpty>();
@@ -17,5 +16,15 @@ namespace Workspace.Facilities
             return facility;
         }
         
+        public static bool CanBuildOn(FacilityType typeNew, FacilityType typeOld) => typeNew switch
+        {
+            FacilityType.Empty => true,
+            _ => throw new System.NotImplementedException(),
+        };
+        public static Facility GetInstanceByType(FacilityType type, int x, int y) => type switch
+        {
+            FacilityType.Empty => FacilityFactory.CreateEmpty(x, y),
+            _ => throw new System.NotImplementedException(),
+        };
     }
 }

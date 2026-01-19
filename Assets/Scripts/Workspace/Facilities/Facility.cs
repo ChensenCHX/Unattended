@@ -13,10 +13,6 @@ namespace Workspace.Facilities
         public abstract int Y { get; }
         # endregion
         
-        # region 管理器方法
-        public abstract bool CanBuildOn(FacilityType type);
-        # endregion
-
         # region 玩家方法
         public abstract DynValue GetUniqueState();
         public abstract DynValue InteractWith(DynValue argTuple);
