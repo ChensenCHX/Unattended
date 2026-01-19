@@ -27,7 +27,7 @@ namespace Workspace
         }
         public bool Resize(int newEdgeLength)
         {
-            if (newEdgeLength < 1 || newEdgeLength > GlobalInfos.MaxWorkspaceEdgeLength) return false;
+            if (newEdgeLength < 1 || newEdgeLength > GlobalConsts.MaxWorkspaceEdgeLength) return false;
             edgeLength = newEdgeLength;
             facilities = new List<Facility> { Capacity = newEdgeLength * newEdgeLength };
             for (var i = newEdgeLength * newEdgeLength - 1; i >= 0 ; i--) 

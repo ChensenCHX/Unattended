@@ -1,4 +1,5 @@
-﻿using MoonSharp.Interpreter;
+﻿using Bots;
+using MoonSharp.Interpreter;
 
 namespace CodeExecutor
 {
@@ -49,10 +50,20 @@ namespace CodeExecutor
                 return oldValue;
             }));
         }
-        public static void RefreshThreadID(LuaVM luaVM, Coroutine currThread)
+        public static void GetCurrentThreadID(LuaVM luaVM)
         {
             var vm = luaVM.GetLuaVM();
-            vm.Globals.Set("__ThreadID__", DynValue.NewNumber(currThread.ReferenceID));
+            vm.Globals.Set("get_current_thread", DynValue.NewCallback((ctx, _)
+                => DynValue.NewNumber(ctx.GetCallingCoroutine().ReferenceID))
+            );
+        }
+
+        public static bool CheckCurrentBotIsBusy(LuaVM luaVM, Coroutine thread)
+        {
+            if (!BotManager.Instance.GetBotByID(thread.ReferenceID, out var bot)) 
+                throw new LuaVMException($"Fatal error: thread id {thread.ReferenceID} have no bot!");
+
+            return bot.BotIsWorking;
         }
     }
 }
