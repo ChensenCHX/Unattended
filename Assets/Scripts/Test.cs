@@ -14,7 +14,7 @@ public class Test : MonoBehaviour
                 LuaVMAdaptorLib.NewThread(vm); LuaVMAdaptorLib.Move(vm);
                 LuaVMAdaptorLib.CanHarvest(vm); LuaVMAdaptorLib.Harvest(vm);
                 vm.GetLuaVM().Options.DebugPrint = Debug.Log;
-            }, LuaVMAdaptorLib.DestroyAllBots, LuaVMAdaptorLib.CheckCurrentBotIsBusy), 
+            }, vm => { }, LuaVMAdaptorLib.CheckCurrentBotIsBusy), 
             "TestScript", @"
 function f()
     print('Thread id:', get_current_thread())

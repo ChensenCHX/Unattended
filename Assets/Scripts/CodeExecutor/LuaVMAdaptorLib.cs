@@ -123,7 +123,5 @@ namespace CodeExecutor
 
             return bot.BotIsWorking;
         }
-
-        public static void DestroyAllBots(LuaVM luaVM) => BotManager.Instance.ReleaseAllBots();
     }
 }
