@@ -187,11 +187,11 @@ namespace CodeExecutor
 
         public void Dispose()
         {
-            State = RunningState.Terminated;
-            BotManager.Instance.ReleaseAllBots();
+            if (State == RunningState.Terminated) return; State = RunningState.Terminated;
+            if (BotManager.Instance != null) BotManager.Instance.ReleaseAllBots();
             luaVMConfigurer.OnDispose(this);
         }
-        ~LuaVM() { if (State != RunningState.Terminated) Dispose(); }
+        ~LuaVM() { if (State != RunningState.Terminated) throw new LuaVMException("Please call Dispose() Method!"); }
         # endregion
     }
 }

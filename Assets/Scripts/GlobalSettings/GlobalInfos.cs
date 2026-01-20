@@ -13,7 +13,7 @@ namespace GlobalSettings
     }
     public class GlobalInfos : Singleton<GlobalInfos>
     {
-        public int WorkspaceEdgeLength = 16;
+        public int WorkspaceEdgeLength = 32;
         public float MoveTime = GlobalConsts.BasicMoveTime;
         
     }
