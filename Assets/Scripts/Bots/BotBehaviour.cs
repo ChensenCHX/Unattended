@@ -16,6 +16,36 @@ namespace Bots
             x = Mathf.RoundToInt(this.transform.position.x);
             y = Mathf.RoundToInt(this.transform.position.z);
         }
+        public void FadeIn()
+        {
+            if (BotIsWorking) return; BotIsWorking = true;
+            transform.localScale = Vector3.zero;
+            transform
+                .DOScale(Vector3.one, GlobalInfos.Instance.MoveTime)
+                .SetEase(Ease.OutQuint)
+                .OnComplete(() => BotIsWorking = false);
+            transform
+                .DORotate(new Vector3(0, 1080, 0), GlobalInfos.Instance.MoveTime, RotateMode.FastBeyond360)
+                .SetEase(Ease.OutQuint)
+                .OnComplete(
+                    () => transform
+                        .DORotate(new Vector3(0, 360, 0), GlobalInfos.Instance.MoveTime, RotateMode.FastBeyond360)
+                        .SetEase(Ease.Linear)
+                        .SetLoops(-1, LoopType.Incremental) // 无限循环
+                    );
+        }
+        public void FadeOut()
+        {
+            transform.DOKill(true);
+            transform
+                .DOScale(Vector3.zero, GlobalInfos.Instance.MoveTime)
+                .SetEase(Ease.InQuint)
+                .OnComplete(() => Destroy(gameObject));
+            transform
+                .DORotate(new Vector3(0, 1080, 0), GlobalInfos.Instance.MoveTime, RotateMode.FastBeyond360)
+                .SetEase(Ease.InQuint);
+        }
+        
         public void Move(Vector3 direction)
         {
             if (BotIsWorking) return; BotIsWorking = true;
@@ -41,12 +71,13 @@ namespace Bots
             if (BotIsWorking) return; BotIsWorking = true;
             var seq =  DOTween.Sequence();
             
-            seq.Append(transform.DOMove(Vector3.down, GlobalInfos.Instance.MoveTime / 2))
+            seq
+                .Append(transform.DOMove(Vector3.down, GlobalInfos.Instance.MoveTime / 2).SetRelative(true))
                 .AppendCallback(() => {
-                    GetPosition(out var x, out var y);
+                    GetPosition(out var x, out var y); 
                     WorkspaceManager.Instance.GetFacility(x, y).Harvest();
                 })
-                .Append(transform.DOMove(Vector3.up, GlobalInfos.Instance.MoveTime / 2))
+                .Append(transform.DOMove(Vector3.up, GlobalInfos.Instance.MoveTime / 2).SetRelative(true))
                 .OnComplete(() => BotIsWorking = false);
         }
     }

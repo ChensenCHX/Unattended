@@ -9,8 +9,8 @@ namespace Workspace
 {
     public class WorkspaceManager : SingletonMono<WorkspaceManager>
     {
-        private List<Facility> facilities;
-        private int edgeLength;
+        private readonly List<Facility> facilities = new List<Facility>();
+        private int edgeLength = GlobalInfos.Instance.WorkspaceEdgeLength;
         
         public Facility GetFacility(int x, int y)
         {
@@ -43,7 +43,6 @@ namespace Workspace
         {
             ResourceManager<GameObject>.AddSearchPath("Facilities/Prefabs");
             ResourceManager<GameObject>.LoadAll();
-            edgeLength = GlobalInfos.Instance.WorkspaceEdgeLength;
             Resize(edgeLength);
         }
     }

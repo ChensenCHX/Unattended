@@ -15,17 +15,18 @@ namespace Bots
         {
             usingBots[id] = Instantiate(BotPrefab).GetComponent<BotBehaviour>();
             usingBots[id].transform.position = new Vector3(x, GlobalConsts.BotStanderYAxisValue, y);
+            usingBots[id].FadeIn();
             // 这里只需要is not即可 刚创建的瞬间它还不存在
             return usingBots[id] is not null;
         }
         public void ReleaseBot(int id)
         {
-            Destroy(usingBots[id].gameObject);
+            usingBots[id].FadeOut();
             usingBots.Remove(id);
         }
         public void ReleaseAllBots()
         {
-            usingBots.ToList().ForEach(kv => Destroy(kv.Value.gameObject));
+            usingBots.ToList().ForEach(kv => ReleaseBot(kv.Key));
             usingBots.Clear();
         }
         public int GetRemainBots() => usingBots.Count;

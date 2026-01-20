@@ -28,7 +28,6 @@ print('New thread:', new_thread(f))
 print(can_harvest())
 print(harvest())
 harvest() harvest() harvest() harvest() harvest()
-while true do end
             ");
     }
 
@@ -42,5 +41,9 @@ while true do end
             if (luaVM.State == RunningState.Faulted) Debug.Log(luaVM.ExceptionWhat);
             Destroy(gameObject);
         }
+    }
+
+    void OnDestroy()
+    {
     }
 }
