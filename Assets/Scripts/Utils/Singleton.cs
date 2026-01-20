@@ -43,9 +43,9 @@ namespace Utils
 
         protected virtual void Awake()
         {
-            if (!DontDestroy) return;
-            
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+            
+            if (!DontDestroy) return;
             
             DontDestroyOnLoad(gameObject);
         }
