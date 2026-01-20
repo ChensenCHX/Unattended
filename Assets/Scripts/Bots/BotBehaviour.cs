@@ -57,7 +57,7 @@ namespace Bots
             
             transform
                 .DOMove(finalPosition, GlobalInfos.Instance.MoveTime)
-                .SetEase(Ease.OutBack)
+                .SetEase(Ease.Linear)
                 .OnComplete(() => BotIsWorking = false);
         }
         public DynValue CanHarvest()
@@ -80,5 +80,6 @@ namespace Bots
                 .Append(transform.DOMove(Vector3.up, GlobalInfos.Instance.MoveTime / 2).SetRelative(true))
                 .OnComplete(() => BotIsWorking = false);
         }
+        private void OnDestroy() => transform.DOKill();
     }
 }

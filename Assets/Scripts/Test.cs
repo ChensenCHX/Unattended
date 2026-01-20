@@ -20,7 +20,7 @@ function f()
     print('Thread id:', get_current_thread())
     move(2) move(2) move(2) move(2) move(2) move(2) move(2) move(2)
     move(2) move(2) move(2) move(2) move(2) move(2) move(2) move(2)
-    while true do end
+    while true do print(test) end
 end
 
 print('Thread id:', get_current_thread())
@@ -45,5 +45,6 @@ harvest() harvest() harvest() harvest() harvest()
 
     void OnDestroy()
     {
+        luaVM.Dispose();
     }
 }

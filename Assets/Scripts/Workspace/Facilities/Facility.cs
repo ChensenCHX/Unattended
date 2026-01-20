@@ -1,4 +1,5 @@
-﻿using MoonSharp.Interpreter;
+﻿using DG.Tweening;
+using MoonSharp.Interpreter;
 using Items;
 using UnityEngine;
 
@@ -20,5 +21,7 @@ namespace Workspace.Facilities
         public abstract DynValue CanHarvest();
         public abstract void Harvest();
         # endregion
+
+        private void OnDestroy() => transform.DOKill();
     }
 }
