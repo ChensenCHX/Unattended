@@ -79,7 +79,31 @@ B在生成时若随机到A会同时向A的可连接表中添加到B的连接 即
 
 产量公式：基本产量 * 连锁收获棵数^3 / 所有激活边的权重之和  
 设置要求：T where T based on FacilityQuartz  
-设置消耗：Melody  
+设置消耗：Quartz  
 收获后退化：-> FacilityQuartz  
 
-## 待定 至少再出两个 考察算法和多线程同步
+## 占位 留给算法考察
+
+
+## FacilityOpus
+产出**特殊产出, 下述** 有要求设施  
+特性：著作：场上最多存在一个FacilityOpus 在场上已有FacilityOpus时尝试设置会失败  
+身上携带四个InteractWith方法与一个内部状态State  
+start() => bool; eval() => bool; add(int, int) => void; remove(int, int) => void; State初始为Init  
+FacilityOpus会执行标准round border B3/S23生命游戏规则  
+如State == Init调用start的瞬间扫描整个场地作为初始状态(有建筑视为1 无建筑视为0 自身所在位置始终视为0)并设置State为Running 否则返回false并设置State为Halt  
+如State == Running调用eval会模拟执行一步并检查场地上建筑分布是否满足要求 返回bool表示场地状态与执行一步后是否相符 如返回false或State不为Running设置State为Halt  
+调用add方法和remove方法会将给定的坐标设置为1/0 无返回值  
+每次eval后 FacilityOpus会为场上的每个建筑计算Age, 规则如下：  
+如果设施是上一轮已存在的 其Age += 1  
+如果设施是上一轮不存在的 其Age = 周围三个细胞Age取平均向下取整  
+如果设施是通过add添加的 其Age = 0  
+**注意** 调用eval后如果FacilityOpus周围一圈八格有建筑 FacilityOpus会直接进入Halt状态并记录当前周围八格的种类和Age 此次判定返回值为true  
+
+产量公式：  
+如果State != Halt 无产出, 无动作
+如果State == Halt 对周围八格 如果种类与记录相匹配则收获之  
+额外产出其产出物 量为(相应建筑物收获产量 * Age) * 记录下周围八格的建筑个数  
+设置要求：Any  
+设置消耗：All  
+收获后退化：-> FacilityEmpty  
