@@ -19,8 +19,8 @@ Lua中实际调用时为InteractWith(string name, args...), 返回值为rets...
 设置消耗：None  
 收获后退化：None
 
-## FacilityStone
-产出Stone 普通设施 无特殊要求  
+## FacilityMana
+产出Mana 普通设施 无特殊要求  
 特性：无  
   
 产量公式：无  
@@ -28,14 +28,14 @@ Lua中实际调用时为InteractWith(string name, args...), 返回值为rets...
 设置消耗：None  
 收获后退化：-> FacilityEmpty
 
-## FacilityQuartz
-产出Quartz 有要求设施  
+## FacilityEther
+产出Ether 有要求设施  
 特性：共振：生长时长 *= 2^(放置时周围相同设施数)  
   
 产量公式：基本产量  
-设置要求：T where T based on FacilityStone  
-设置消耗：Stone  
-收获后退化：-> FacilityStone  
+设置要求：T where T based on FacilityMana  
+设置消耗：Mana  
+收获后退化：-> FacilityMana  
 
 ## FacilityMelody
 产出Melody 有要求设施  
@@ -45,9 +45,9 @@ Lua中实际调用时为InteractWith(string name, args...), 返回值为rets...
 调用后返回设施上携带的Tone的值  
   
 产量公式：基本产量 * min(16, 连续不同次数)  
-设置要求：T where T based on FacilityStone  
-设置消耗：Quartz  
-收获后退化：-> FacilityStone  
+设置要求：T where T based on FacilityMana  
+设置消耗：Ether  
+收获后退化：-> FacilityMana  
 
 ## FacilityChronos
 产出Chronos 有要求设施  
@@ -59,9 +59,9 @@ Lua中实际调用时为InteractWith(string name, args...), 返回值为rets...
 如成功则设施进入增产状态 增产状态下再调用start方法无意义  
   
 产量公式：check() == true ? round(基本产量 * 16 / min(16, sqrt(abs(Tolerance)))) : 基本产量  
-设置要求：T where T based on FacilityQuartz  
+设置要求：T where T based on FacilityEther  
 设置消耗：Melody  
-收获后退化：-> FacilityQuartz  
+收获后退化：-> FacilityEther  
 
 ## FacilitySignum
 产出Signum 有要求设施  
@@ -72,9 +72,9 @@ get_height() => int; 调用后获得设施的内部量Height的值
 收获时会连锁收获所有接收到的信号的源FacilityIter
 
 产量公式：基本产量 * 连锁收获个数^2 * 接收到信号的Strength之和
-设置要求：T where T based on FacilityQuartz  
-设置消耗：Quartz, Melody  
-收获后退化：-> FacilityQuartz  
+设置要求：T where T based on FacilityEther  
+设置消耗：Ether, Melody  
+收获后退化：-> FacilityEther  
 
 ## FacilityIter
 产出Iter 有要求设施  
@@ -92,8 +92,8 @@ B在生成时若随机到A会同时向A的可连接表中添加到B的连接 即
 
 产量公式：基本产量 * 连锁收获个数^3 / 所有激活边的权重之和  
 设置要求：T where T based on FacilitySignum  
-设置消耗：Quartz, Signum  
-收获后退化：-> FacilityQuartz  
+设置消耗：Ether, Signum  
+收获后退化：-> FacilityEther  
 
 ## FacilityOpus
 产出Opus与**特殊产出, 下述** 有要求设施  
