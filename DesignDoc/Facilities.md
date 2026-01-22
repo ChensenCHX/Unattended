@@ -86,24 +86,25 @@ B在生成时若随机到A会同时向A的可连接表中添加到B的连接 即
 
 
 ## FacilityOpus
-产出**特殊产出, 下述** 有要求设施  
+产出Opus与**特殊产出, 下述** 有要求设施  
 特性：著作：场上最多存在一个FacilityOpus 在场上已有FacilityOpus时尝试设置会失败  
 身上携带四个InteractWith方法与一个内部状态State  
-start() => bool; eval() => bool; add(int, int) => void; remove(int, int) => void; State初始为Init  
+start() => table?; eval() => bool; add(int, int) => bool; State初始为Init  
 FacilityOpus会执行标准round border B3/S23生命游戏规则  
-如State == Init调用start的瞬间扫描整个场地作为初始状态(有建筑视为1 无建筑视为0 自身所在位置始终视为0)并设置State为Running 否则返回false并设置State为Halt  
-如State == Running调用eval会模拟执行一步并检查场地上建筑分布是否满足要求 返回bool表示场地状态与执行一步后是否相符 如返回false或State不为Running设置State为Halt  
-调用add方法和remove方法会将给定的坐标设置为1/0 无返回值  
+如State == Init调用start 设施会生成一个初始状态表返回给玩家(应有建筑为1 应无建筑为0 自身所在位置及周围一圈一定为0)并设置State为Running 否则返回nil并设置State为Halt  
+如State == Running调用eval会模拟执行一步并检查场地上建筑分布是否满足要求(不考虑自身 自身所在位置一定为0) 返回bool表示场地状态与执行一步后是否相符 如返回false或State不为Running设置State为Halt  
+调用add方法会将给定的坐标设置为1 消耗1 Opus 返回是否成功(Opus不足会失败)  
 每次eval后 FacilityOpus会为场上的每个建筑计算Age, 规则如下：  
 如果设施是上一轮已存在的 其Age += 1  
 如果设施是上一轮不存在的 其Age = 周围三个细胞Age取平均向下取整  
 如果设施是通过add添加的 其Age = 0  
 **注意** 调用eval后如果FacilityOpus周围一圈八格有建筑 FacilityOpus会直接进入Halt状态并记录当前周围八格的种类和Age 此次判定返回值为true  
+视觉效果: 设施会标记下轮期望的形状 相应地块上会有黄色的光效 如地块上已有设施则更换为绿色光效 若不应有建筑的地块有建筑则会有红色光效
 
 产量公式：  
-如果State != Halt 无产出, 无动作
-如果State == Halt 对周围八格 如果种类与记录相匹配则收获之  
-额外产出其产出物 量为(相应建筑物收获产量 * Age) * 记录下周围八格的建筑个数  
+如果State != Halt 产出 基础产量的Opus, 无动作  
+如果State == Halt 产出 基础产量 * 周围八格记录下的建筑数量的Opus 对周围八格 如果种类与记录相匹配则收获之  
+额外产出它们的产出物 量为(相应建筑物收获产量 * Age) * 记录下周围八格的建筑个数   
 设置要求：Any  
-设置消耗：All  
+设置消耗：All(Expt Opus)  
 收获后退化：-> FacilityEmpty  
