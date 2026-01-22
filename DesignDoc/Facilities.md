@@ -63,6 +63,19 @@ Lua中实际调用时为InteractWith(string name, args...), 返回值为rets...
 设置消耗：Melody  
 收获后退化：-> FacilityQuartz  
 
+## FacilitySignum
+产出Signum 有要求设施  
+特性：信号：每个FacilitySignum会向四向发出信号 产出量由接收到信号量决定  
+身上携带两个InteractWith方法与两个内部量Height(>0) Strength(>1)  
+get_height() => int; 调用后获得设施的内部量Height的值  
+信号的传输规则：所有非FacilitySignum的设施的Height视为0 信号传输到第一个Height >= 自身Height的FacilitySignum后被接收不再传输  
+收获时会连锁收获所有接收到的信号的源FacilityIter
+
+产量公式：基本产量 * 连锁收获个数^2 * 接收到信号的Strength之和
+设置要求：T where T based on FacilityQuartz  
+设置消耗：Quartz, Melody  
+收获后退化：-> FacilityQuartz  
+
 ## FacilityIter
 产出Iter 有要求设施  
 特性：旅行：每个FacilityIter在建造时会随机挑选场上3~5个非自身的FacilityIter作为连接目标  
@@ -77,18 +90,15 @@ EdgeInfo形为 { target_x = int, target_y = int, edge_weight = int, enable = boo
 B在生成时若随机到A会同时向A的可连接表中添加到B的连接 即连接是无向图  
 收获时会连锁收获所有连接在一起的FacilityIter
 
-产量公式：基本产量 * 连锁收获棵数^3 / 所有激活边的权重之和  
-设置要求：T where T based on FacilityQuartz  
-设置消耗：Quartz  
+产量公式：基本产量 * 连锁收获个数^3 / 所有激活边的权重之和  
+设置要求：T where T based on FacilitySignum  
+设置消耗：Quartz, Signum  
 收获后退化：-> FacilityQuartz  
-
-## 占位 留给算法考察
-
 
 ## FacilityOpus
 产出Opus与**特殊产出, 下述** 有要求设施  
 特性：著作：场上最多存在一个FacilityOpus 在场上已有FacilityOpus时尝试设置会失败  
-身上携带四个InteractWith方法与一个内部状态State  
+身上携带三个InteractWith方法与一个内部状态State  
 start() => table?; eval() => bool; add(int, int) => bool; State初始为Init  
 FacilityOpus会执行标准round border B3/S23生命游戏规则  
 如State == Init调用start 设施会生成一个初始状态表返回给玩家(应有建筑为1 应无建筑为0 自身所在位置及周围一圈一定为0)并设置State为Running 否则返回nil并设置State为Halt  
