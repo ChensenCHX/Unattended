@@ -1,6 +1,8 @@
-﻿using Bots;
+﻿using System;
+using Bots;
 using MoonSharp.Interpreter;
 using UnityEngine;
+using Workspace.Facilities;
 using Coroutine = MoonSharp.Interpreter.Coroutine;
 
 namespace CodeExecutor
@@ -62,38 +64,11 @@ namespace CodeExecutor
                 => DynValue.NewNumber(ctx.GetCallingCoroutine().ReferenceID))
             );
         }
+        
         public static void Move(LuaVM luaVM)
         {
             var vm = luaVM.GetLuaVM();
             vm.Globals.Set("move", DynValue.NewCallback((ctx, args) =>
-                {
-                    var haveBot = BotManager.Instance.GetBotByID(ctx.GetCallingCoroutine().ReferenceID, out var bot);
-                    if (!haveBot) throw new LuaVMException("Fatal error: cannot find this thread's bot.");
-                    
-                    var direction = args.AsInt(0, "move");
-                    ctx.GetCallingCoroutine().AutoYieldCounter = 0;     // 涉及Bot移动的操作都需要立即让出当前执行
-                    switch (direction)
-                    {
-                        case 1:
-                            bot.Move(Vector3.right); break;
-                        case 2:
-                            bot.Move(Vector3.forward); break;
-                        case 3:
-                            bot.Move(Vector3.left); break;
-                        case 4:
-                            bot.Move(Vector3.back); break;
-                        default:
-                            return DynValue.False;
-                    }
-                    return DynValue.True;
-                }
-            ));
-        }
-
-        public static void TrySetFacility(LuaVM luaVM)
-        {
-            var vm = luaVM.GetLuaVM();
-            vm.Globals.Set("build", DynValue.NewCallback((ctx, args) =>
                 {
                     var haveBot = BotManager.Instance.GetBotByID(ctx.GetCallingCoroutine().ReferenceID, out var bot);
                     if (!haveBot) throw new LuaVMException("Fatal error: cannot find this thread's bot.");
@@ -142,7 +117,20 @@ namespace CodeExecutor
                 }
             ));
         }
-
+        public static void TrySetFacility(LuaVM luaVM)
+        {
+            var vm = luaVM.GetLuaVM();
+            vm.Globals.Set("build", DynValue.NewCallback((ctx, args) =>
+                {
+                    var haveBot = BotManager.Instance.GetBotByID(ctx.GetCallingCoroutine().ReferenceID, out var bot);
+                    if (!haveBot) throw new LuaVMException("Fatal error: cannot find this thread's bot.");
+                    
+                    var type = args.AsInt(0, "build");
+                    if (!Enum.IsDefined(typeof(FacilityType), type)) throw new LuaVMException($"Error: type '{type}' is not a valid type.");
+                    return bot.TrySetFacility((FacilityType)type);
+                }
+            ));
+        }
         
         public static bool CheckCurrentBotIsBusy(LuaVM luaVM, Coroutine thread)
         {

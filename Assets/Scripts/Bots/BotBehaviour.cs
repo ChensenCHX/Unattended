@@ -68,6 +68,19 @@ namespace Bots
                 .Append(transform.DOMove(Vector3.up, GlobalInfos.Instance.MoveTime / 2).SetRelative(true))
                 .OnComplete(() => BotIsWorking = false);
         }
+        public DynValue TrySetFacility(FacilityType type)
+        {
+            if (BotIsWorking) return DynValue.False; BotIsWorking = true;
+            var couldTryDo = FacilityFactory.CanBuildOn(type, WorkspaceManager.Instance.GetFacility(X, Y).Type);
+            if (!couldTryDo) return DynValue.False;
+            DOTween.Sequence(transform)
+                .Append(transform.DOMove(Vector3.down, GlobalInfos.Instance.MoveTime / 2).SetRelative(true))
+                .AppendCallback(() => WorkspaceManager.Instance.TrySetFacility(X, Y, type))
+                .Append(transform.DOMove(Vector3.up, GlobalInfos.Instance.MoveTime / 2).SetRelative(true))
+                .OnComplete(() => BotIsWorking = false);
+            
+            return DynValue.True;
+        }
         
         private void OnDestroy() => transform.DOKill();
     }
