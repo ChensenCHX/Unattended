@@ -15,8 +15,8 @@ namespace CodeExecutor
                 var thread = vm.CreateCoroutine(func).Coroutine;
                 var haveBot = BotManager.Instance.GetBotByID(ctx.GetCallingCoroutine().ReferenceID, out var bot);
                 if (!haveBot) throw new LuaVMException("Fatal error: try alloc new bot but have no known father.");
-                bot.GetPosition(out var x, out var y);
-                var success = luaVM.AttachThread(thread, x, y);
+                
+                var success = luaVM.AttachThread(thread, bot.X, bot.Y);
                 return success ? DynValue.NewNumber(thread.ReferenceID) : DynValue.False;
             }));
         }
@@ -66,6 +66,34 @@ namespace CodeExecutor
         {
             var vm = luaVM.GetLuaVM();
             vm.Globals.Set("move", DynValue.NewCallback((ctx, args) =>
+                {
+                    var haveBot = BotManager.Instance.GetBotByID(ctx.GetCallingCoroutine().ReferenceID, out var bot);
+                    if (!haveBot) throw new LuaVMException("Fatal error: cannot find this thread's bot.");
+                    
+                    var direction = args.AsInt(0, "move");
+                    ctx.GetCallingCoroutine().AutoYieldCounter = 0;     // 涉及Bot移动的操作都需要立即让出当前执行
+                    switch (direction)
+                    {
+                        case 1:
+                            bot.Move(Vector3.right); break;
+                        case 2:
+                            bot.Move(Vector3.forward); break;
+                        case 3:
+                            bot.Move(Vector3.left); break;
+                        case 4:
+                            bot.Move(Vector3.back); break;
+                        default:
+                            return DynValue.False;
+                    }
+                    return DynValue.True;
+                }
+            ));
+        }
+
+        public static void TrySetFacility(LuaVM luaVM)
+        {
+            var vm = luaVM.GetLuaVM();
+            vm.Globals.Set("build", DynValue.NewCallback((ctx, args) =>
                 {
                     var haveBot = BotManager.Instance.GetBotByID(ctx.GetCallingCoroutine().ReferenceID, out var bot);
                     if (!haveBot) throw new LuaVMException("Fatal error: cannot find this thread's bot.");

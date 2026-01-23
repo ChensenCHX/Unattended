@@ -4,18 +4,16 @@ using GlobalSettings;
 using MoonSharp.Interpreter;
 using UnityEngine;
 using Workspace;
+using Workspace.Facilities;
 
 namespace Bots
 {
     public class BotBehaviour : MonoBehaviour
     {
         public bool BotIsWorking { get; private set; } = false;
-
-        public void GetPosition(out int x, out int y)
-        {
-            x = Mathf.RoundToInt(this.transform.position.x);
-            y = Mathf.RoundToInt(this.transform.position.z);
-        }
+        public int X => Mathf.RoundToInt(transform.position.x);
+        public int Y => Mathf.RoundToInt(transform.position.z);
+        
         public void FadeIn()
         {
             if (BotIsWorking) return; BotIsWorking = true;
@@ -60,26 +58,17 @@ namespace Bots
                 .SetEase(Ease.Linear)
                 .OnComplete(() => BotIsWorking = false);
         }
-        public DynValue CanHarvest()
-        {
-            if (BotIsWorking) return DynValue.False;
-            GetPosition(out var x, out var y);
-            return WorkspaceManager.Instance.GetFacility(x, y).CanHarvest();
-        }
+        public DynValue CanHarvest() => BotIsWorking ? DynValue.False : WorkspaceManager.Instance.GetFacility(X, Y).CanHarvest();
         public void Harvest()
         {
             if (BotIsWorking) return; BotIsWorking = true;
-            var seq =  DOTween.Sequence();
-            
-            seq
+            DOTween.Sequence(transform)
                 .Append(transform.DOMove(Vector3.down, GlobalInfos.Instance.MoveTime / 2).SetRelative(true))
-                .AppendCallback(() => {
-                    GetPosition(out var x, out var y); 
-                    WorkspaceManager.Instance.GetFacility(x, y).Harvest();
-                })
+                .AppendCallback(() => WorkspaceManager.Instance.GetFacility(X, Y).Harvest())
                 .Append(transform.DOMove(Vector3.up, GlobalInfos.Instance.MoveTime / 2).SetRelative(true))
                 .OnComplete(() => BotIsWorking = false);
         }
+        
         private void OnDestroy() => transform.DOKill();
     }
 }
