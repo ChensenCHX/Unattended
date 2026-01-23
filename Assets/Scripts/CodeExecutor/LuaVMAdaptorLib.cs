@@ -126,6 +126,7 @@ namespace CodeExecutor
                     if (!haveBot) throw new LuaVMException("Fatal error: cannot find this thread's bot.");
                     
                     var type = args.AsInt(0, "build");
+                    ctx.GetCallingCoroutine().AutoYieldCounter = 0;     // 涉及Bot移动的操作都需要立即让出当前执行
                     if (!Enum.IsDefined(typeof(FacilityType), type)) throw new LuaVMException($"Error: type '{type}' is not a valid type.");
                     return bot.TrySetFacility((FacilityType)type);
                 }
