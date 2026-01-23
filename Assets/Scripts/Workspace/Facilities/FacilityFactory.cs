@@ -15,6 +15,15 @@ namespace Workspace.Facilities
             facility.Init(x, y);
             return facility;
         }
+        public static Facility CreateMana(int x, int y)
+        {
+            var obj = Object.Instantiate(
+                ResourceManager<GameObject>.GetResource("FacilityMana"), 
+                WorkspaceManager.Instance.transform);
+            var facility = obj.GetComponent<FacilityMana>();
+            facility.Init(x, y);
+            return facility;
+        }
         
         public static bool CanBuildOn(FacilityType typeNew, FacilityType typeOld) => typeNew switch
         {
@@ -24,6 +33,7 @@ namespace Workspace.Facilities
         public static Facility GetInstanceByType(FacilityType type, int x, int y) => type switch
         {
             FacilityType.Empty => FacilityFactory.CreateEmpty(x, y),
+            FacilityType.Mana  => FacilityFactory.CreateMana(x, y),
             _ => throw new System.NotImplementedException(),
         };
     }
