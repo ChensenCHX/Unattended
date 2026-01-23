@@ -28,6 +28,7 @@ namespace Workspace.Facilities
         public static bool CanBuildOn(FacilityType typeNew, FacilityType typeOld) => typeNew switch
         {
             FacilityType.Empty => true,
+            FacilityType.Mana => true,
             _ => throw new System.NotImplementedException(),
         };
         public static Facility GetInstanceByType(FacilityType type, int x, int y) => type switch

@@ -20,7 +20,7 @@ namespace Workspace.Facilities.Impl
             throw new System.NotImplementedException();
         }
         public override void Harvest() { }
-        public override DynValue CanHarvest() => DynValue.False;
+        public override DynValue CanHarvest() => DynValue.True;
         public void Init(int x, int y) => transform.position = new Vector3(x, 0, y);
     }
 }

@@ -13,21 +13,22 @@ public class Test : MonoBehaviour
                 LuaVMAdaptorLib.GetCurrentThreadID(vm); LuaVMAdaptorLib.HangupCurrentThread(vm);
                 LuaVMAdaptorLib.NewThread(vm); LuaVMAdaptorLib.Move(vm);
                 LuaVMAdaptorLib.CanHarvest(vm); LuaVMAdaptorLib.Harvest(vm);
+                LuaVMAdaptorLib.TrySetFacility(vm);
                 vm.GetLuaVM().Options.DebugPrint = Debug.Log;
             }, vm => { }, LuaVMAdaptorLib.CheckCurrentBotIsBusy), 
             "TestScript", @"
-function f()
-    print('Thread id:', get_current_thread())
-    move(2) move(2) move(2) move(2) move(2) move(2) move(2) move(2)
-    move(2) move(2) move(2) move(2) move(2) move(2) move(2) move(2)
-    while true do print(test) end
-end
-
 print('Thread id:', get_current_thread())
-print('New thread:', new_thread(f))
-print(can_harvest())
-print(harvest())
-harvest() harvest() harvest() harvest() harvest()
+
+while true do
+    move(1)
+    if can_harvest() then 
+        harvest()
+        build(1)
+    else
+        hangup_current_thread()
+    end
+end
+build(1)
             ");
     }
 
