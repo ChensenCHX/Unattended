@@ -12,7 +12,7 @@ namespace Workspace.Facilities.Impl
         public override int X => Mathf.RoundToInt(transform.position.x);
         public override int Y => Mathf.RoundToInt(transform.position.z);
 
-        public override DynValue InteractWith(DynValue argTuple) => DynValue.Nil;
+        public override DynValue InteractWith(CallbackArguments args) => DynValue.Nil;
         public override DynValue TryAddItem(ItemType item, int count)
         {
             // TODO:: maybe some item have effect

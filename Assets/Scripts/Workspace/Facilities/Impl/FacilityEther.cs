@@ -15,7 +15,7 @@ namespace Workspace.Facilities.Impl
         
         private double progress = 0.0f;
 
-        public override DynValue InteractWith(DynValue argTuple) => DynValue.Nil;
+        public override DynValue InteractWith(CallbackArguments args) => DynValue.Nil;
         public override DynValue TryAddItem(ItemType item, int count)
         {
             // TODO:: maybe some item have effect
