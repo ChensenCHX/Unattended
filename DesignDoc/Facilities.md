@@ -42,7 +42,7 @@ Lua中实际调用时为InteractWith(string name, args...), 返回值为rets...
 特性：旋律：每个FacilityMelodia身上会携带一个Tone  
 在收获Melodia时如果与上次的Tone不同，会获得额外产出量  
 身上携带一个InteractWith方法 签名为 get_tone() => int
-调用后返回设施上携带的Tone的值  
+调用后返回设施上携带的Tone的值 Tone取值范围为[0, 31]  
   
 产量公式：基本产量 * min(16, 连续不同次数)  
 设置要求：T where T based on FacilityMana  
