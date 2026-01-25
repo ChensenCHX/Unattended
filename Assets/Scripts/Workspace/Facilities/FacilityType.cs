@@ -9,8 +9,13 @@ namespace Workspace.Facilities
         Mana                = 0b00000010,
         Ether               = 0b00000100,
         Melodia             = 0b00001000,
+        Chronos             = 0b00010000,
+        Signum              = 0b00100000,
+        Iter                = 0b01000000,
+        Opus                = 0b10000000,
         
-        EtherCanBuild       = 0b00001110,
-        MelodiaCanBuild     = 0b00001110,
+        EtherCanBuild       = 0b11111110,
+        MelodiaCanBuild     = 0b11111110,
+        ChronosCanBuild     = 0b11111100,
     }
 }

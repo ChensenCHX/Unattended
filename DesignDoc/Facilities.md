@@ -52,8 +52,8 @@ Lua中实际调用时为InteractWith(string name, args...), 返回值为rets...
 ## FacilityChronos
 产出Chronos 有要求设施  
 特性：时间：每个FacilityChronos身上会携带一个随机的Delay(int), 表示帧数区间  
-身上携带两个InteractWith方法 签名为 start(int) => Item.Type, int 与 check() => bool  
-调用check后返回的信息为是否处于增产状态  
+身上携带两个InteractWith方法 签名为 start(int) => Item.Type, int 与 check() => string  
+调用check后返回的信息为是否处于增产状态(init, waiting, success, fail)  
 调用start时传入一个整型值Tolerance, 返回的结果是一个物品类型Require与一个整数值Framecount  
 玩家需要在 [Framecount-Time, Framecount+Time] 的帧数区间内对设施UseItem(Require) 且有足够的物品供消耗  
 如成功则设施进入增产状态 增产状态下再调用start方法无意义  
