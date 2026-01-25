@@ -132,6 +132,18 @@ namespace CodeExecutor
                 }
             ));
         }
+        public static void InteractWith(LuaVM luaVM)
+        {
+            var vm = luaVM.GetLuaVM();
+            vm.Globals.Set("build", DynValue.NewCallback((ctx, args) => 
+                {
+                    var haveBot = BotManager.Instance.GetBotByID(ctx.GetCallingCoroutine().ReferenceID, out var bot);
+                    if (!haveBot) throw new LuaVMException("Fatal error: cannot find this thread's bot.");
+                    
+                    return bot.InteractWith(args);
+                }
+            ));
+        }
         
         public static bool CheckCurrentBotIsBusy(LuaVM luaVM, Coroutine thread)
         {

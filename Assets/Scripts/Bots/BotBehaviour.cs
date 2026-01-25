@@ -81,6 +81,9 @@ namespace Bots
             
             return DynValue.True;
         }
+        public DynValue InteractWith(CallbackArguments ctx) 
+            => WorkspaceManager.Instance.GetFacility(X, Y).InteractWith(ctx);
+        
         
         private void OnDestroy() => transform.DOKill();
     }
