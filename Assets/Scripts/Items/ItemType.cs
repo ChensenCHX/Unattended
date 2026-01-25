@@ -2,34 +2,16 @@
 {
     public enum ItemType
     {
-        // 实际上是现在有的所有模型
-        # region from Miner
-        OreGold,
-        OreSilver,
-        OreCopper,
-        OreZinc,
-        OreIron,
-        OreNickel,
-        OreCoal,
-        # endregion
+        None,                   // 特殊用途 标识非正常状态
         
-        # region from Refiner
-        RefinedGold,
-        RefinedSilver,
-        RefinedCopper,
-        RefinedZinc,
-        RefinedIron,
-        RefinedNickel,
-        RefinedCoal,
-        # endregion
+        Mana,
+        Ether,
+        Melodia,
+        Chronos,
+        Signum,
+        Iter,
+        Opus,
         
-        # region from Smelter
-        IngotGold,
-        IngotSilver,
-        IngotCopper,
-        IngotZinc,
-        IngotIron,
-        IngotNickel, 
-        # endregion
+        ItemTypeCount           // 特殊用途 标识个数
     }
 }
