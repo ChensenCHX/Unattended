@@ -14,8 +14,7 @@ namespace Workspace.Facilities.Impl
         public override int Y => Mathf.RoundToInt(transform.position.z);
         
         private double progress = 0.0f;
-        
-        public override DynValue GetUniqueState() => DynValue.Nil;
+
         public override DynValue InteractWith(DynValue argTuple) => DynValue.Nil;
         public override DynValue TryAddItem(ItemType item, int count)
         {

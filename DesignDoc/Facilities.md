@@ -37,10 +37,10 @@ Lua中实际调用时为InteractWith(string name, args...), 返回值为rets...
 设置消耗：Mana  
 收获后退化：-> FacilityMana  
 
-## FacilityMelody
-产出Melody 有要求设施  
-特性：旋律：每个FacilityMelody身上会携带一个Tone  
-在收获Melody时如果与上次的Tone不同，会获得额外产出量  
+## FacilityMelodia
+产出Melodia 有要求设施  
+特性：旋律：每个FacilityMelodia身上会携带一个Tone  
+在收获Melodia时如果与上次的Tone不同，会获得额外产出量  
 身上携带一个InteractWith方法 签名为 get_tone() => int
 调用后返回设施上携带的Tone的值  
   
@@ -60,7 +60,7 @@ Lua中实际调用时为InteractWith(string name, args...), 返回值为rets...
   
 产量公式：check() == true ? round(基本产量 * 16 / min(16, sqrt(abs(Tolerance)))) : 基本产量  
 设置要求：T where T based on FacilityEther  
-设置消耗：Melody  
+设置消耗：Melodia  
 收获后退化：-> FacilityEther  
 
 ## FacilitySignum
@@ -73,7 +73,7 @@ get_height() => int; 调用后获得设施的内部量Height的值
 
 产量公式：基本产量 * 连锁收获个数^2 * 接收到信号的Strength之和
 设置要求：T where T based on FacilityEther  
-设置消耗：Ether, Melody  
+设置消耗：Ether, Melodia  
 收获后退化：-> FacilityEther  
 
 ## FacilityIter

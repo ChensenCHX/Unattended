@@ -15,7 +15,6 @@ namespace Workspace.Facilities
         # endregion
         
         # region 玩家方法
-        public abstract DynValue GetUniqueState();
         public abstract DynValue InteractWith(DynValue argTuple);
         public abstract DynValue TryAddItem(ItemType item, int count);
         public abstract DynValue CanHarvest();
