@@ -72,7 +72,7 @@ namespace Bots
         {
             if (BotIsWorking) return DynValue.False; BotIsWorking = true;
             var couldTryDo = FacilityFactory.CanBuildOn(type, WorkspaceManager.Instance.GetFacility(X, Y).Type);
-            if (!couldTryDo) return DynValue.False;
+            if (!couldTryDo) { BotIsWorking = false; return DynValue.False; }
             DOTween.Sequence(transform)
                 .Append(transform.DOMove(Vector3.down, GlobalInfos.Instance.MoveTime / 2).SetRelative(true))
                 .AppendCallback(() => WorkspaceManager.Instance.TrySetFacility(X, Y, type))
