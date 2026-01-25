@@ -38,6 +38,7 @@ namespace Workspace.Facilities
         {
             FacilityType.Empty => true,
             FacilityType.Mana => true,
+            FacilityType.Ether => (typeOld & FacilityType.EtherCanBuild) != 0,
             _ => throw new System.NotImplementedException(),
         };
         public static Facility GetInstanceByType(FacilityType type, int x, int y) => type switch
