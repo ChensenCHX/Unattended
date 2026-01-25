@@ -16,7 +16,7 @@ namespace Workspace.Facilities
         
         # region 玩家方法
         public abstract DynValue InteractWith(CallbackArguments args);
-        public abstract DynValue TryAddItem(ItemType item, int count);
+        public abstract DynValue TryAddItem(ItemType item);
         public abstract DynValue CanHarvest();
         public abstract void Harvest();
         # endregion

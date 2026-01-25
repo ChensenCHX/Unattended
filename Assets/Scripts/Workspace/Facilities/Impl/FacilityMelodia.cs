@@ -18,14 +18,14 @@ namespace Workspace.Facilities.Impl
         private double progress = 0.0f;
         private static int lastTone = -1;
         private static int notSameTime = 0;
-        private int tone = 0;
+        private int tone = Random.Range(0, 32);
 
         public override DynValue InteractWith(CallbackArguments args)
         {
             var funcName = args.AsType(0, "InteractWith", DataType.String);
             return funcName.String != "get_tone" ? DynValue.Nil : DynValue.NewNumber(tone);
         }
-        public override DynValue TryAddItem(ItemType item, int count)
+        public override DynValue TryAddItem(ItemType item)
         {
             throw new System.NotImplementedException();
         }
@@ -39,12 +39,11 @@ namespace Workspace.Facilities.Impl
                 lastTone = tone;
                 GlobalInfos.Instance.MelodiaCount += GlobalInfos.Instance.MelodiaBaseYield * Math.Min(16, notSameTime);
             }
-            WorkspaceManager.Instance.TrySetFacility(X, Y, FacilityType.Empty);
+            WorkspaceManager.Instance.TrySetFacility(X, Y, FacilityType.Mana);
         }
         public void Init(int x, int y)
         {
             transform.position = new Vector3(x, 0, y);
-            tone = Random.Range(0, 32);
             var time = Random.Range(GlobalConsts.MelodiaGrowTimeLowerBound, GlobalConsts.MelodiaGrowTimeUpperBound);
             var objTransform = transform.Find("Main").transform;
             objTransform.DOScale(Vector3.one, time)
