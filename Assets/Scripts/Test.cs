@@ -13,39 +13,14 @@ public class Test : MonoBehaviour
                 LuaVMAdaptorLib.GetCurrentThreadID(vm); LuaVMAdaptorLib.HangupCurrentThread(vm);
                 LuaVMAdaptorLib.NewThread(vm); LuaVMAdaptorLib.Move(vm);
                 LuaVMAdaptorLib.CanHarvest(vm); LuaVMAdaptorLib.Harvest(vm);
-                LuaVMAdaptorLib.TrySetFacility(vm);
+                LuaVMAdaptorLib.TrySetFacility(vm); LuaVMAdaptorLib.InteractWith(vm);
                 vm.GetLuaVM().Options.DebugPrint = Debug.Log;
             }, vm => { }, LuaVMAdaptorLib.CheckCurrentBotIsBusy), 
             "TestScript", @"
 print('Thread id:', get_current_thread())
-
-build(4)
 build(2)
-build(4)
-move(1)
-build(2)
-build(4)
-move(1)
-build(2)
-build(4)
-move(2)
-build(2)
-build(4)
-move(3)
-build(2)
-build(4)
-move(3)
-build(2)
-build(4)
-move(2)
-build(2)
-build(4)
-move(1)
-build(2)
-build(4)
-move(1)
-build(2)
-build(4)
+build(8)
+print(interact_with('get_tone'))
 while true do
     move(1)
     if can_harvest() then 
