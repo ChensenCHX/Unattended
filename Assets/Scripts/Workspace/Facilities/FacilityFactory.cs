@@ -24,6 +24,15 @@ namespace Workspace.Facilities
             facility.Init(x, y);
             return facility;
         }
+        public static Facility CreateEther(int x, int y)
+        {
+            var obj = Object.Instantiate(
+                ResourceManager<GameObject>.GetResource("FacilityEther"), 
+                WorkspaceManager.Instance.transform);
+            var facility = obj.GetComponent<FacilityEther>();
+            facility.Init(x, y);
+            return facility;
+        }
         
         public static bool CanBuildOn(FacilityType typeNew, FacilityType typeOld) => typeNew switch
         {
@@ -35,6 +44,7 @@ namespace Workspace.Facilities
         {
             FacilityType.Empty => FacilityFactory.CreateEmpty(x, y),
             FacilityType.Mana  => FacilityFactory.CreateMana(x, y),
+            FacilityType.Ether => FacilityFactory.CreateEther(x, y),
             _ => throw new System.NotImplementedException(),
         };
     }

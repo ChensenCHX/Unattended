@@ -30,9 +30,9 @@ Lua中实际调用时为InteractWith(string name, args...), 返回值为rets...
 
 ## FacilityEther
 产出Ether 有要求设施  
-特性：共振：生长时长 *= 2^(放置时周围相同设施数)  
+特性：共振：生长时长 *= 2^(周围相同设施数)  
   
-产量公式：基本产量  
+产量公式：基本产量 * 2^(4-周围相同设施数)  
 设置要求：T where T based on FacilityMana  
 设置消耗：Mana  
 收获后退化：-> FacilityMana  
