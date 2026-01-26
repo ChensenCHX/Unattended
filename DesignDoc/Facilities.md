@@ -40,10 +40,14 @@ Lua中实际调用时为InteractWith(string name, args...), 返回值为rets...
 ## FacilityMelodia
 产出Melodia 有要求设施  
 特性：旋律：每个FacilityMelodia身上会携带一个Tone  
-在收获Melodia时如果与上次的Tone不同，会获得额外产出量  
-身上携带一个InteractWith方法 签名为 get_tone() => int
-调用后返回设施上携带的Tone的值 Tone取值范围为[0, 31]  
-  
+在收获Melodia时如果与之前的Tone不同，会获得额外产出量  
+FacilityMelodia会持有一个全局队列来保存之前收获的音符种类  
+如果队列Count < 32则检查是否有重复 无重复则insert 有重复则清空再insert  
+如果队列Count >= 32则先Dequeue直到回到< 32的情况  
+身上携带两个InteractWith方法 签名为 get_tone() => int; reset() => void;  
+get_tone调用后返回设施上携带的Tone的值 Tone取值范围为[0, 31]  
+
+
 产量公式：基本产量 * min(16, 连续不同次数)  
 设置要求：T where T based on FacilityMana  
 设置消耗：Ether  

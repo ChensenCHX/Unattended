@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using GlobalSettings;
 using Items;
@@ -16,8 +18,7 @@ namespace Workspace.Facilities.Impl
         public override int Y => Mathf.RoundToInt(transform.position.z);
         
         private double progress = 0.0f;
-        private static int lastTone = -1;
-        private static int notSameTime = 0;
+        private static Queue<int> toneQueue = new();
         private Transform objTransform;
         private int tone;
 
@@ -36,9 +37,11 @@ namespace Workspace.Facilities.Impl
         {
             if (_CanHarvest())
             {
-                if (tone != lastTone) notSameTime++; else notSameTime = 1;
-                lastTone = tone;
-                GlobalInfos.Instance.MelodiaCount += GlobalInfos.Instance.MelodiaBaseYield * Math.Min(16, notSameTime);
+                while (toneQueue.Count >= 32) toneQueue.Dequeue();
+                
+                if (toneQueue.Any(toneBefore => tone == toneBefore)) toneQueue.Clear();
+                toneQueue.Enqueue(tone);
+                GlobalInfos.Instance.MelodiaCount += GlobalInfos.Instance.MelodiaBaseYield * Math.Min(16, toneQueue.Count);
             }
             WorkspaceManager.Instance.TrySetFacility(X, Y, FacilityType.Mana);
         }
