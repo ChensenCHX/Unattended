@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using DG.Tweening;
 using GlobalSettings;
 using Items;
 using MoonSharp.Interpreter;
@@ -14,6 +15,7 @@ namespace Workspace.Facilities.Impl
         public override int Y => Mathf.RoundToInt(transform.position.z);
         
         private double progress = 0.0f;
+        private Transform objTransform;
 
         public override DynValue InteractWith(CallbackArguments args) => DynValue.Nil;
         public override DynValue TryAddItem(ItemType item)
@@ -48,7 +50,7 @@ namespace Workspace.Facilities.Impl
         }
         private IEnumerator InitCoroutine(float basicGrowthTime)
         {
-            var objTransform = transform.Find("Main").transform;
+            objTransform = transform.Find("Main").transform;
 
             while (progress < 1.0f)
             {
@@ -61,5 +63,7 @@ namespace Workspace.Facilities.Impl
             progress = 1.0f;
             objTransform.localScale = Vector3.one;
         }
+        
+        private void OnDestroy() => objTransform.DOKill();
     }
 }

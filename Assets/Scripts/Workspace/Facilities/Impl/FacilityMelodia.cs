@@ -18,7 +18,8 @@ namespace Workspace.Facilities.Impl
         private double progress = 0.0f;
         private static int lastTone = -1;
         private static int notSameTime = 0;
-        private int tone = Random.Range(0, 32);
+        private Transform objTransform;
+        private int tone;
 
         public override DynValue InteractWith(CallbackArguments args)
         {
@@ -44,12 +45,15 @@ namespace Workspace.Facilities.Impl
         public void Init(int x, int y)
         {
             transform.position = new Vector3(x, 0, y);
+            tone = Random.Range(0, 32);
             var time = Random.Range(GlobalConsts.MelodiaGrowTimeLowerBound, GlobalConsts.MelodiaGrowTimeUpperBound);
-            var objTransform = transform.Find("Main").transform;
+            objTransform = transform.Find("Main").transform;
             objTransform.DOScale(Vector3.one, time)
                 .SetEase(Ease.Linear)
                 .OnUpdate(() => progress = objTransform.localScale.x)
                 .OnComplete(() => progress = 1.0f);
         }
+
+        private void OnDestroy() => objTransform.DOKill();
     }
 }

@@ -16,6 +16,7 @@ namespace Workspace.Facilities.Impl
         public override int Y => Mathf.RoundToInt(transform.position.z);
         
         private double progress = 0.0f;
+        private Transform objTransform;
         private readonly ItemType requestItemType = (ItemType)Random.Range((int)ItemType.Mana, (int)ItemType.Signum);
         private bool startedBefore = false;
         private bool finished = false;
@@ -74,11 +75,13 @@ namespace Workspace.Facilities.Impl
         {
             transform.position = new Vector3(x, 0, y);
             var time = Random.Range(GlobalConsts.ChronosGrowTimeLowerBound, GlobalConsts.ChronosGrowTimeUpperBound);
-            var objTransform = transform.Find("Main").transform;
+            objTransform = transform.Find("Main").transform;
             objTransform.DOScale(Vector3.one, time)
                 .SetEase(Ease.Linear)
                 .OnUpdate(() => progress = objTransform.localScale.x)
                 .OnComplete(() => progress = 1.0f);
         }
+        
+        private void OnDestroy() => objTransform.DOKill();
     }
 }

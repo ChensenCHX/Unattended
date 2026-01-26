@@ -1,10 +1,12 @@
-﻿using CodeExecutor;
+﻿using System;
+using CodeExecutor;
 using GlobalSettings;
 using UnityEngine;
 
 public class Test : MonoBehaviour
 {
     private LuaVM luaVM;
+    private double lastFrameCount = GlobalInfos.Instance.MelodiaCount;
     void Start()
     {
         luaVM = new LuaVM(new LuaVMConfigurer(8,
@@ -18,14 +20,13 @@ public class Test : MonoBehaviour
             }, vm => { }, LuaVMAdaptorLib.CheckCurrentBotIsBusy), 
             "TestScript", @"
 print('Thread id:', get_current_thread())
-build(2)
-build(8)
-print(interact_with('get_tone'))
 while true do
     move(1)
     if can_harvest() then 
+        print(interact_with('get_tone'))
         harvest()
         build(2)
+        build(8)
     else
         hangup_current_thread()
     end
@@ -44,6 +45,10 @@ build(1)
             if (luaVM.State == RunningState.Faulted) Debug.Log(luaVM.ExceptionWhat);
             Destroy(gameObject);
         }
+
+        if (Math.Abs(GlobalInfos.Instance.MelodiaCount - lastFrameCount) < 1e-6) return;
+        lastFrameCount = GlobalInfos.Instance.MelodiaCount;
+        Debug.Log($"Now count: {lastFrameCount}");
     }
 
     void OnDestroy()

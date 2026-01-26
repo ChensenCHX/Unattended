@@ -14,6 +14,7 @@ namespace Workspace.Facilities.Impl
         public override int Y => Mathf.RoundToInt(transform.position.z);
         
         private double progress = 0.0f;
+        private Transform objTransform;
 
         public override DynValue InteractWith(CallbackArguments args) => DynValue.Nil;
         public override DynValue TryAddItem(ItemType item)
@@ -33,11 +34,13 @@ namespace Workspace.Facilities.Impl
         {
             transform.position = new Vector3(x, 0, y);
             var time = Random.Range(GlobalConsts.ManaGrowTimeLowerBound, GlobalConsts.ManaGrowTimeUpperBound);
-            var objTransform = transform.Find("Main").transform;
+            objTransform = transform.Find("Main").transform;
             objTransform.DOScale(Vector3.one, time)
                 .SetEase(Ease.Linear)
                 .OnUpdate(() => progress = objTransform.localScale.x)
                 .OnComplete(() => progress = 1.0f);
         }
+        
+        private void OnDestroy() => objTransform.DOKill();
     }
 }
