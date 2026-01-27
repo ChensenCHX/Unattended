@@ -42,6 +42,15 @@ namespace Workspace.Facilities
             facility.Init(x, y);
             return facility;
         }
+        public static Facility CreateChronos(int x, int y)
+        {
+            var obj = Object.Instantiate(
+                ResourceManager<GameObject>.GetResource("FacilityChronos"), 
+                WorkspaceManager.Instance.transform);
+            var facility = obj.GetComponent<FacilityChronos>();
+            facility.Init(x, y);
+            return facility;
+        }
         
         public static bool CanBuildOn(FacilityType typeNew, FacilityType typeOld) => typeNew switch
         {
@@ -49,6 +58,7 @@ namespace Workspace.Facilities
             FacilityType.Mana => true,
             FacilityType.Ether => (typeOld & FacilityType.EtherCanBuild) != 0,
             FacilityType.Melodia => (typeOld & FacilityType.MelodiaCanBuild) != 0,
+            FacilityType.Chronos => (typeOld & FacilityType.ChronosCanBuild) != 0,
             _ => throw new System.NotImplementedException(),
         };
         public static Facility GetInstanceByType(FacilityType type, int x, int y) => type switch
@@ -57,6 +67,7 @@ namespace Workspace.Facilities
             FacilityType.Mana       => FacilityFactory.CreateMana(x, y),
             FacilityType.Ether      => FacilityFactory.CreateEther(x, y),
             FacilityType.Melodia    => FacilityFactory.CreateMelodia(x, y),
+            FacilityType.Chronos    => FacilityFactory.CreateChronos(x, y),
             _ => throw new System.NotImplementedException(),
         };
     }

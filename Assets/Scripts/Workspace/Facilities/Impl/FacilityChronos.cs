@@ -17,7 +17,7 @@ namespace Workspace.Facilities.Impl
         
         private double progress = 0.0f;
         private Transform objTransform;
-        private readonly ItemType requestItemType = (ItemType)Random.Range((int)ItemType.Mana, (int)ItemType.Signum);
+        private ItemType requestItemType;
         private bool startedBefore = false;
         private bool finished = false;
         private bool success = false;
@@ -74,6 +74,7 @@ namespace Workspace.Facilities.Impl
         public void Init(int x, int y)
         {
             transform.position = new Vector3(x, 0, y);
+            requestItemType = (ItemType)Random.Range((int)ItemType.Mana, (int)ItemType.Signum);
             var time = Random.Range(GlobalConsts.ChronosGrowTimeLowerBound, GlobalConsts.ChronosGrowTimeUpperBound);
             objTransform = transform.Find("Main").transform;
             objTransform.DOScale(Vector3.one, time)

@@ -14,6 +14,8 @@ namespace Workspace.Facilities
         Iter                = 0b01000000,
         Opus                = 0b10000000,
         
+        EmptyCanBuild       = 0b11111111,
+        ManaCanBuild        = 0b11111111,
         EtherCanBuild       = 0b11111110,
         MelodiaCanBuild     = 0b11111110,
         ChronosCanBuild     = 0b11111100,

@@ -1,6 +1,7 @@
 ﻿using System;
 using DG.Tweening;
 using GlobalSettings;
+using Items;
 using MoonSharp.Interpreter;
 using UnityEngine;
 using Workspace;
@@ -81,8 +82,8 @@ namespace Bots
             
             return DynValue.True;
         }
-        public DynValue InteractWith(CallbackArguments ctx) 
-            => WorkspaceManager.Instance.GetFacility(X, Y).InteractWith(ctx);
+        public DynValue InteractWith(CallbackArguments ctx) => WorkspaceManager.Instance.GetFacility(X, Y).InteractWith(ctx);
+        public DynValue TryAddItem(ItemType item) => WorkspaceManager.Instance.GetFacility(X, Y).TryAddItem(item);
         
         
         private void OnDestroy() => transform.DOKill();
