@@ -62,7 +62,7 @@ get_tone调用后返回设施上携带的Tone的值 Tone取值范围为[0, 31]
 玩家需要在 [Framecount-Time, Framecount+Time] 的帧数区间内对设施UseItem(Require) 且有足够的物品供消耗  
 如成功则设施进入增产状态 增产状态下再调用start方法无意义  
   
-产量公式：check() == true ? round(基本产量 * 16 / min(16, sqrt(abs(Tolerance)))) : 基本产量  
+产量公式：check() == true ? floor(基本产量 * 16 / min(16, sqrt(abs(Tolerance + 1)))) : 基本产量  
 设置要求：T where T based on FacilityEther  
 设置消耗：Melodia  
 收获后退化：-> FacilityEther  

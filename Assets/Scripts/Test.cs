@@ -13,25 +13,26 @@ public class Test : MonoBehaviour
             vm => {
                 LuaVMAdaptorLib.AtomicCAS(vm); LuaVMAdaptorLib.CheckThread(vm);
                 LuaVMAdaptorLib.GetCurrentThreadID(vm); LuaVMAdaptorLib.HangupCurrentThread(vm);
-                LuaVMAdaptorLib.NewThread(vm); LuaVMAdaptorLib.Move(vm);
+                LuaVMAdaptorLib.NewThread(vm); LuaVMAdaptorLib.GetCurrentFrameCount(vm);
+                LuaVMAdaptorLib.Move(vm); LuaVMAdaptorLib.UseItem(vm);
                 LuaVMAdaptorLib.CanHarvest(vm); LuaVMAdaptorLib.Harvest(vm);
                 LuaVMAdaptorLib.TrySetFacility(vm); LuaVMAdaptorLib.InteractWith(vm);
                 vm.GetLuaVM().Options.DebugPrint = Debug.Log;
             }, vm => { }, LuaVMAdaptorLib.CheckCurrentBotIsBusy), 
             "TestScript", @"
 print('Thread id:', get_current_thread())
-while true do
-    move(1)
-    if can_harvest() then 
-        print(interact_with('get_tone'))
-        harvest()
-        build(2)
-        build(8)
-    else
-        hangup_current_thread()
-    end
-end
-build(1)
+build(2)
+build(4)
+build(16)
+
+print(interact_with('check'))
+itemType, targetTime = interact_with('start', 114514)
+print(itemType, targetTime, get_current_frame_count())
+while(targetTime ~= get_current_frame_count()+3) do hangup_current_thread() end
+use_item(itemType)
+
+while(not can_harvest()) do hangup_current_thread() end
+harvest()
             ");
     }
 
@@ -45,10 +46,6 @@ build(1)
             if (luaVM.State == RunningState.Faulted) Debug.Log(luaVM.ExceptionWhat);
             Destroy(gameObject);
         }
-
-        if (Math.Abs(GlobalInfos.Instance.MelodiaCount - lastFrameCount) < 1e-6) return;
-        lastFrameCount = GlobalInfos.Instance.MelodiaCount;
-        Debug.Log($"Now count: {lastFrameCount}");
     }
 
     void OnDestroy()

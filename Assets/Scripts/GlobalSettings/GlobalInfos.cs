@@ -20,6 +20,9 @@ namespace GlobalSettings
         public const float MelodiaGrowTimeLowerBound = 3.2f;
         public const float ChronosGrowTimeUpperBound = 3.8f;
         public const float ChronosGrowTimeLowerBound = 2.2f;
+        
+        public const int ChronosSyncFrameUpperBound = 512;
+        public const int ChronosSyncFrameLowerBound = 128;
     }
     public class GlobalInfos : Singleton<GlobalInfos>
     {
@@ -34,10 +37,10 @@ namespace GlobalSettings
         public int IterBaseYield = 1;
         public int OpusBaseYield = 1;
 
-        public double ManaCount = 0.0;
-        public double EtherCount = 0.0;
-        public double MelodiaCount = 0.0;
-        public double ChronosCount = 0.0;
+        public double ManaCount = 10.0;
+        public double EtherCount = 10.0;
+        public double MelodiaCount = 10.0;
+        public double ChronosCount = 10.0;
         public double SignumCount = 0.0;
         public double IterCount = 0.0;
         public double OpusCount = 0.0;

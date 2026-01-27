@@ -21,7 +21,7 @@ namespace Workspace.Facilities.Impl
         private bool startedBefore = false;
         private bool finished = false;
         private bool success = false;
-        private int startTime;
+        private int targetTime;
         private int tolerance;
 
         
@@ -32,14 +32,15 @@ namespace Workspace.Facilities.Impl
             {
                 case "check":
                     if (!startedBefore) return DynValue.NewString("init");
-                    if (Math.Abs(Time.frameCount - startTime) > tolerance) finished = true; 
+                    if (Math.Abs(Time.frameCount - targetTime) > tolerance) finished = true; 
                     return finished ? DynValue.NewString(success ? "success" : "fail") : DynValue.NewString("waiting");
                 case "start":
                     var arg = args.AsInt(1, "Chronos.InteractWith.start");
-                    tolerance = Math.Abs(arg) + 1;
+                    tolerance = Math.Abs(arg);
                     
-                    if (!startedBefore) startedBefore = true; else return DynValue.NewNumber((int)ItemType.None);
-                    return DynValue.NewNumber((int)requestItemType);
+                    if (!startedBefore) startedBefore = true; else return DynValue.Nil;
+                    targetTime = Time.frameCount + Random.Range(GlobalConsts.ChronosSyncFrameLowerBound, GlobalConsts.ChronosSyncFrameUpperBound);
+                    return DynValue.NewTuple(DynValue.NewNumber((int)requestItemType), DynValue.NewNumber(targetTime));
                 default:
                     return DynValue.Nil;
             }
@@ -51,8 +52,8 @@ namespace Workspace.Facilities.Impl
                 if (!GlobalInfos.Instance.TryConsumeItem(item, GlobalInfos.Instance.ChronosBaseYield)) return DynValue.False;
                 if (!startedBefore || finished) return DynValue.True;
 
-                if (Math.Abs(Time.frameCount - startTime) <= tolerance) success = true; 
                 finished = true;
+                if (Math.Abs(Time.frameCount - targetTime) <= tolerance) success = true;
                 return DynValue.True;
             }
             
@@ -64,8 +65,9 @@ namespace Workspace.Facilities.Impl
         {
             if (_CanHarvest())
             {
+                var before = GlobalInfos.Instance.ChronosCount;
                 if (success) 
-                    GlobalInfos.Instance.ChronosCount += Math.Ceiling(GlobalInfos.Instance.ChronosBaseYield * 16 / Math.Min(16, Math.Sqrt(tolerance)));
+                    GlobalInfos.Instance.ChronosCount += Math.Floor(GlobalInfos.Instance.ChronosBaseYield * (16.0 / Math.Min(16.0, Math.Sqrt(tolerance + 1))));
                 else
                     GlobalInfos.Instance.ChronosCount += GlobalInfos.Instance.ChronosBaseYield;
             }
