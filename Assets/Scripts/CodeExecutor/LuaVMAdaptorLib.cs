@@ -1,5 +1,6 @@
 ﻿using System;
 using Bots;
+using Items;
 using MoonSharp.Interpreter;
 using UnityEngine;
 using Workspace.Facilities;
@@ -64,6 +65,11 @@ namespace CodeExecutor
                 => DynValue.NewNumber(ctx.GetCallingCoroutine().ReferenceID))
             );
         }
+        public static void GetCurrentFrameCount(LuaVM luaVM)
+        {
+            var vm = luaVM.GetLuaVM();
+            vm.Globals.Set("get_current_frame_count", DynValue.NewCallback((_, _) => DynValue.NewNumber(Time.frameCount)));
+        }
         
         public static void Move(LuaVM luaVM)
         {
@@ -89,6 +95,21 @@ namespace CodeExecutor
                             return DynValue.False;
                     }
                     return DynValue.True;
+                }
+            ));
+        }
+        public static void UseItem(LuaVM luaVM)
+        {
+            var vm = luaVM.GetLuaVM();
+            vm.Globals.Set("use_item", DynValue.NewCallback((ctx, args) =>
+                {
+                    var haveBot = BotManager.Instance.GetBotByID(ctx.GetCallingCoroutine().ReferenceID, out var bot);
+                    if (!haveBot) throw new LuaVMException("Fatal error: cannot find this thread's bot.");
+                    
+                    var item = args.AsInt(0, "use_item");
+                    if (!Enum.IsDefined(typeof(ItemType), item)) throw new LuaVMException($"Error: type '{item}' is not a valid item type.");
+
+                    return bot.TryAddItem((ItemType)item);
                 }
             ));
         }
