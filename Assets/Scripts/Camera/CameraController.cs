@@ -1,3 +1,4 @@
+using System;
 using GlobalSettings;
 using UnityEngine;
 
@@ -18,7 +19,10 @@ public class CameraController : MonoBehaviour
 
     private Vector3 _moveVelocity;
     private float _rotationVelocity;
-
+    private static int moveLock = 0;
+    public static void Lock() => moveLock++;
+    public static void Unlock() => moveLock = Math.Max(moveLock - 1, 0);
+    
     void Awake()
     {
         _camera = Camera.main;
@@ -27,6 +31,7 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+        if (moveLock > 0) return;
         HandleInput();
         CameraMove();
     }
