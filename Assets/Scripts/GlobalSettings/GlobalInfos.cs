@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using Items;
+using UnityEngine;
 using Utils;
 
 namespace GlobalSettings
 {
     public static class GlobalConsts
     {
+        public static readonly BoundsInt CameraBounds = new BoundsInt(-16, 1, -16, 48, 24, 48);
         public const float BotStanderYAxisValue = 1.25f;
         
         public const int MaxWorkspaceEdgeLength = 32;
