@@ -22,9 +22,17 @@ namespace GlobalSettings
         public const float MelodiaGrowTimeLowerBound = 3.2f;
         public const float ChronosGrowTimeUpperBound = 3.8f;
         public const float ChronosGrowTimeLowerBound = 2.2f;
-        
+        public const float SignumGrowTimeUpperBound = 3.2f;
+        public const float SignumGrowTimeLowerBound = 2.4f;
+
         public const int ChronosSyncFrameUpperBound = 512;
         public const int ChronosSyncFrameLowerBound = 128;
+        
+        public const int SignumHeightUpperBound = 1;
+        public const int SignumHeightLowerBound = 128 + 1;
+        public const int SignumStrengthUpperBound = 1;
+        public const int SignumStrengthLowerBound = 128 + 1;
+
     }
     public class GlobalInfos : Singleton<GlobalInfos>
     {
