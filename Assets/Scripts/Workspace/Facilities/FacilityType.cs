@@ -19,5 +19,6 @@ namespace Workspace.Facilities
         EtherCanBuild       = 0b11111110,
         MelodiaCanBuild     = 0b11111110,
         ChronosCanBuild     = 0b11111100,
+        SignumCanBuild      = 0b11111100,
     }
 }
