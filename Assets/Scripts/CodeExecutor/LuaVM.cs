@@ -147,6 +147,7 @@ namespace CodeExecutor
         public LuaVM(LuaVMConfigurer configurer, string scriptName, string scriptCode)
         {
             luaVM = new Script(configurer.GetCoreModules());
+            luaVMConfigurer = configurer;
             configurer.OnStartVM(this);
             
             DynValue userCode = null;
@@ -178,8 +179,6 @@ namespace CodeExecutor
             }
             
             luaVMInfoHook = new LuaVMInfoHook(runtimeInfos);
-            luaVMConfigurer = configurer;
-            
             luaVM.AttachDebugger(luaVMInfoHook);
             luaVM.DebuggerEnabled = true;
             State = RunningState.Ready;
