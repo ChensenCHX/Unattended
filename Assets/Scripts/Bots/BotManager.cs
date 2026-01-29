@@ -14,6 +14,7 @@ namespace Bots
         public bool AllocBot(int id, int x, int y)
         {
             var bot = Instantiate(BotPrefab).GetComponent<BotBehaviour>();
+            bot.transform.SetParent(transform);
             bot.transform.position = new Vector3(x, GlobalConsts.BotStanderYAxisValue, y);
             bot.FadeIn();
             usingBots[id] = bot;
