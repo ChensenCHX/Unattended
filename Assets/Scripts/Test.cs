@@ -21,17 +21,41 @@ public class Test : MonoBehaviour
             }, vm => { }, LuaVMAdaptorLib.CheckCurrentBotIsBusy), 
             "TestScript", @"
 print('Thread id:', get_current_thread())
-build(2)
-build(4)
-build(16)
 
-print(interact_with('check'))
-itemType, targetTime = interact_with('start', 114514)
-print(itemType, targetTime, get_current_frame_count())
-while(targetTime ~= get_current_frame_count()+3) do hangup_current_thread() end
-use_item(itemType)
+function test()
+    build(2)
+    build(4)
+    build(32)
+    --print(('x=%d, y=%d;   height:%d, strength=%d;'):format(i, j, interact_with('get_height'), interact_with('get_strength')))
+end
 
-while(not can_harvest()) do hangup_current_thread() end
+function for_all(f)
+	function row()
+		for i=1, 31 do
+			f()
+			move(1)
+		end
+		f()
+    end
+	for i=1, 32 do
+		if not new_thread(row) then row() end
+		move(2)
+    end
+end
+
+for_all(test)
+move(1)
+
+
+height = interact_with('get_height') print(height) move(1)
+
+t = {0}
+for i=1, 31 do
+    val = interact_with('get_height') print(val)
+    if val <= t[#t] or val >= height then interact_with('detach') harvest() else table.insert(t, val) end
+    move(1)
+end
+for i=1, 300 do hangup_current_thread() end
 harvest()
             ");
     }
@@ -50,6 +74,6 @@ harvest()
 
     void OnDestroy()
     {
-        luaVM.Dispose();
+        luaVM?.Dispose();
     }
 }

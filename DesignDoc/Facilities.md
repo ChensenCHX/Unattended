@@ -70,7 +70,7 @@ get_tone调用后返回设施上携带的Tone的值 Tone取值范围为[0, 31]
 ## FacilitySignum
 产出Signum 有要求设施  
 特性：信号：每个FacilitySignum会向四向发出信号 产出量由接收到信号量决定  
-身上携带三个InteractWith方法与两个内部量Height(>0) Strength(>1)  
+身上携带三个InteractWith方法与两个内部量Height[1, 128] Strength[1, 4]  
 get_height() => int; 调用后获得设施的内部量Height的值  
 get_strength() => int; 调用后获得设施的内部量Strength的值
 detach() => void; 调用后将该建筑脱离传输 不再影响其他收发 收获时只获得基础产量  

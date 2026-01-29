@@ -31,13 +31,13 @@ namespace GlobalSettings
         public const int SignumHeightUpperBound = 1;
         public const int SignumHeightLowerBound = 128 + 1;
         public const int SignumStrengthUpperBound = 1;
-        public const int SignumStrengthLowerBound = 128 + 1;
+        public const int SignumStrengthLowerBound = 4 + 1;
 
     }
     public class GlobalInfos : Singleton<GlobalInfos>
     {
         public int WorkspaceEdgeLength = 32;
-        public float MoveTime = GlobalConsts.BasicMoveTime;
+        public float MoveTime = GlobalConsts.BasicMoveTime * 0.05f;
 
         public int ManaBaseYield = 1;
         public int EtherBaseYield = 1;
@@ -47,10 +47,10 @@ namespace GlobalSettings
         public int IterBaseYield = 1;
         public int OpusBaseYield = 1;
 
-        public double ManaCount = 10.0;
-        public double EtherCount = 10.0;
-        public double MelodiaCount = 10.0;
-        public double ChronosCount = 10.0;
+        public double ManaCount = 512.0;
+        public double EtherCount = 512.0;
+        public double MelodiaCount = 512.0;
+        public double ChronosCount = 512.0;
         public double SignumCount = 0.0;
         public double IterCount = 0.0;
         public double OpusCount = 0.0;
