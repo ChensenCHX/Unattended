@@ -21,16 +21,22 @@ namespace Workspace.Facilities.Impl
         private Transform objTransform;
         private int height;
         private int strength;
-        private HashSet<FacilitySignum> canTransferFrom = new();
+        private bool detached = false;
         
         public override DynValue InteractWith(CallbackArguments args)
         {
             var funcName = args.AsType(0, "InteractWith", DataType.String);
-            return funcName.String switch
+            switch(funcName.String)
             {
-                "get_height" => DynValue.NewNumber(height),
-                "get_strength" => DynValue.NewNumber(strength),
-                _ => DynValue.Nil
+                case "get_height":
+                    return DynValue.NewNumber(height);
+                case "get_strength":
+                    return DynValue.NewNumber(strength);
+                case "detach":
+                    detached = true;
+                    return DynValue.True;
+                default:
+                    return DynValue.Nil;
             };
         }
         public override DynValue TryAddItem(ItemType item)
@@ -40,21 +46,29 @@ namespace Workspace.Facilities.Impl
         }
         private bool _CanHarvest() => progress >= 1.0f;
         public override DynValue CanHarvest() => _CanHarvest() ? DynValue.True : DynValue.False;
-        private bool RawHarvest() { WorkspaceManager.Instance.TrySetFacility(X, Y, FacilityType.Ether); return _CanHarvest(); }
+        private bool RawHarvest()
+        {
+            WorkspaceManager.Instance.TrySetFacility(X, Y, FacilityType.Ether); 
+            return _CanHarvest();
+        }
         public override void Harvest()
         {
             if (_CanHarvest())
             {
-                var totalStrength = 0;
-                var totalCount = 0;
-                canTransferFrom
-                    .ToList()
-                    .ForEach(facility => {
-                        if (!facility.RawHarvest()) return;
-                        totalCount++; totalStrength += facility.strength;
+                if (detached) 
+                    GlobalInfos.Instance.SignumCount += GlobalInfos.Instance.SignumBaseYield;
+                else
+                {
+                    var totalStrength = strength;
+                    var totalCount = 1;
+                    var canTransferFrom = GetSignumsCanBeLinked();
+                    canTransferFrom.ForEach(signum =>
+                    {
+                        if (!signum.RawHarvest()) return;
+                        totalCount++; totalStrength += signum.strength;
                     });
-                
-                GlobalInfos.Instance.SignumCount += GlobalInfos.Instance.SignumBaseYield * totalCount * totalCount * totalStrength;
+                    GlobalInfos.Instance.SignumCount += GlobalInfos.Instance.SignumBaseYield * totalCount * totalCount * totalStrength;
+                }
             }
             RawHarvest();
         }
@@ -63,53 +77,6 @@ namespace Workspace.Facilities.Impl
             transform.position = new Vector3(x, 0, y);
             height = Random.Range(GlobalConsts.SignumHeightLowerBound, GlobalConsts.SignumHeightUpperBound);
             strength = Random.Range(GlobalConsts.SignumStrengthLowerBound, GlobalConsts.SignumStrengthUpperBound);
-
-            var edgeLength = GlobalInfos.Instance.WorkspaceEdgeLength;
-
-            var luLowerList = new List<FacilitySignum>(32);
-            var luHigherList = new List<FacilitySignum>(32);
-            var rdLowerList = new List<FacilitySignum>(32);
-            var rdHigherList = new List<FacilitySignum>(32);
-
-            for (var objX = x - 1; objX >= 0; objX--)
-            {
-                var facility = WorkspaceManager.Instance.GetFacility(objX, y);
-                if (facility.Type != FacilityType.Signum) continue;
-                var signum = (FacilitySignum)facility;
-                if (signum.height <= height) luLowerList.Add(signum); else luHigherList.Add(signum);
-            }
-            for (var objX = x + 1; objX < edgeLength; objX++)
-            {
-                var facility = WorkspaceManager.Instance.GetFacility(objX, y);
-                if (facility.Type != FacilityType.Signum) continue;
-                var signum = (FacilitySignum)facility;
-                if (signum.height <= height) rdLowerList.Add(signum); else rdHigherList.Add(signum);
-            }
-            luLowerList.ForEach(signum => signum.canTransferFrom.ExceptWith(rdLowerList));
-            luHigherList.ForEach(signum => signum.canTransferFrom.ExceptWith(rdLowerList));
-            rdLowerList.ForEach(signum => signum.canTransferFrom.ExceptWith(luLowerList));
-            rdHigherList.ForEach(signum => signum.canTransferFrom.ExceptWith(luLowerList));
-            
-            luLowerList.Clear(); luHigherList.Clear(); rdLowerList.Clear(); rdHigherList.Clear();
-            for (var objY = y + 1; objY < edgeLength; objY++)
-            {
-                var facility = WorkspaceManager.Instance.GetFacility(x, objY);
-                if (facility.Type != FacilityType.Signum) continue;
-                var signum = (FacilitySignum)facility;
-                if (signum.height <= height) luLowerList.Add(signum); else luHigherList.Add(signum);
-            }
-            for (var objY = y - 1; objY >= 0; objY--)
-            {
-                var facility = WorkspaceManager.Instance.GetFacility(x, objY);
-                if (facility.Type != FacilityType.Signum) continue;
-                var signum = (FacilitySignum)facility;
-                if (signum.height <= height) rdLowerList.Add(signum); else rdHigherList.Add(signum);
-            }
-            luLowerList.ForEach(signum => signum.canTransferFrom.ExceptWith(rdLowerList));
-            luHigherList.ForEach(signum => signum.canTransferFrom.ExceptWith(rdLowerList));
-            rdLowerList.ForEach(signum => signum.canTransferFrom.ExceptWith(luLowerList));
-            rdHigherList.ForEach(signum => signum.canTransferFrom.ExceptWith(luLowerList));
-            
             var time = Random.Range(GlobalConsts.SignumGrowTimeLowerBound, GlobalConsts.SignumGrowTimeUpperBound);
             objTransform = transform.Find("Main").transform;
             objTransform.DOScale(Vector3.one, time)
@@ -118,24 +85,46 @@ namespace Workspace.Facilities.Impl
                 .OnComplete(() => progress = 1.0f);
         }
         
-        private void OnDestroy()
+        private void OnDestroy() => objTransform.DOKill();
+
+        private List<FacilitySignum> GetSignumsCanBeLinked()
         {
-            objTransform.DOKill();
             var edgeLength = GlobalInfos.Instance.WorkspaceEdgeLength;
-            for (var x = 0; x < edgeLength; x++)
+            var canTransferFrom = new List<FacilitySignum>();
+            var currentHighest = 0;
+            for (var objX = X - 1; objX >= 0; objX--)
             {
-                var facility = WorkspaceManager.Instance.GetFacility(x, Y);
+                var facility = WorkspaceManager.Instance.GetFacility(objX, Y);
                 if (facility.Type != FacilityType.Signum) continue;
                 var signum = (FacilitySignum)facility;
-                signum.canTransferFrom.Remove(this);
-            }
-            for(var y = 0; y < edgeLength; y++)
+                if (currentHighest >= signum.height) continue; currentHighest = signum.height;
+                if (currentHighest > height) continue; canTransferFrom.Add(signum);
+            } currentHighest = 0;
+            for (var objX = X + 1; objX < edgeLength; objX++)
             {
-                var facility = WorkspaceManager.Instance.GetFacility(X, y);
+                var facility = WorkspaceManager.Instance.GetFacility(objX, Y);
                 if (facility.Type != FacilityType.Signum) continue;
                 var signum = (FacilitySignum)facility;
-                signum.canTransferFrom.Remove(this);
-            }
+                if (currentHighest >= signum.height) continue; currentHighest = signum.height;
+                if (currentHighest > height) continue; canTransferFrom.Add(signum);
+            } currentHighest = 0;
+            for (var objY = Y - 1; objY >= 0; objY--)
+            {
+                var facility = WorkspaceManager.Instance.GetFacility(X, objY);
+                if (facility.Type != FacilityType.Signum) continue;
+                var signum = (FacilitySignum)facility;
+                if (currentHighest >= signum.height) continue; currentHighest = signum.height;
+                if (currentHighest > height) continue; canTransferFrom.Add(signum);
+            } currentHighest = 0;
+            for (var objY = Y + 1; objY < edgeLength; objY++)
+            {
+                var facility = WorkspaceManager.Instance.GetFacility(X, objY);
+                if (facility.Type != FacilityType.Signum) continue;
+                var signum = (FacilitySignum)facility;
+                if (currentHighest >= signum.height) continue; currentHighest = signum.height;
+                if (currentHighest > height) continue; canTransferFrom.Add(signum);
+            } currentHighest = 0;
+            return canTransferFrom;
         }
     }
 }
