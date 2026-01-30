@@ -147,7 +147,7 @@ namespace Workspace.Facilities.Impl
             {
                 var current = queue.Dequeue();
                 if (!visited.Add(current)) continue;
-                foreach (var (target, linked) in edgeList)
+                foreach (var (target, linked) in current.edgeList)
                     if (linked) queue.Enqueue(target);
             }
 
