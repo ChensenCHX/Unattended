@@ -99,7 +99,7 @@ namespace Workspace.Facilities.Impl
                 edgeWeightSum += iter.edgeList.Sum(kvPair => kvPair.Value ? edgeWeight[kvPair.Key] : 0);
                 validNodeCount += iter.RawHarvest() ? 1 : 0;
             }
-            
+            edgeWeightSum >>= 1;    //这里每条边实际被计算了两次 (a->b + b->a) 所以总权重要除以2
             GlobalInfos.Instance.IterCount += 1.0 * GlobalInfos.Instance.IterBaseYield * 
                 validNodeCount * validNodeCount * validNodeCount / Math.Max(1, edgeWeightSum);
         }
