@@ -60,6 +60,15 @@ namespace Workspace.Facilities
             facility.Init(x, y);
             return facility;
         }
+        public static Facility CreateIter(int x, int y)
+        {
+            var obj = Object.Instantiate(
+                ResourceManager<GameObject>.GetResource("FacilityIter"), 
+                WorkspaceManager.Instance.transform);
+            var facility = obj.GetComponent<FacilityIter>();
+            facility.Init(x, y);
+            return facility;
+        }
         
         public static bool CanBuildOn(FacilityType typeNew, FacilityType typeOld) => typeNew switch
         {
@@ -69,6 +78,7 @@ namespace Workspace.Facilities
             FacilityType.Melodia => (typeOld & FacilityType.MelodiaCanBuild) != 0,
             FacilityType.Chronos => (typeOld & FacilityType.ChronosCanBuild) != 0,
             FacilityType.Signum => (typeOld & FacilityType.SignumCanBuild) != 0,
+            FacilityType.Iter => (typeOld & FacilityType.IterCanBuild) != 0,
             _ => throw new System.NotImplementedException(),
         };
         public static Facility GetInstanceByType(FacilityType type, int x, int y) => type switch
@@ -79,6 +89,7 @@ namespace Workspace.Facilities
             FacilityType.Melodia    => FacilityFactory.CreateMelodia(x, y),
             FacilityType.Chronos    => FacilityFactory.CreateChronos(x, y),
             FacilityType.Signum     => FacilityFactory.CreateSignum(x, y),
+            FacilityType.Iter       => FacilityFactory.CreateIter(x, y),
             _ => throw new System.NotImplementedException(),
         };
     }
