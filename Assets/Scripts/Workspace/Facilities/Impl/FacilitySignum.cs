@@ -53,22 +53,19 @@ namespace Workspace.Facilities.Impl
         }
         public override void Harvest()
         {
-            if (_CanHarvest())
+            if (detached)
+                if (_CanHarvest()) GlobalInfos.Instance.SignumCount += GlobalInfos.Instance.SignumBaseYield;
+            else
             {
-                if (detached) 
-                    GlobalInfos.Instance.SignumCount += GlobalInfos.Instance.SignumBaseYield;
-                else
+                var totalStrength = strength;
+                var totalCount = _CanHarvest() ? 1 : 0;
+                var canTransferFrom = GetSignumsCanBeLinked();
+                canTransferFrom.ForEach(signum =>
                 {
-                    var totalStrength = strength;
-                    var totalCount = 1;
-                    var canTransferFrom = GetSignumsCanBeLinked();
-                    canTransferFrom.ForEach(signum =>
-                    {
-                        if (!signum.RawHarvest()) return;
-                        totalCount++; totalStrength += signum.strength;
-                    });
-                    GlobalInfos.Instance.SignumCount += GlobalInfos.Instance.SignumBaseYield * totalCount * totalCount * totalStrength;
-                }
+                    if (!signum.RawHarvest()) return;
+                    totalCount++; totalStrength += signum.strength;
+                });
+                GlobalInfos.Instance.SignumCount += GlobalInfos.Instance.SignumBaseYield * totalCount * totalCount * totalStrength;
             }
             RawHarvest();
         }

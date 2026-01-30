@@ -77,7 +77,7 @@ detach() => void; 调用后将该建筑脱离传输 不再影响其他收发 收
 信号的传输规则：所有非FacilitySignum的设施的Height视为0 信号传输到第一个Height >= 自身Height的FacilitySignum后被接收不再传输  
 收获时会连锁收获所有接收到的信号的源FacilityIter
 
-产量公式：基本产量 * 连锁收获个数^2 * 接收到信号的Strength之和
+产量公式：基本产量 * 连锁收获个数^2 * (接收到信号的Strength之和 + 自身Strength)
 设置要求：T where T based on FacilityEther  
 设置消耗：Ether, Melodia  
 收获后退化：-> FacilityEther  
