@@ -20,5 +20,6 @@ namespace Workspace.Facilities
         MelodiaCanBuild     = 0b11111110,
         ChronosCanBuild     = 0b11111100,
         SignumCanBuild      = 0b11111100,
+        IterCanBuild        = 0b11100000,
     }
 }

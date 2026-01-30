@@ -24,6 +24,8 @@ namespace GlobalSettings
         public const float ChronosGrowTimeLowerBound = 2.2f;
         public const float SignumGrowTimeUpperBound = 3.2f;
         public const float SignumGrowTimeLowerBound = 2.4f;
+        public const float IterGrowTimeUpperBound = 4.2f;
+        public const float IterGrowTimeLowerBound = 3.5f;
 
         public const int ChronosSyncFrameUpperBound = 512;
         public const int ChronosSyncFrameLowerBound = 128;
@@ -32,6 +34,11 @@ namespace GlobalSettings
         public const int SignumHeightLowerBound = 128 + 1;
         public const int SignumStrengthUpperBound = 1;
         public const int SignumStrengthLowerBound = 4 + 1;
+        
+        public const int IterEdgeCountUpperBound = 4 + 1;
+        public const int IterEdgeCountLowerBound = 1;
+        public const int IterEdgeWeightUpperBound = 4 + 1;
+        public const int IterEdgeWeightLowerBound = 1;
 
     }
     public class GlobalInfos : Singleton<GlobalInfos>
