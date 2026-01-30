@@ -56,8 +56,9 @@ namespace Workspace.Facilities.Impl
                     if (facility.Type != FacilityType.Iter) return DynValue.False;
 
                     var iter = (FacilityIter)facility;
-                    if (!edgeList.ContainsKey(iter)) return DynValue.False;
+                    if (!(edgeList.ContainsKey(iter) && iter.edgeList.ContainsKey(this))) return DynValue.False;
                     edgeList[iter] = true;
+                    iter.edgeList[this] = true;
                     return DynValue.True;
                 }
                 case "disconnect":
@@ -68,8 +69,9 @@ namespace Workspace.Facilities.Impl
                     if (facility.Type != FacilityType.Iter) return DynValue.False;
 
                     var iter = (FacilityIter)facility;
-                    if (!edgeList.ContainsKey(iter)) return DynValue.False;
+                    if (!(edgeList.ContainsKey(iter) && iter.edgeList.ContainsKey(this))) return DynValue.False;
                     edgeList[iter] = false;
+                    iter.edgeList[this] = false;
                     return DynValue.True;
                 }
                 default:
@@ -92,13 +94,9 @@ namespace Workspace.Facilities.Impl
         public override void Harvest()
         {
             var iters = FindAllLinkedItersFromThis();
-            var validNodeCount = 0;
-            var edgeWeightSum = 0;
-            foreach (var iter in iters)
-            {
-                edgeWeightSum += iter.edgeList.Sum(kvPair => kvPair.Value ? edgeWeight[kvPair.Key] : 0);
-                validNodeCount += iter.RawHarvest() ? 1 : 0;
-            }
+            var edgeWeightSum = iters.Sum(iter => iter.edgeList.Sum(kvPair => kvPair.Value ? edgeWeight[kvPair.Key] : 0));
+            var validNodeCount = iters.Sum(iter => iter.RawHarvest() ? 1 : 0);
+
             edgeWeightSum >>= 1;    //这里每条边实际被计算了两次 (a->b + b->a) 所以总权重要除以2
             GlobalInfos.Instance.IterCount += 1.0 * GlobalInfos.Instance.IterBaseYield * 
                 validNodeCount * validNodeCount * validNodeCount / Math.Max(1, edgeWeightSum);
@@ -108,6 +106,7 @@ namespace Workspace.Facilities.Impl
             transform.position = new Vector3(x, 0, y);
             var time = Random.Range(GlobalConsts.IterGrowTimeLowerBound, GlobalConsts.IterGrowTimeUpperBound);
             var others = GetOtherIters()
+                .FindAll(iter => iter.edgeList.Count < GlobalConsts.IterEdgeCountUpperBound)
                 .Shuffle()
                 .Take(Random.Range(GlobalConsts.IterEdgeCountLowerBound, GlobalConsts.IterEdgeCountUpperBound));
             foreach (var other in others)
@@ -154,5 +153,23 @@ namespace Workspace.Facilities.Impl
             if (notIncludeSelf) visited.Remove(this);
             return visited;
         }
+
+        // private void OnDrawGizmos()
+        // {
+        //     var from = new Vector3(X, 0, Y);
+        //     Gizmos.color = Color.green;
+        //     edgeList
+        //         .Where(kvPair => kvPair.Value)
+        //         .Select(iter => new Vector3(iter.Key.X, 0, iter.Key.Y))
+        //         .ToList()
+        //         .ForEach(to => Gizmos.DrawLine(from, to));
+
+        //     Gizmos.color = Color.red;
+        //     edgeList
+        //         .Where(kvPair => !kvPair.Value)
+        //         .Select(iter => new Vector3(iter.Key.X, 0, iter.Key.Y))
+        //         .ToList()
+        //         .ForEach(to => Gizmos.DrawLine(from, to));
+        // }
     }
 }
