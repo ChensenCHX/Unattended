@@ -81,7 +81,7 @@ function kruskal()
         local yr = find_root(edges[i].v);
         if xr ~= yr then
             merge(xr, yr);
-            table.insert(task_t, {from = xr, to = yr})
+            table.insert(task_t, {from = edges[i].u, to = edges[i].v})
         end
     end
 end
@@ -104,8 +104,8 @@ kruskal()
 print('test 3')
 
 function create_spin_lock() return { locked = 0 } end
-function spin_lock(lock) while atomic_compare_and_swap_at(lock, ""locked"", 0, 1) ~= 0 do hangup_current_thread() end end
-function spin_unlock(lock) atomic_compare_and_swap_at(lock, ""locked"", 1, 0) end
+function spin_lock(lock) while atomic_compare_and_swap_at(lock, 'locked', 0, 1) ~= 0 do hangup_current_thread() end end
+function spin_unlock(lock) atomic_compare_and_swap_at(lock, 'locked', 1, 0) end
 
 task_id_lock = create_spin_lock()
 task_id = 1
@@ -118,7 +118,7 @@ function link_nodes()
         spin_unlock(task_id_lock)
 
         goto_pos((task.from-1) % 32, math.floor((task.from-1) / 32))
-        interact_with('connect', (task.to-1) % 32, math.floor((task.to-1) / 32))
+        if not interact_with('connect', (task.to-1) % 32, math.floor((task.to-1) / 32)) then error('WTF??') end
     end
 end
 
