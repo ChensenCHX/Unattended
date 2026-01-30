@@ -70,6 +70,26 @@ namespace CodeExecutor
             var vm = luaVM.GetLuaVM();
             vm.Globals.Set("get_current_frame_count", DynValue.NewCallback((_, _) => DynValue.NewNumber(Time.frameCount)));
         }
+        public static void GetPosition(LuaVM luaVM)
+        {
+            var vm = luaVM.GetLuaVM();
+            vm.Globals.Set("get_x_pos", DynValue.NewCallback((ctx, _) =>
+                {
+                    var haveBot = BotManager.Instance.GetBotByID(ctx.GetCallingCoroutine().ReferenceID, out var bot);
+                    if (!haveBot) throw new LuaVMException("Fatal error: cannot find this thread's bot.");
+
+                    return DynValue.NewNumber(bot.X);
+                }
+            ));
+            vm.Globals.Set("get_y_pos", DynValue.NewCallback((ctx, _) =>
+                {
+                    var haveBot = BotManager.Instance.GetBotByID(ctx.GetCallingCoroutine().ReferenceID, out var bot);
+                    if (!haveBot) throw new LuaVMException("Fatal error: cannot find this thread's bot.");
+
+                    return DynValue.NewNumber(bot.Y);
+                }
+            ));
+        }
         
         public static void Move(LuaVM luaVM)
         {
