@@ -94,8 +94,9 @@ namespace Workspace.Facilities.Impl
         public override void Harvest()
         {
             var iters = FindAllLinkedItersFromThis();
-            var edgeWeightSum = iters.Sum(iter => iter.edgeList.Sum(kvPair => kvPair.Value ? edgeWeight[kvPair.Key] : 0));
+            var edgeWeightSum = iters.Sum(iter => iter.edgeList.Sum(kvPair => kvPair.Value ? kvPair.Key.edgeWeight[iter] : 0));
             var validNodeCount = iters.Sum(iter => iter.RawHarvest() ? 1 : 0);
+
 
             edgeWeightSum >>= 1;    //这里每条边实际被计算了两次 (a->b + b->a) 所以总权重要除以2
             GlobalInfos.Instance.IterCount += 1.0 * GlobalInfos.Instance.IterBaseYield * 
@@ -156,18 +157,18 @@ namespace Workspace.Facilities.Impl
 
         // private void OnDrawGizmos()
         // {
-        //     var from = new Vector3(X, 0, Y);
+        //     var from = new Vector3(X, 1, Y);
         //     Gizmos.color = Color.green;
         //     edgeList
         //         .Where(kvPair => kvPair.Value)
-        //         .Select(iter => new Vector3(iter.Key.X, 0, iter.Key.Y))
+        //         .Select(iter => new Vector3(iter.Key.X, 1, iter.Key.Y))
         //         .ToList()
         //         .ForEach(to => Gizmos.DrawLine(from, to));
-
+        //
         //     Gizmos.color = Color.red;
         //     edgeList
         //         .Where(kvPair => !kvPair.Value)
-        //         .Select(iter => new Vector3(iter.Key.X, 0, iter.Key.Y))
+        //         .Select(iter => new Vector3(iter.Key.X, 1, iter.Key.Y))
         //         .ToList()
         //         .ForEach(to => Gizmos.DrawLine(from, to));
         // }

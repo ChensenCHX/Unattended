@@ -129,15 +129,20 @@ harvest()
             ");
     }
 
+    private bool printed = false;
     void Update()
     {
         if (luaVM.CouldResume())
             luaVM.ResumeUntilLimit(LuaVMConfigurer.MaxInstructionPerResume * 10);
-        else
+        else if (!printed)
         {
+            printed = true;
             Debug.Log(luaVM.State);
             if (luaVM.State == RunningState.Faulted) Debug.Log(luaVM.ExceptionWhat);
-            Destroy(gameObject);
+        }
+        else
+        {
+            ;   // trap here
         }
     }
 
