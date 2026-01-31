@@ -44,6 +44,8 @@ namespace CodeExecutor
         # endregion
 
         # region IDebugger接口方法
+
+        public bool NeedWatchItemInfo => false;
         public DebuggerCaps GetDebuggerCaps() => DebuggerCaps.CanDebugSourceCode;
         public void SetDebugService(DebugService debugService) => dbgSvc = debugService;
         public void SetSourceCode(SourceCode src) => codes[src.Name] = Tuple.Create(src, new HashSet<int>());

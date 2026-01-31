@@ -258,7 +258,7 @@ namespace MoonSharp.Interpreter.Execution.VM
 			SourceRef sref = GetCurrentSourceRef(instructionPtr);
 			ScriptExecutionContext context = new ScriptExecutionContext(this, null, sref);
 			
-			if (m_Debug.DebuggerAttached.NeedInfo)
+			if (m_Debug.DebuggerAttached.NeedWatchItemInfo)
 			{
 				List<DynamicExpression> watchList = m_Debug.DebuggerAttached.GetWatchItems();
 				List<WatchItem> callStack = Debugger_GetCallStack(sref);
