@@ -7,6 +7,7 @@ namespace MoonSharp.Interpreter.Debugging
 	/// </summary>
 	public interface IDebugger
 	{
+		bool NeedInfo => true;
 		/// <summary>
 		/// Gets the debugger caps.
 		/// </summary>

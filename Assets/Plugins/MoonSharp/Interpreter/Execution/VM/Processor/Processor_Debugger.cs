@@ -257,20 +257,22 @@ namespace MoonSharp.Interpreter.Execution.VM
 		{
 			SourceRef sref = GetCurrentSourceRef(instructionPtr);
 			ScriptExecutionContext context = new ScriptExecutionContext(this, null, sref);
+			
+			if (m_Debug.DebuggerAttached.NeedInfo)
+			{
+				List<DynamicExpression> watchList = m_Debug.DebuggerAttached.GetWatchItems();
+				List<WatchItem> callStack = Debugger_GetCallStack(sref);
+				List<WatchItem> watches = Debugger_RefreshWatches(context, watchList);
+				List<WatchItem> vstack = Debugger_RefreshVStack();
+				List<WatchItem> locals = Debugger_RefreshLocals(context);
+				List<WatchItem> threads = Debugger_RefreshThreads(context);
 
-			List<DynamicExpression> watchList = m_Debug.DebuggerAttached.GetWatchItems();
-			List<WatchItem> callStack = Debugger_GetCallStack(sref);
-			List<WatchItem> watches = Debugger_RefreshWatches(context, watchList);
-			List<WatchItem> vstack = Debugger_RefreshVStack();
-			List<WatchItem> locals = Debugger_RefreshLocals(context);
-			List<WatchItem> threads = Debugger_RefreshThreads(context);
-
-			m_Debug.DebuggerAttached.Update(WatchType.CallStack, callStack);
-			m_Debug.DebuggerAttached.Update(WatchType.Watches, watches);
-			m_Debug.DebuggerAttached.Update(WatchType.VStack, vstack);
-			m_Debug.DebuggerAttached.Update(WatchType.Locals, locals);
-			m_Debug.DebuggerAttached.Update(WatchType.Threads, threads);
-
+				m_Debug.DebuggerAttached.Update(WatchType.CallStack, callStack);
+				m_Debug.DebuggerAttached.Update(WatchType.Watches, watches);
+				m_Debug.DebuggerAttached.Update(WatchType.VStack, vstack);
+				m_Debug.DebuggerAttached.Update(WatchType.Locals, locals);
+				m_Debug.DebuggerAttached.Update(WatchType.Threads, threads);
+			}
 			if (hard)
 				m_Debug.DebuggerAttached.RefreshBreakpoints(m_Debug.BreakPoints);
 		}
