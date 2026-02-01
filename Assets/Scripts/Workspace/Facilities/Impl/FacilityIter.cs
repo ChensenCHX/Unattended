@@ -33,17 +33,23 @@ namespace Workspace.Facilities.Impl
                 {
                     var tableObj = DynValue.NewPrimeTable();
                     var table = tableObj.Table;
+                    
+                    var xTableObj = DynValue.NewPrimeTable(); var xTable = xTableObj.Table;
+                    var yTableObj = DynValue.NewPrimeTable(); var yTable = yTableObj.Table;
+                    var weightTableObj = DynValue.NewPrimeTable(); var weightTable = weightTableObj.Table;
+                    var stateTableObj = DynValue.NewPrimeTable(); var stateTable = stateTableObj.Table;
+
+                    table.Set("x", xTableObj);
+                    table.Set("y", yTableObj);
+                    table.Set("weight", weightTableObj);
+                    table.Set("state", stateTableObj);
 
                     foreach (var (target, state) in edgeList)
                     {
-                        var subTableObj = DynValue.NewPrimeTable();
-                        var subTable = subTableObj.Table;
-                        subTable.Set("x", DynValue.NewNumber(target.X));
-                        subTable.Set("y", DynValue.NewNumber(target.Y));
-                        subTable.Set("weight", DynValue.NewNumber(edgeWeight[target]));
-                        subTable.Set("state", DynValue.NewString(state ? "connected" : "disconnected"));
-
-                        table.Append(subTableObj);
+                        xTable.Append(DynValue.NewNumber(target.X));
+                        yTable.Append(DynValue.NewNumber(target.Y));
+                        weightTable.Append(DynValue.NewNumber(edgeWeight[target]));
+                        stateTable.Append(DynValue.NewString(state ? "connected" : "disconnected"));
                     }
 
                     return tableObj;

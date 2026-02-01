@@ -14,11 +14,12 @@ namespace Workspace
         
         public Facility GetFacility(int x, int y)
         {
-            x = x % edgeLength; y = y % edgeLength;
+            x = ((x % edgeLength) + edgeLength) % edgeLength; y = ((y % edgeLength) + edgeLength) % edgeLength;
             return facilities[x + y*edgeLength];
         }
         public bool TrySetFacility(int x, int y, FacilityType newFacility)
         {
+            x = ((x % edgeLength) + edgeLength) % edgeLength; y = ((y % edgeLength) + edgeLength) % edgeLength;
             var index = x + y * edgeLength;
             var oldFacility = facilities[index];
             if (!FacilityFactory.CanBuildOn(newFacility, oldFacility.Type)) return false;
