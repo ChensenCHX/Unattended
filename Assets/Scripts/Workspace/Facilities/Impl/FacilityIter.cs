@@ -46,10 +46,10 @@ namespace Workspace.Facilities.Impl
 
                     foreach (var (target, state) in edgeList)
                     {
-                        xTable.Append(DynValue.NewNumber(target.X));
-                        yTable.Append(DynValue.NewNumber(target.Y));
-                        weightTable.Append(DynValue.NewNumber(edgeWeight[target]));
-                        stateTable.Append(DynValue.NewString(state ? "connected" : "disconnected"));
+                        xTable.Append(DynValueCache.NewNumber(target.X));
+                        yTable.Append(DynValueCache.NewNumber(target.Y));
+                        weightTable.Append(DynValueCache.NewNumber(edgeWeight[target]));
+                        stateTable.Append(DynValueCache.NewString(state ? "connected" : "disconnected"));
                     }
 
                     return tableObj;

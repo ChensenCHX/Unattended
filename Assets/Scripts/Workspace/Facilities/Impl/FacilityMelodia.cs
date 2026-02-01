@@ -25,7 +25,7 @@ namespace Workspace.Facilities.Impl
         public override DynValue InteractWith(CallbackArguments args)
         {
             var funcName = args.AsType(0, "InteractWith", DataType.String);
-            return funcName.String != "get_tone" ? DynValue.Nil : DynValue.NewNumber(tone);
+            return funcName.String != "get_tone" ? DynValue.Nil : DynValueCache.NewNumber(tone);
         }
         public override DynValue TryAddItem(ItemType item)
         {

@@ -31,16 +31,16 @@ namespace Workspace.Facilities.Impl
             switch (funcName.String)
             {
                 case "check":
-                    if (!startedBefore) return DynValue.NewString("init");
+                    if (!startedBefore) return DynValueCache.NewString("init");
                     if (Math.Abs(Time.frameCount - targetTime) > tolerance) finished = true; 
-                    return finished ? DynValue.NewString(success ? "success" : "fail") : DynValue.NewString("waiting");
+                    return finished ? DynValueCache.NewString(success ? "success" : "fail") : DynValueCache.NewString("waiting");
                 case "start":
                     var arg = args.AsInt(1, "Chronos.InteractWith.start");
                     tolerance = Math.Abs(arg);
                     
                     if (!startedBefore) startedBefore = true; else return DynValue.Nil;
                     targetTime = Time.frameCount + Random.Range(GlobalConsts.ChronosSyncFrameLowerBound, GlobalConsts.ChronosSyncFrameUpperBound);
-                    return DynValue.NewTuple(DynValue.NewNumber((int)requestItemType), DynValue.NewNumber(targetTime));
+                    return DynValue.NewTuple(DynValueCache.NewNumber((int)requestItemType), DynValueCache.NewNumber(targetTime));
                 default:
                     return DynValue.Nil;
             }

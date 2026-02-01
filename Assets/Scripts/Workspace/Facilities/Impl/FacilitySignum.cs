@@ -29,9 +29,9 @@ namespace Workspace.Facilities.Impl
             switch(funcName.String)
             {
                 case "get_height":
-                    return DynValue.NewNumber(height);
+                    return DynValueCache.NewNumber(height);
                 case "get_strength":
-                    return DynValue.NewNumber(strength);
+                    return DynValueCache.NewNumber(strength);
                 case "detach":
                     detached = true;
                     return DynValue.True;

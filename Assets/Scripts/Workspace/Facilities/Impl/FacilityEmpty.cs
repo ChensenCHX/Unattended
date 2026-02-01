@@ -1,5 +1,4 @@
-﻿using System;
-using MoonSharp.Interpreter;
+﻿using MoonSharp.Interpreter;
 using UnityEngine;
 using Items;
 
