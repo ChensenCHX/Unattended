@@ -69,6 +69,15 @@ namespace Workspace.Facilities
             facility.Init(x, y);
             return facility;
         }
+        public static Facility CreateOpus(int x, int y)
+        {
+            var obj = Object.Instantiate(
+                ResourceManager<GameObject>.GetResource("FacilityOpus"), 
+                WorkspaceManager.Instance.transform);
+            var facility = obj.GetComponent<FacilityOpus>();
+            facility.Init(x, y);
+            return facility;
+        }
         
         public static bool CanBuildOn(FacilityType typeNew, FacilityType typeOld) => typeNew switch
         {
@@ -79,6 +88,7 @@ namespace Workspace.Facilities
             FacilityType.Chronos => (typeOld & FacilityType.ChronosCanBuild) != 0,
             FacilityType.Signum => (typeOld & FacilityType.SignumCanBuild) != 0,
             FacilityType.Iter => (typeOld & FacilityType.IterCanBuild) != 0,
+            FacilityType.Opus => (typeOld & FacilityType.OpusCanBuild) != 0,
             _ => throw new System.NotImplementedException(),
         };
         public static Facility GetInstanceByType(FacilityType type, int x, int y) => type switch
@@ -90,6 +100,7 @@ namespace Workspace.Facilities
             FacilityType.Chronos    => FacilityFactory.CreateChronos(x, y),
             FacilityType.Signum     => FacilityFactory.CreateSignum(x, y),
             FacilityType.Iter       => FacilityFactory.CreateIter(x, y),
+            FacilityType.Opus       => FacilityFactory.CreateOpus(x, y),
             _ => throw new System.NotImplementedException(),
         };
     }
