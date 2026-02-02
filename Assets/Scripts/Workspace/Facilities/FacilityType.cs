@@ -21,5 +21,6 @@ namespace Workspace.Facilities
         ChronosCanBuild     = 0b11111100,
         SignumCanBuild      = 0b11111100,
         IterCanBuild        = 0b11100000,
+        OpusCanBuild        = 0b11111111,
     }
 }
