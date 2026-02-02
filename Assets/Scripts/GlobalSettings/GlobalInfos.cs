@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using Items;
 using UnityEngine;
 using Utils;
+using Workspace.Facilities;
 
 namespace GlobalSettings
 {
@@ -26,6 +27,8 @@ namespace GlobalSettings
         public const float SignumGrowTimeLowerBound = 2.4f;
         public const float IterGrowTimeUpperBound = 4.2f;
         public const float IterGrowTimeLowerBound = 3.5f;
+        public const float OpusGrowTimeUpperBound = 8.9f;
+        public const float OpusGrowTimeLowerBound = 7.2f;
 
         public const int ChronosSyncFrameUpperBound = 512;
         public const int ChronosSyncFrameLowerBound = 128;
@@ -39,11 +42,14 @@ namespace GlobalSettings
         public const int IterEdgeCountLowerBound = 1;
         public const int IterEdgeWeightUpperBound = 4 + 1;
         public const int IterEdgeWeightLowerBound = 1;
+        
+        public const int OpusGenerateCountUpperBound = 32;
+        public const int OpusGenerateCountLowerBound = 16;
 
     }
     public class GlobalInfos : Singleton<GlobalInfos>
     {
-        public int WorkspaceEdgeLength = 32;
+        public int WorkspaceEdgeLength = 8;
         public float MoveTime = GlobalConsts.BasicMoveTime * 0.05f;
 
         public int ManaBaseYield = 1;
@@ -58,9 +64,9 @@ namespace GlobalSettings
         public double EtherCount = 512.0;
         public double MelodiaCount = 512.0;
         public double ChronosCount = 512.0;
-        public double SignumCount = 0.0;
-        public double IterCount = 0.0;
-        public double OpusCount = 0.0;
+        public double SignumCount = 512.0;
+        public double IterCount = 512.0;
+        public double OpusCount = 512.0;
 
         public bool TryConsumeItem(ItemType type, int count) => type switch
         {
@@ -74,6 +80,60 @@ namespace GlobalSettings
             ItemType.Opus           => OpusCount >= count && (OpusCount -= count) >= 0,
             ItemType.ItemTypeCount  => false,
             _                       => throw new NotImplementedException(),
+        };
+        public double GetItemCountByType(ItemType type) => type switch
+        {
+            ItemType.None           => 0,
+            ItemType.Mana           => ManaCount,
+            ItemType.Ether          => EtherCount,
+            ItemType.Melodia        => MelodiaCount,
+            ItemType.Chronos        => ChronosCount,
+            ItemType.Signum         => SignumCount,
+            ItemType.Iter           => IterCount,
+            ItemType.Opus           => OpusCount,
+            ItemType.ItemTypeCount  => 0,
+            _                       => throw new NotImplementedException(),
+        };
+        public void SetItemCountByType(ItemType type, double count)
+        {
+            switch (type)
+            {
+                case ItemType.None:             return;
+                case ItemType.Mana:             ManaCount = count; return;
+                case ItemType.Ether:            EtherCount = count; return;
+                case ItemType.Melodia:          MelodiaCount = count; return;
+                case ItemType.Chronos:          ChronosCount = count; return;
+                case ItemType.Signum:           SignumCount = count; return;
+                case ItemType.Iter:             IterCount = count; return;
+                case ItemType.Opus:             OpusCount = count; return;
+                case ItemType.ItemTypeCount:    return;
+                default:                        throw new NotImplementedException();
+            }
+        }
+        public static ItemType FacilityTypeToItemType(FacilityType type) => type switch
+        {
+            FacilityType.Empty      => ItemType.None,
+            FacilityType.Mana       => ItemType.Mana,
+            FacilityType.Ether      => ItemType.Ether,
+            FacilityType.Melodia    => ItemType.Melodia,
+            FacilityType.Chronos    => ItemType.Chronos,
+            FacilityType.Signum     => ItemType.Signum,
+            FacilityType.Iter       => ItemType.Iter,
+            FacilityType.Opus       => ItemType.Opus,
+            _                       => ItemType.None,
+        };
+        public static FacilityType ItemTypeToFacilityType(ItemType type) => type switch
+        {
+            ItemType.None           => FacilityType.Empty,
+            ItemType.Mana           => FacilityType.Mana,
+            ItemType.Ether          => FacilityType.Ether,
+            ItemType.Melodia        => FacilityType.Melodia,
+            ItemType.Chronos        => FacilityType.Chronos,
+            ItemType.Signum         => FacilityType.Signum,
+            ItemType.Iter           => FacilityType.Iter,
+            ItemType.Opus           => FacilityType.Opus,
+            ItemType.ItemTypeCount  => FacilityType.Empty,
+            _                       => FacilityType.Empty,
         };
     }
 }
