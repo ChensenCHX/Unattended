@@ -71,12 +71,23 @@ namespace Workspace.Facilities
         }
         public static Facility CreateOpus(int x, int y)
         {
-            var obj = Object.Instantiate(
+            GameObject obj;
+            if (FacilityOpus.OpusOnWorkplace)
+            {
+                obj = Object.Instantiate(
+                    ResourceManager<GameObject>.GetResource("FacilityEmpty"),
+                    WorkspaceManager.Instance.transform);
+                var facilityEmpty = obj.GetComponent<FacilityEmpty>();
+                facilityEmpty.Init(x, y);
+                return facilityEmpty;
+            }
+            
+            obj = Object.Instantiate(
                 ResourceManager<GameObject>.GetResource("FacilityOpus"), 
                 WorkspaceManager.Instance.transform);
-            var facility = obj.GetComponent<FacilityOpus>();
-            facility.Init(x, y);
-            return facility;
+            var facilityOpus = obj.GetComponent<FacilityOpus>();
+            facilityOpus.Init(x, y);
+            return facilityOpus;
         }
         
         public static bool CanBuildOn(FacilityType typeNew, FacilityType typeOld) => typeNew switch

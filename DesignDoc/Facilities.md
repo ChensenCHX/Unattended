@@ -103,7 +103,7 @@ B在生成时若随机到A会同时向A的可连接表中添加到B的连接 即
 
 ## FacilityOpus
 产出Opus与**特殊产出, 下述** 有要求设施  
-特性：著作：按round border执行B3/S23康威生命游戏并进行增产  
+特性：著作：场上同时最多存在一个, 按round border执行B3/S23康威生命游戏并进行增产  
 身上携带三个InteractWith方法与一个内部状态State  
 start() => table?; eval() => bool; add(int, int) => bool; remove(int, int) => bool; State初始为Init  
 FacilityOpus会执行标准round border B3/S23生命游戏规则  

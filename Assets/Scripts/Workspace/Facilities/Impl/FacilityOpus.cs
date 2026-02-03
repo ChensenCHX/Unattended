@@ -24,6 +24,7 @@ namespace Workspace.Facilities.Impl
         private bool started = false;
         private bool halted = false;
         private int removeCost = 0;
+        public static bool OpusOnWorkplace { get; private set; } = false;
         private List<ValueTuple<int, int>> advPositions = new();
         
         private uint GetLifeTime(int x, int y) => lifegameMap[x, y] >> 2;
@@ -64,7 +65,7 @@ namespace Workspace.Facilities.Impl
                     for (var jj = j - 1; jj <= j + 1; jj++)
                     {
                         var jPos = ClampPos(jj);
-                        if (iPos == i || jPos == j || !AliveNow(iPos, jPos)) continue;
+                        if ((iPos == i && jPos == j) || !AliveNow(iPos, jPos)) continue;
                         aliveCount++;
                         totalLifetime += (int)GetLifeTime(iPos, jPos);
                     }
@@ -116,20 +117,19 @@ namespace Workspace.Facilities.Impl
                 {
                     if (halted || !started) return DynValue.False;
                     var workspaceManager = WorkspaceManager.Instance;
+                    var x = X;
+                    var y = Y;
                     for (var i = 0; i < lifegameMapSize; i++)
                     for (var j = 0; j < lifegameMapSize; j++)
                     {
                         var isAlive = workspaceManager.GetFacility(i, j).Type != FacilityType.Empty;
-                        if (isAlive == AliveNow(i, j)) continue;
-
+                        if (isAlive == AliveNow(i, j) || (i == x && j == y)) continue;
                         halted = true;
                         return DynValue.False;
                     }
 
                     UpdateLifeMap();
                     
-                    var x = X;
-                    var y = Y;
                     for (var i = x - 1; i < x + 1; i++) { 
                         var iPos = ClampPos(i);
                         for (var j = y - 1; j < y + 1; j++)
@@ -208,6 +208,7 @@ namespace Workspace.Facilities.Impl
             transform.position = new Vector3(x, 0, y);
             var time = Random.Range(GlobalConsts.OpusGrowTimeLowerBound, GlobalConsts.OpusGrowTimeUpperBound);
             var edgeLength = GlobalInfos.Instance.WorkspaceEdgeLength;
+            OpusOnWorkplace = true;
             lifegameMap = new uint[edgeLength, edgeLength];
             lifegameMapSize = edgeLength;
             objTransform = transform.Find("Main").transform;
@@ -217,6 +218,10 @@ namespace Workspace.Facilities.Impl
                 .OnComplete(() => progress = 1.0f);
         }
         
-        private void OnDestroy() => objTransform.DOKill();
+        private void OnDestroy()
+        {
+            objTransform.DOKill();
+            OpusOnWorkplace = false;
+        }
     }
 }
