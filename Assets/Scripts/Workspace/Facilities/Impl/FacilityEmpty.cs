@@ -1,10 +1,11 @@
 ﻿using MoonSharp.Interpreter;
 using UnityEngine;
 using Items;
+using Utils;
 
 namespace Workspace.Facilities.Impl
 {
-    public class FacilityEmpty : Facility
+    public class FacilityEmpty : Facility, IPoolable<FacilityEmpty>
     {
         public override FacilityType Type { get; } = FacilityType.Empty;
         public override double Progress { get; } = 1;
@@ -20,5 +21,8 @@ namespace Workspace.Facilities.Impl
         public override void Harvest() { }
         public override DynValue CanHarvest() => DynValue.True;
         public void Init(int x, int y) => transform.position = new Vector3(x, 0, y);
+
+        public override void FreeThis() => GameObjectPool<FacilityEmpty>.Free(this);
+        public override void OnAlloc() { }
     }
 }

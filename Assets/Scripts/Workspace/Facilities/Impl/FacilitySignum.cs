@@ -6,11 +6,12 @@ using GlobalSettings;
 using Items;
 using MoonSharp.Interpreter;
 using UnityEngine;
+using Utils;
 using Random = UnityEngine.Random;
 
 namespace Workspace.Facilities.Impl
 {
-    public class FacilitySignum : Facility
+    public class FacilitySignum : Facility, IPoolable<FacilitySignum>
     {
         public override FacilityType Type { get; } = FacilityType.Signum;
         public override double Progress => progress;
@@ -75,7 +76,6 @@ namespace Workspace.Facilities.Impl
             height = Random.Range(GlobalConsts.SignumHeightLowerBound, GlobalConsts.SignumHeightUpperBound);
             strength = Random.Range(GlobalConsts.SignumStrengthLowerBound, GlobalConsts.SignumStrengthUpperBound);
             var time = Random.Range(GlobalConsts.SignumGrowTimeLowerBound, GlobalConsts.SignumGrowTimeUpperBound);
-            objTransform = transform.Find("Main").transform;
             objTransform.DOScale(Vector3.one, time)
                 .SetEase(Ease.Linear)
                 .OnUpdate(() => progress = objTransform.localScale.x)
@@ -122,6 +122,15 @@ namespace Workspace.Facilities.Impl
                 if (currentHighest > height) continue; canTransferFrom.Add(signum);
             } currentHighest = 0;
             return canTransferFrom;
+        }
+        
+        public override void FreeThis() => GameObjectPool<FacilitySignum>.Free(this);
+        public override void OnAlloc()
+        {
+            progress = 0.0f;
+            objTransform ??= transform.Find("Main").transform;
+            objTransform.DOKill();
+            objTransform.localScale = Vector3.zero;
         }
     }
 }

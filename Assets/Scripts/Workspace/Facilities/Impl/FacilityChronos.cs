@@ -4,11 +4,12 @@ using GlobalSettings;
 using Items;
 using MoonSharp.Interpreter;
 using UnityEngine;
+using Utils;
 using Random = UnityEngine.Random;
 
 namespace Workspace.Facilities.Impl
 {
-    public class FacilityChronos : Facility
+    public class FacilityChronos : Facility, IPoolable<FacilityChronos>
     {
         public override FacilityType Type { get; } = FacilityType.Chronos;
         public override double Progress => progress;
@@ -79,7 +80,6 @@ namespace Workspace.Facilities.Impl
             transform.position = new Vector3(x, 0, y);
             requestItemType = (ItemType)Random.Range((int)ItemType.Mana, (int)ItemType.Signum);
             var time = Random.Range(GlobalConsts.ChronosGrowTimeLowerBound, GlobalConsts.ChronosGrowTimeUpperBound);
-            objTransform = transform.Find("Main").transform;
             objTransform.DOScale(Vector3.one, time)
                 .SetEase(Ease.Linear)
                 .OnUpdate(() => progress = objTransform.localScale.x)
@@ -87,5 +87,14 @@ namespace Workspace.Facilities.Impl
         }
         
         private void OnDestroy() => objTransform.DOKill();
+        
+        public override void FreeThis() => GameObjectPool<FacilityChronos>.Free(this);
+        public override void OnAlloc()
+        {
+            progress = 0.0f;
+            objTransform ??= transform.Find("Main").transform;
+            objTransform.DOKill();
+            objTransform.localScale = Vector3.zero;
+        }
     }
 }

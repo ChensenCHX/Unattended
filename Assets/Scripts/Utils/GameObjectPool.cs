@@ -5,19 +5,18 @@ using Workspace.Facilities.Impl;
 
 namespace Utils
 {
-    public interface IPoolAble<T> where T : MonoBehaviour
+    public interface IPoolable<T> where T : MonoBehaviour
     {
-        void OnFree();
+        void FreeThis();
         void OnAlloc();
     }
     
-    public static class GameObjectPool<T> where T : MonoBehaviour, IPoolAble<T>
+    public static class GameObjectPool<T> where T : MonoBehaviour, IPoolable<T>
     {
-        private static readonly List<T> pool = new();
-        private static int currPtr = 0;
+        private static readonly Stack<T> pool = new();
         public static T Alloc(GameObject prefab)
         {
-            if (currPtr < 0)
+            if (pool.Count == 0)
             {
                 var obj = Object.Instantiate(prefab, WorkspaceManager.Instance.transform);
                 var objMono = obj.GetComponent<T>();
@@ -25,7 +24,7 @@ namespace Utils
                 return objMono;
             }
             
-            var curr = pool[currPtr]; currPtr--;
+            var curr = pool.Pop();
             curr.gameObject.SetActive(true);
             curr.OnAlloc();
             return curr;
@@ -33,11 +32,8 @@ namespace Utils
 
         public static void Free(T obj)
         {
-            obj.OnFree();
-            obj.transform.SetParent(GameObjectPoolHolder.Instance.Transform);
             obj.gameObject.SetActive(false);
-            pool.Add(obj);
-            currPtr++;
+            pool.Push(obj);
         }
     }
 }

@@ -8,84 +8,56 @@ namespace Workspace.Facilities
     {
         public static Facility CreateEmpty(int x, int y)
         {
-            var obj = Object.Instantiate(
-                ResourceManager<GameObject>.GetResource("FacilityEmpty"), 
-                WorkspaceManager.Instance.transform);
-            var facility = obj.GetComponent<FacilityEmpty>();
+            var facility = GameObjectPool<FacilityEmpty>.Alloc(ResourceManager<GameObject>.GetResource("FacilityEmpty"));
             facility.Init(x, y);
             return facility;
         }
         public static Facility CreateMana(int x, int y)
         {
-            var obj = Object.Instantiate(
-                ResourceManager<GameObject>.GetResource("FacilityMana"), 
-                WorkspaceManager.Instance.transform);
-            var facility = obj.GetComponent<FacilityMana>();
+            var facility = GameObjectPool<FacilityMana>.Alloc(ResourceManager<GameObject>.GetResource("FacilityMana"));
             facility.Init(x, y);
             return facility;
         }
         public static Facility CreateEther(int x, int y)
         {
-            var obj = Object.Instantiate(
-                ResourceManager<GameObject>.GetResource("FacilityEther"), 
-                WorkspaceManager.Instance.transform);
-            var facility = obj.GetComponent<FacilityEther>();
+            var facility = GameObjectPool<FacilityEther>.Alloc(ResourceManager<GameObject>.GetResource("FacilityEther"));
             facility.Init(x, y);
             return facility;
         }
         public static Facility CreateMelodia(int x, int y)
         {
-            var obj = Object.Instantiate(
-                ResourceManager<GameObject>.GetResource("FacilityMelodia"), 
-                WorkspaceManager.Instance.transform);
-            var facility = obj.GetComponent<FacilityMelodia>();
+            var facility = GameObjectPool<FacilityMelodia>.Alloc(ResourceManager<GameObject>.GetResource("FacilityMelodia"));
             facility.Init(x, y);
             return facility;
         }
         public static Facility CreateChronos(int x, int y)
         {
-            var obj = Object.Instantiate(
-                ResourceManager<GameObject>.GetResource("FacilityChronos"), 
-                WorkspaceManager.Instance.transform);
-            var facility = obj.GetComponent<FacilityChronos>();
+            var facility = GameObjectPool<FacilityChronos>.Alloc(ResourceManager<GameObject>.GetResource("FacilityChronos"));
             facility.Init(x, y);
             return facility;
         }
         public static Facility CreateSignum(int x, int y)
         {
-            var obj = Object.Instantiate(
-                ResourceManager<GameObject>.GetResource("FacilitySignum"), 
-                WorkspaceManager.Instance.transform);
-            var facility = obj.GetComponent<FacilitySignum>();
+            var facility = GameObjectPool<FacilitySignum>.Alloc(ResourceManager<GameObject>.GetResource("FacilitySignum"));
             facility.Init(x, y);
             return facility;
         }
         public static Facility CreateIter(int x, int y)
         {
-            var obj = Object.Instantiate(
-                ResourceManager<GameObject>.GetResource("FacilityIter"), 
-                WorkspaceManager.Instance.transform);
-            var facility = obj.GetComponent<FacilityIter>();
+            var facility = GameObjectPool<FacilityIter>.Alloc(ResourceManager<GameObject>.GetResource("FacilityIter"));
             facility.Init(x, y);
             return facility;
         }
         public static Facility CreateOpus(int x, int y)
         {
-            GameObject obj;
             if (FacilityOpus.OpusOnWorkplace)
             {
-                obj = Object.Instantiate(
-                    ResourceManager<GameObject>.GetResource("FacilityEmpty"),
-                    WorkspaceManager.Instance.transform);
-                var facilityEmpty = obj.GetComponent<FacilityEmpty>();
+                var facilityEmpty = GameObjectPool<FacilityEmpty>.Alloc(ResourceManager<GameObject>.GetResource("FacilityEmpty"));
                 facilityEmpty.Init(x, y);
                 return facilityEmpty;
             }
             
-            obj = Object.Instantiate(
-                ResourceManager<GameObject>.GetResource("FacilityOpus"), 
-                WorkspaceManager.Instance.transform);
-            var facilityOpus = obj.GetComponent<FacilityOpus>();
+            var facilityOpus = GameObjectPool<FacilityOpus>.Alloc(ResourceManager<GameObject>.GetResource("FacilityOpus"));
             facilityOpus.Init(x, y);
             return facilityOpus;
         }

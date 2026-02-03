@@ -22,9 +22,8 @@ namespace Workspace
             x = ((x % edgeLength) + edgeLength) % edgeLength; y = ((y % edgeLength) + edgeLength) % edgeLength;
             var index = x + y * edgeLength;
             var oldFacility = facilities[index];
-            if (!FacilityFactory.CanBuildOn(newFacility, oldFacility.Type)) return false;
-
-            Destroy(facilities[index].gameObject);
+            if (!FacilityFactory.CanBuildOn(newFacility, oldFacility.Type)) return false; oldFacility.FreeThis();
+            
             facilities[index] = FacilityFactory.GetInstanceByType(newFacility, x, y);
             return true;
         }

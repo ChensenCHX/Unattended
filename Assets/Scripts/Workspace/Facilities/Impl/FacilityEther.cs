@@ -4,10 +4,11 @@ using GlobalSettings;
 using Items;
 using MoonSharp.Interpreter;
 using UnityEngine;
+using Utils;
 
 namespace Workspace.Facilities.Impl
 {
-    public class FacilityEther : Facility
+    public class FacilityEther : Facility, IPoolable<FacilityEther>
     {
         public override FacilityType Type { get; } = FacilityType.Ether;
         public override double Progress => progress;
@@ -50,8 +51,6 @@ namespace Workspace.Facilities.Impl
         }
         private IEnumerator InitCoroutine(float basicGrowthTime)
         {
-            objTransform = transform.Find("Main").transform;
-
             while (progress < 1.0f)
             {
                 yield return null;
@@ -65,5 +64,14 @@ namespace Workspace.Facilities.Impl
         }
         
         private void OnDestroy() => objTransform.DOKill();
+        
+        public override void FreeThis() => GameObjectPool<FacilityEther>.Free(this);
+        public override void OnAlloc()
+        {
+            progress = 0.0f;
+            objTransform ??= transform.Find("Main").transform;
+            objTransform.DOKill();
+            objTransform.localScale = Vector3.zero;
+        }
     }
 }

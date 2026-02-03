@@ -6,11 +6,12 @@ using GlobalSettings;
 using Items;
 using MoonSharp.Interpreter;
 using UnityEngine;
+using Utils;
 using Random = UnityEngine.Random;
 
 namespace Workspace.Facilities.Impl
 {
-    public class FacilityMelodia : Facility
+    public class FacilityMelodia : Facility, IPoolable<FacilityMelodia>
     {
         public override FacilityType Type { get; } = FacilityType.Melodia;
         public override double Progress => progress;
@@ -51,7 +52,6 @@ namespace Workspace.Facilities.Impl
             transform.position = new Vector3(x, 0, y);
             tone = Random.Range(0, 32);
             var time = Random.Range(GlobalConsts.MelodiaGrowTimeLowerBound, GlobalConsts.MelodiaGrowTimeUpperBound);
-            objTransform = transform.Find("Main").transform;
             objTransform.DOScale(Vector3.one, time)
                 .SetEase(Ease.Linear)
                 .OnUpdate(() => progress = objTransform.localScale.x)
@@ -59,5 +59,14 @@ namespace Workspace.Facilities.Impl
         }
 
         private void OnDestroy() => objTransform.DOKill();
+
+        public override void FreeThis() => GameObjectPool<FacilityMelodia>.Free(this);
+        public override void OnAlloc()
+        {
+            progress = 0.0f;
+            objTransform ??= transform.Find("Main").transform;
+            objTransform.DOKill();
+            objTransform.localScale = Vector3.zero;
+        }
     }
 }

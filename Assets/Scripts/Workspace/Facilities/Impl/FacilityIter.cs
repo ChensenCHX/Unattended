@@ -12,7 +12,7 @@ using Random = UnityEngine.Random;
 
 namespace Workspace.Facilities.Impl
 {
-    public class FacilityIter : Facility
+    public class FacilityIter : Facility, IPoolable<FacilityIter>
     {
         public override FacilityType Type { get; } = FacilityType.Iter;
         public override double Progress => progress;
@@ -124,7 +124,6 @@ namespace Workspace.Facilities.Impl
                 other.edgeList.Add(this, false);
                 other.edgeWeight.Add(this, weight);
             }
-            objTransform = transform.Find("Main").transform;
             objTransform.DOScale(Vector3.one, time)
                 .SetEase(Ease.Linear)
                 .OnUpdate(() => progress = objTransform.localScale.x)
@@ -178,5 +177,14 @@ namespace Workspace.Facilities.Impl
         //         .ToList()
         //         .ForEach(to => Gizmos.DrawLine(from, to));
         // }
+        
+        public override void FreeThis() => GameObjectPool<FacilityIter>.Free(this);
+        public override void OnAlloc()
+        {
+            progress = 0.0f;
+            objTransform ??= transform.Find("Main").transform;
+            objTransform.DOKill();
+            objTransform.localScale = Vector3.zero;
+        }
     }
 }

@@ -3,10 +3,11 @@ using GlobalSettings;
 using Items;
 using MoonSharp.Interpreter;
 using UnityEngine;
+using Utils;
 
 namespace Workspace.Facilities.Impl
 {
-    public class FacilityMana : Facility
+    public class FacilityMana : Facility, IPoolable<FacilityMana>
     {
         public override FacilityType Type { get; } = FacilityType.Mana;
         public override double Progress => progress;
@@ -34,7 +35,6 @@ namespace Workspace.Facilities.Impl
         {
             transform.position = new Vector3(x, 0, y);
             var time = Random.Range(GlobalConsts.ManaGrowTimeLowerBound, GlobalConsts.ManaGrowTimeUpperBound);
-            objTransform = transform.Find("Main").transform;
             objTransform.DOScale(Vector3.one, time)
                 .SetEase(Ease.Linear)
                 .OnUpdate(() => progress = objTransform.localScale.x)
@@ -42,5 +42,14 @@ namespace Workspace.Facilities.Impl
         }
         
         private void OnDestroy() => objTransform.DOKill();
+
+        public override void FreeThis() => GameObjectPool<FacilityMana>.Free(this);
+        public override void OnAlloc()
+        {
+            progress = 0.0f;
+            objTransform ??= transform.Find("Main").transform;
+            objTransform.DOKill();
+            objTransform.localScale = Vector3.zero;
+        }
     }
 }

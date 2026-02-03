@@ -2,10 +2,11 @@
 using MoonSharp.Interpreter;
 using Items;
 using UnityEngine;
+using Utils;
 
 namespace Workspace.Facilities
 {
-    public abstract class Facility : MonoBehaviour
+    public abstract class Facility : MonoBehaviour, IPoolable<Facility>
     {
         # region 属性
         public abstract FacilityType Type { get; }
@@ -22,5 +23,8 @@ namespace Workspace.Facilities
         # endregion
 
         private void OnDestroy() => transform.DOKill();
+
+        public virtual void FreeThis() { }
+        public virtual void OnAlloc() { }
     }
 }
