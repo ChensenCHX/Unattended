@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using System.Text;
+using TMPro;
+using UnityEngine;
+
 
 namespace InGameTextEditor.Format
 {
@@ -11,7 +15,7 @@ namespace InGameTextEditor.Format
         /// <summary>
         /// Font style.
         /// </summary>
-        public FontStyle fontStyle = FontStyle.Normal;
+        public FontStyles fontStyle = FontStyles.Normal;
 
         /// <summary>
         /// Indicates whether the default font style should be overridden by
@@ -35,7 +39,7 @@ namespace InGameTextEditor.Format
         /// leaving the font color unchanged.
         /// </summary>
         /// <param name="fontStyle">Font style.</param>
-        public TextStyle(FontStyle fontStyle)
+        public TextStyle(FontStyles fontStyle)
         {
             this.fontStyle = fontStyle;
             overrideFontStyle = true;
@@ -58,7 +62,7 @@ namespace InGameTextEditor.Format
         /// </summary>
         /// <param name="fontStyle">Font style.</param>
         /// <param name="fontColor">Font color.</param>
-        public TextStyle(FontStyle fontStyle, Color fontColor)
+        public TextStyle(FontStyles fontStyle, Color fontColor)
         {
             this.fontStyle = fontStyle;
             this.fontColor = fontColor;
@@ -74,25 +78,14 @@ namespace InGameTextEditor.Format
         {
             get
             {
-                string openTag = overrideColor ? "<color=#" + ColorUtility.ToHtmlStringRGBA(fontColor) + ">" : "";
+                var openTag = new StringBuilder();
+                if (overrideColor) { openTag.Append("<color=#"); openTag.Append(ColorUtility.ToHtmlStringRGBA(fontColor)); openTag.Append(">"); }
+                
+                if (!overrideFontStyle) return openTag.ToString();
+                if ((fontStyle & FontStyles.Bold) != 0) openTag.Append("<b>");
+                if ((fontStyle & FontStyles.Italic) != 0) openTag.Append("<i>");
 
-                if (overrideFontStyle)
-                {
-                    switch (fontStyle)
-                    {
-                        case FontStyle.Bold:
-                            openTag += "<b>";
-                            break;
-                        case FontStyle.Italic:
-                            openTag += "<i>";
-                            break;
-                        case FontStyle.BoldAndItalic:
-                            openTag += "<b><i>";
-                            break;
-                    }
-                }
-
-                return openTag;
+                return openTag.ToString();
             }
         }
 
@@ -104,28 +97,17 @@ namespace InGameTextEditor.Format
         {
             get
             {
-                string closeTag = "";
+                var closeTag = new StringBuilder();
 
                 if (overrideFontStyle)
                 {
-                    switch (fontStyle)
-                    {
-                        case FontStyle.Bold:
-                            closeTag += "</b>";
-                            break;
-                        case FontStyle.Italic:
-                            closeTag += "</i>";
-                            break;
-                        case FontStyle.BoldAndItalic:
-                            closeTag += "</i></b>";
-                            break;
-                    }
+                    if ((fontStyle & FontStyles.Italic) != 0) closeTag.Append("</i>");
+                    if ((fontStyle & FontStyles.Bold) != 0) closeTag.Append("</b>");
                 }
 
-                if (overrideColor)
-                    closeTag += "</color>";
+                if (overrideColor) closeTag.Append("</color>");
 
-                return closeTag;
+                return closeTag.ToString();
             }
         }
     }

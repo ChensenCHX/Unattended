@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using TMPro;
 using UnityEngine;
 
 namespace InGameTextEditor.Format
@@ -28,7 +29,7 @@ namespace InGameTextEditor.Format
         /// <summary>
         /// Blue text style.
         /// </summary>
-        public TextStyle textStyleNumber = new TextStyle(FontStyle.Bold);
+        public TextStyle textStyleNumber = new TextStyle(FontStyles.Bold);
 
         // indicates if the text formatter has been initialized
         bool initialized = false;
