@@ -849,6 +849,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a1f49e5fa8f7fa447bdd6cf36b9c6114, type: 3}
+--- !u!1 &542735506 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1134388053291424, guid: d53fd87b7d86a40469735ea1ab29f85c,
+    type: 3}
+  m_PrefabInstance: {fileID: 1367849686}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &546706800
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2109,6 +2115,43 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1367849686}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1219436975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542735506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 618e4db5c62740519d8183b2d92440a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textStyleComment:
+    fontStyle: 0
+    overrideFontStyle: 0
+    fontColor: {r: 0.42, g: 0.6, b: 0.33, a: 1}
+    overrideColor: 1
+  textStyleString:
+    fontStyle: 0
+    overrideFontStyle: 0
+    fontColor: {r: 0.81, g: 0.57, b: 0.47, a: 1}
+    overrideColor: 1
+  textStyleNumber:
+    fontStyle: 0
+    overrideFontStyle: 0
+    fontColor: {r: 0.71, g: 0.81, b: 0.66, a: 1}
+    overrideColor: 1
+  textStyleKeyword:
+    fontStyle: 0
+    overrideFontStyle: 0
+    fontColor: {r: 0.34, g: 0.61, b: 0.84, a: 1}
+    overrideColor: 1
+  textStyleLiteral:
+    fontStyle: 0
+    overrideFontStyle: 0
+    fontColor: {r: 0.31, g: 0.76, b: 1, a: 1}
+    overrideColor: 1
 --- !u!1001 &1240179955
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2740,7 +2783,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1134388053291424, guid: d53fd87b7d86a40469735ea1ab29f85c,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1219436975}
   m_SourcePrefab: {fileID: 100100000, guid: d53fd87b7d86a40469735ea1ab29f85c, type: 3}
 --- !u!4 &1404972090 stripped
 Transform:
