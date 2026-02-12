@@ -2115,7 +2115,7 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1367849686}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1219436975
+--- !u!114 &1219436978
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2130,7 +2130,7 @@ MonoBehaviour:
   textStyleComment:
     fontStyle: 0
     overrideFontStyle: 0
-    fontColor: {r: 0.42, g: 0.6, b: 0.33, a: 1}
+    fontColor: {r: 0.42, g: 0.54, b: 0.22, a: 1}
     overrideColor: 1
   textStyleString:
     fontStyle: 0
@@ -2140,17 +2140,32 @@ MonoBehaviour:
   textStyleNumber:
     fontStyle: 0
     overrideFontStyle: 0
-    fontColor: {r: 0.71, g: 0.81, b: 0.66, a: 1}
+    fontColor: {r: 0.6, g: 1, b: 0.39607844, a: 1}
     overrideColor: 1
   textStyleKeyword:
     fontStyle: 0
     overrideFontStyle: 0
-    fontColor: {r: 0.34, g: 0.61, b: 0.84, a: 1}
+    fontColor: {r: 0.72327036, g: 0.27065772, b: 0.6861709, a: 1}
     overrideColor: 1
-  textStyleLiteral:
+  textStyleFunction:
     fontStyle: 0
     overrideFontStyle: 0
-    fontColor: {r: 0.31, g: 0.76, b: 1, a: 1}
+    fontColor: {r: 1, g: 1, b: 0.23137255, a: 1}
+    overrideColor: 1
+  textStyleMember:
+    fontStyle: 0
+    overrideFontStyle: 0
+    fontColor: {r: 0.39308167, g: 0.76561886, b: 1, a: 1}
+    overrideColor: 1
+  textStyleLabel:
+    fontStyle: 0
+    overrideFontStyle: 0
+    fontColor: {r: 0.28235295, g: 0.9254902, b: 0.7647059, a: 1}
+    overrideColor: 1
+  textStyleSelf:
+    fontStyle: 0
+    overrideFontStyle: 0
+    fontColor: {r: 0.21561633, g: 0.57001996, b: 0.8679245, a: 1}
     overrideColor: 1
 --- !u!1001 &1240179955
 PrefabInstance:
@@ -2787,7 +2802,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1134388053291424, guid: d53fd87b7d86a40469735ea1ab29f85c,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1219436975}
+      addedObject: {fileID: 1219436978}
   m_SourcePrefab: {fileID: 100100000, guid: d53fd87b7d86a40469735ea1ab29f85c, type: 3}
 --- !u!4 &1404972090 stripped
 Transform:

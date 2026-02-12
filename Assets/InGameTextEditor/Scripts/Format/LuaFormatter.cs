@@ -10,21 +10,27 @@ namespace InGameTextEditor.Format
         // 样式
         // ===========================
 
-        public TextStyle textStyleComment  = new TextStyle(new Color(0.5f, 0.5f, 0.5f));
-        public TextStyle textStyleString   = new TextStyle(new Color(0.9f, 0.4f, 0.1f));
-        public TextStyle textStyleNumber   = new TextStyle(new Color(0.2f, 0.4f, 0.8f));
-        public TextStyle textStyleKeyword  = new TextStyle(new Color(0.2f, 0.7f, 0.7f));
-        public TextStyle textStyleFunction = new TextStyle(new Color(0.3f, 0.9f, 0.3f));
-        public TextStyle textStyleMember   = new TextStyle(new Color(0.4f, 0.7f, 1f));
-        public TextStyle textStyleLabel    = new TextStyle(new Color(0.8f, 0.6f, 0.2f));
+        public TextStyle textStyleComment       = new TextStyle(new Color(0.5f, 0.5f, 0.5f));
+        public TextStyle textStyleString        = new TextStyle(new Color(0.9f, 0.4f, 0.1f));
+        public TextStyle textStyleNumber        = new TextStyle(new Color(0.2f, 0.4f, 0.8f));
+        public TextStyle textStyleKeyword       = new TextStyle(new Color(0.2f, 0.7f, 0.7f));
+        public TextStyle textStyleKeywordValue  = new TextStyle(new Color(0.9f, 0.4f, 0.1f));
+        public TextStyle textStyleFunction      = new TextStyle(new Color(0.3f, 0.9f, 0.3f));
+        public TextStyle textStyleMember        = new TextStyle(new Color(0.4f, 0.7f, 1f));
+        public TextStyle textStyleLabel         = new TextStyle(new Color(0.8f, 0.6f, 0.2f));
 
-        public TextStyle textStyleSelf     = new TextStyle(new Color(1f, 0.4f, 0.4f));
+        public TextStyle textStyleSelf          = new TextStyle(new Color(1f, 0.4f, 0.4f));
 
-        readonly string[] keywords =
+        readonly string[] keywordsControl =
         {
-            "and","break","do","else","elseif","end","false","for","function",
-            "goto","if","in","local","nil","not","or","repeat","return",
-            "then","true","until","while"
+            "break","do","else","elseif","end","for","function",
+            "goto","if","in","repeat","return",
+            "then","until","while"
+        };
+
+        readonly string[] keywordsValue =
+        {
+            "and","true","false","nil","or","not","local","..."
         };
 
         Regex regex;
@@ -48,13 +54,31 @@ namespace InGameTextEditor.Format
             pattern += @"|(?<number>\b\d+(\.\d+)?\b)";
 
             pattern += @"|(?<keyword>\b(";
-            for (int i = 0; i < keywords.Length; i++)
+            for (int i = 0; i < keywordsControl.Length; i++)
             {
-                pattern += keywords[i];
-                if (i < keywords.Length - 1)
+                pattern += keywordsControl[i];
+                if (i < keywordsControl.Length - 1)
                     pattern += "|";
             }
             pattern += @")\b)";
+
+            pattern += @"|(?<keywordvalue>(";
+            for (int i = 0; i < keywordsValue.Length; i++)
+            {
+                string k = keywordsValue[i];
+                if (k == "...")
+                {
+                    pattern += @"\.{3}";
+                }
+                else
+                {
+                    pattern += @"\b" + k + @"\b";
+                }
+
+                if (i < keywordsValue.Length - 1)
+                    pattern += "|";
+            }
+            pattern += @"))";
 
             pattern += @"|(?<identifier>\b[a-zA-Z_]\w*\b)";
 
@@ -201,6 +225,10 @@ namespace InGameTextEditor.Format
 
                         case "keyword":
                             groups.Add(new TextFormatGroup(start, end, textStyleKeyword));
+                            break;
+
+                        case "keywordvalue":
+                            groups.Add(new TextFormatGroup(start, end, textStyleKeywordValue));
                             break;
 
                         case "label":
