@@ -36,7 +36,7 @@ namespace InGameTextEditor.Format
 
         static Regex regex;
         // Strict valid escape sequences for Lua 5.2: \a \b \f \n \r \t \v \\\ " ' \z<ws>* and octal \ddd (0-7) and hex \xHH
-        static readonly Regex validEscapeRegex = new Regex(@"\\(?:(?:[0-7]{1,3})|(?:x[0-9A-Fa-f]{1,2})|(?:z\s*)|[abfnrtv""'\\])", RegexOptions.Compiled);
+        static readonly Regex validEscapeRegex = new Regex(@"\\(?:(?:[0-9]{1,3})|(?:x[0-9A-Fa-f]{1,2})|(?:z\s*)|[abfnrtv""'\\])", RegexOptions.Compiled);
         // compiled regex for long bracket opener like --[[ or [==[  (captures optional -- and equals sequence)
         static readonly Regex longBracketOpenRegex = new Regex(@"(--)?\[(=*)\[", RegexOptions.Compiled);
 
@@ -110,9 +110,7 @@ namespace InGameTextEditor.Format
                 line.PreviousLine.GetProperty<bool>("endsWithLongString", false);
 
             int equalsCount =
-                line.PreviousLine != null
-                ? line.PreviousLine.GetProperty<int>("longBracketEqualsCount", 0)
-                : 0;
+                line.PreviousLine?.GetProperty<int>("longBracketEqualsCount", 0) ?? 0;
 
             if (HandleLongState(line, text, groups, prevLongComment, prevLongString, equalsCount))
                 return;
@@ -125,8 +123,8 @@ namespace InGameTextEditor.Format
                 bool immediateBracket = (firstDash + 2 < text.Length && text[firstDash + 2] == '[');
                 if (!immediateBracket)
                 {
-                            if (firstDash > 0)
-                                ApplyRegex(text.Substring(0, firstDash), 0, groups, text);
+                    if (firstDash > 0)
+                        ApplyRegex(text.Substring(0, firstDash), 0, groups, text);
 
                     groups.Add(new TextFormatGroup(firstDash, text.Length - 1, textStyleComment));
                     line.SetProperty("endsWithLongComment", false);
@@ -411,7 +409,7 @@ namespace InGameTextEditor.Format
 
         void ApplyRegex(string text, int offset, List<TextFormatGroup> groups, string fullLine = null)
         {
-            if (fullLine == null) fullLine = text;
+            fullLine ??= text;
             MatchCollection matches = regex.Matches(text);
 
             foreach (Match match in matches)
@@ -562,33 +560,6 @@ namespace InGameTextEditor.Format
                 i++;
 
             return (i < text.Length && text[i] == '[');
-        }
-
-        bool HasUnquotedDashDashBefore(int pos, string text)
-        {
-            bool inSingle = false, inDouble = false;
-            for (int i = 0; i < pos - 1; i++)
-            {
-                char c = text[i];
-                if (c == '\'' && !inDouble)
-                {
-                    // toggle single quote, ignore escaped ones
-                    if (i == 0 || text[i - 1] != '\\')
-                        inSingle = !inSingle;
-                }
-                else if (c == '"' && !inSingle)
-                {
-                    if (i == 0 || text[i - 1] != '\\')
-                        inDouble = !inDouble;
-                }
-
-                if (!inSingle && !inDouble && c == '-' && i + 1 < pos && text[i + 1] == '-')
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         int FindUnquotedDashDashBefore(int pos, string text)

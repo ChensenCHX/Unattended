@@ -2155,7 +2155,7 @@ MonoBehaviour:
   textStyleFunction:
     fontStyle: 0
     overrideFontStyle: 0
-    fontColor: {r: 1, g: 1, b: 0.23, a: 1}
+    fontColor: {r: 1, g: 1, b: 0.15, a: 1}
     overrideColor: 1
   textStyleMember:
     fontStyle: 0
