@@ -125,8 +125,8 @@ namespace InGameTextEditor.Format
                 bool immediateBracket = (firstDash + 2 < text.Length && text[firstDash + 2] == '[');
                 if (!immediateBracket)
                 {
-                    if (firstDash > 0)
-                        ApplyRegex(text.Substring(0, firstDash), 0, groups);
+                            if (firstDash > 0)
+                                ApplyRegex(text.Substring(0, firstDash), 0, groups, text);
 
                     groups.Add(new TextFormatGroup(firstDash, text.Length - 1, textStyleComment));
                     line.SetProperty("endsWithLongComment", false);
@@ -154,7 +154,7 @@ namespace InGameTextEditor.Format
                 if (!isComment && dashIndex >= 0 && dashIndex + 2 < openerIndex)
                 {
                     if (dashIndex > 0)
-                        ApplyRegex(text.Substring(0, dashIndex), 0, groups);
+                        ApplyRegex(text.Substring(0, dashIndex), 0, groups, text);
 
                     groups.Add(new TextFormatGroup(dashIndex, text.Length - 1, textStyleComment));
 
@@ -176,7 +176,7 @@ namespace InGameTextEditor.Format
 
                 // Color prefix before opener
                 if (openerIndex > 0)
-                    ApplyRegex(text.Substring(0, openerIndex), 0, groups);
+                    ApplyRegex(text.Substring(0, openerIndex), 0, groups, text);
 
                 if (closeIndex >= 0)
                 {
@@ -186,7 +186,7 @@ namespace InGameTextEditor.Format
 
                     // process the rest after closer
                     if (endIdx + 1 < text.Length)
-                        ApplyRegex(text.Substring(endIdx + 1), endIdx + 1, groups);
+                        ApplyRegex(text.Substring(endIdx + 1), endIdx + 1, groups, text);
 
                     line.SetProperty("endsWithLongComment", false);
                     line.SetProperty("endsWithLongString", false);
@@ -261,8 +261,8 @@ namespace InGameTextEditor.Format
                             if (!immediateBracket)
                             {
                                 // process any unprocessed text before the '--' within rest
-                                if (dashRelInSub > 0)
-                                    ApplyRegex(restSub.Substring(0, dashRelInSub), baseOffset + scanPos, groups);
+                                        if (dashRelInSub > 0)
+                                            ApplyRegex(restSub.Substring(0, dashRelInSub), baseOffset + scanPos, groups, text);
 
                                 groups.Add(new TextFormatGroup(dashAbs, text.Length - 1, textStyleComment));
 
@@ -279,7 +279,7 @@ namespace InGameTextEditor.Format
                     {
                         // no more openers, process the tail and finish
                         if (scanPos < rest.Length)
-                            ApplyRegex(rest.Substring(scanPos), baseOffset + scanPos, groups);
+                            ApplyRegex(rest.Substring(scanPos), baseOffset + scanPos, groups, text);
 
                         line.SetProperty("endsWithLongComment", false);
                         line.SetProperty("endsWithLongString", false);
@@ -292,7 +292,7 @@ namespace InGameTextEditor.Format
                     // process text before this opener
                     if (innerMatch.Index > 0)
                     {
-                        ApplyRegex(restSub.Substring(0, innerMatch.Index), baseOffset + scanPos, groups);
+                        ApplyRegex(restSub.Substring(0, innerMatch.Index), baseOffset + scanPos, groups, text);
                         processedUpTo = Math.Max(processedUpTo, baseOffset + innerMatch.Index - 1);
                     }
 
@@ -317,7 +317,7 @@ namespace InGameTextEditor.Format
                             {
                                 // process any unprocessed text before the '--' within rest
                                 if (dashIndexRel > scanPos)
-                                    ApplyRegex(rest.Substring(scanPos, dashIndexRel - scanPos), baseOffset + scanPos, groups);
+                                    ApplyRegex(rest.Substring(scanPos, dashIndexRel - scanPos), baseOffset + scanPos, groups, text);
 
                                 // color the rest as a single-line comment
                                 groups.Add(new TextFormatGroup(dashIndex, text.Length - 1, textStyleComment));
@@ -409,8 +409,9 @@ namespace InGameTextEditor.Format
         // REGEX APPLY
         // ===========================
 
-        void ApplyRegex(string text, int offset, List<TextFormatGroup> groups)
+        void ApplyRegex(string text, int offset, List<TextFormatGroup> groups, string fullLine = null)
         {
+            if (fullLine == null) fullLine = text;
             MatchCollection matches = regex.Matches(text);
 
             foreach (Match match in matches)
@@ -509,7 +510,7 @@ namespace InGameTextEditor.Format
                             break;
 
                         case "identifier":
-                            ColorizeIdentifier(text, start, end, groups);
+                            ColorizeIdentifier(fullLine, start, end, groups);
                             break;
                     }
                 }
@@ -614,6 +615,10 @@ namespace InGameTextEditor.Format
             for (int i = 0; i < text.Length - 1; i++)
             {
                 char c = text[i];
+                
+                // if not space just return -1; other logic can be removed but just keep them now.
+                if (c != '-' && !char.IsWhiteSpace(c)) return -1;
+                
                 if (c == '\'' && !inDouble)
                 {
                     if (i == 0 || text[i - 1] != '\\')
