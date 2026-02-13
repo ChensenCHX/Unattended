@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using InGameTextEditor;
+using InGameTextEditor.Format;
 using UnityEngine;
 
-namespace InGameTextEditor.Format
+namespace EditorUIAdaptor
 {
     public class LuaSyntaxHighlighter : TextFormatter
     {

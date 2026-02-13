@@ -45,9 +45,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 224537337030871512}
-  - component: {fileID: 114662724014931294}
   - component: {fileID: 222746571416295990}
   - component: {fileID: 114459442232745188}
+  - component: {fileID: 114662724014931294}
   m_Layer: 5
   m_Name: TextEditor
   m_TagString: Untagged
@@ -81,103 +81,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &114662724014931294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1134388053291424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7805e69d5e4240f29d3f06e26ff5883, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  font: {fileID: 11400000, guid: 014b6780fcea6bf4687cedfb91903e50, type: 2}
-  fontSize: 14
-  lineSpacing: 1
-  mainFontStyle: 0
-  mainFontColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
-  mainBackgroundColor: {r: 0.12156863, g: 0.12156863, b: 0.12156863, a: 1}
-  mainMarginLeft: 4
-  mainMarginRight: 4
-  mainMarginTop: 0
-  mainMarginBottom: 0
-  defaultText: 
-  wrapLines: 0
-  indentNewLines: 1
-  showLineNumbers: 1
-  lineNumberFontStyle: 0
-  lineNumberFontColor: {r: 0.43137255, g: 0.4627451, b: 0.5058824, a: 1}
-  lineNumberBackgroundColor: {r: 0, g: 0, b: 0, a: 0.2}
-  lineNumberMinWidth: 0
-  lineNumberMarginLeft: 4
-  lineNumberMarginRight: 4
-  showLineLabelIcons: 1
-  lineLabelIconsBackgroundColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.2}
-  lineLabelIconsWidth: 20
-  tooltipFont: {fileID: 11400000, guid: 014b6780fcea6bf4687cedfb91903e50, type: 2}
-  tooltipFontSize: 12
-  tooltipLineSpacing: 1
-  tooltipFontStyle: 0
-  tooltipFontColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
-  tooltipBackgroundColor: {r: 0, g: 0, b: 0, a: 0.8}
-  tooltipMarginLeft: 8
-  tooltipMarginRight: 8
-  tooltipMarginTop: 8
-  tooltipMarginBottom: 8
-  tooltipAboveCursor: 3
-  tooltipBelowCursor: 15
-  tooltipDelay: 0.2
-  tooltipFadeDuration: 0.05
-  disableInput: 0
-  deactivateOnLostApplicationFocus: 1
-  deactivateOnClickOutsideOfEditor: 1
-  resizeTimeout: 0.1
-  showLockMask: 1
-  showVerticalScrollbar: 0
-  showHorizontalScrollbar: 0
-  scrollbarWidth: 12
-  verticalWheelScrollSpeed: 20
-  horizontalWheelScrollSpeed: 20
-  verticalDragScrollSpeed: 5
-  horizontalDragScrollSpeed: 5
-  invertVerticalScrollDirection: 0
-  invertHorizontalScrollDirection: 1
-  caretColor: {r: 0.68235296, g: 0.6862745, b: 0.6784314, a: 0.5019608}
-  caretWidth: 4
-  caretBlinkRate: 2
-  selectionActiveColor: {r: 0.14901961, g: 0.30980393, b: 0.47058824, a: 1}
-  selectionInactiveColor: {r: 0.22745098, g: 0.23921569, b: 0.25490198, a: 1}
-  doubleClickInterval: 0.5
-  wordDelimiters: 200009002e002c003a003b0021003f005f002b002d002a002f0025003d0040007c00280029005b005d007b007d002200
-  tabStopWidth: 4
-  replaceTabsBySpaces: 0
-  enableHistory: 1
-  maxHistoryLength: 500
-  useDefaultKeyboardShortcuts: 1
-  useArrowKeys: 1
-  keyRepeatThreshold: 0.5
-  keyRepeatRate: 30
-  mainPanel: {fileID: 224909684747876842}
-  mainContent: {fileID: 224489640982486502}
-  textContainer: {fileID: 4187372009249731028}
-  selectionContainer: {fileID: 5687678700953552278}
-  labelContainer: {fileID: 5979198796719344735}
-  mainText: {fileID: 4992574013619506835}
-  lineNumberPanel: {fileID: 224039019142120276}
-  lineNumberContent: {fileID: 224749342996812946}
-  lineNumberText: {fileID: 8288928912187489347}
-  lineLabelIconsPanel: {fileID: 2179097416862821447}
-  lineLabelIconsContent: {fileID: 6015498875889028244}
-  caret: {fileID: 1833745760542384}
-  verticalScrollbar: {fileID: 114926909872171700}
-  horizontalScrollbar: {fileID: 114803381886405840}
-  lockMask: {fileID: 1940041573265608}
-  tooltip: {fileID: 4259688365497890687}
-  tooltipText: {fileID: 6908403585034542731}
-  characterWidth: 8.40237
-  characterHeight: 16.552801
 --- !u!222 &222746571416295990
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -216,6 +119,103 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &114662724014931294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1134388053291424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7805e69d5e4240f29d3f06e26ff5883, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  font: {fileID: 11400000, guid: 014b6780fcea6bf4687cedfb91903e50, type: 2}
+  fontSize: 14
+  lineSpacing: 1
+  mainFontStyle: 0
+  mainFontColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  mainBackgroundColor: {r: 0.12156863, g: 0.12156863, b: 0.12156863, a: 1}
+  mainMarginLeft: 4
+  mainMarginRight: 4
+  mainMarginTop: 0
+  mainMarginBottom: 0
+  defaultText: 
+  wrapLines: 0
+  indentNewLines: 1
+  showLineNumbers: 1
+  lineNumberFontStyle: 0
+  lineNumberFontColor: {r: 0.43137255, g: 0.4627451, b: 0.5058824, a: 1}
+  lineNumberBackgroundColor: {r: 0, g: 0, b: 0, a: 0.2}
+  lineNumberMinWidth: 45
+  lineNumberMarginLeft: 4
+  lineNumberMarginRight: 4
+  showLineLabelIcons: 1
+  lineLabelIconsBackgroundColor: {r: 0.33962262, g: 0.33962262, b: 0.33962262, a: 0.2}
+  lineLabelIconsWidth: 16
+  tooltipFont: {fileID: 11400000, guid: 014b6780fcea6bf4687cedfb91903e50, type: 2}
+  tooltipFontSize: 12
+  tooltipLineSpacing: 1
+  tooltipFontStyle: 0
+  tooltipFontColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  tooltipBackgroundColor: {r: 0, g: 0, b: 0, a: 0.8}
+  tooltipMarginLeft: 8
+  tooltipMarginRight: 8
+  tooltipMarginTop: 8
+  tooltipMarginBottom: 8
+  tooltipAboveCursor: 3
+  tooltipBelowCursor: 15
+  tooltipDelay: 0.2
+  tooltipFadeDuration: 0.05
+  disableInput: 0
+  deactivateOnLostApplicationFocus: 1
+  deactivateOnClickOutsideOfEditor: 1
+  resizeTimeout: 0.1
+  showLockMask: 1
+  showVerticalScrollbar: 0
+  showHorizontalScrollbar: 0
+  scrollbarWidth: 12
+  verticalWheelScrollSpeed: 20
+  horizontalWheelScrollSpeed: 20
+  verticalDragScrollSpeed: 5
+  horizontalDragScrollSpeed: 5
+  invertVerticalScrollDirection: 0
+  invertHorizontalScrollDirection: 1
+  caretColor: {r: 0.68235296, g: 0.6862745, b: 0.6784314, a: 0.5019608}
+  caretWidth: 2
+  caretBlinkRate: 2
+  selectionActiveColor: {r: 0.14901961, g: 0.30980393, b: 0.47058824, a: 1}
+  selectionInactiveColor: {r: 0.22745098, g: 0.23921569, b: 0.25490198, a: 1}
+  doubleClickInterval: 0.5
+  wordDelimiters: 200009002e002c003a003b0021003f005f002b002d002a002f0025003d0040007c00280029005b005d007b007d002200
+  tabStopWidth: 4
+  replaceTabsBySpaces: 0
+  enableHistory: 1
+  maxHistoryLength: 500
+  useDefaultKeyboardShortcuts: 1
+  useArrowKeys: 1
+  keyRepeatThreshold: 0.5
+  keyRepeatRate: 30
+  mainPanel: {fileID: 224909684747876842}
+  mainContent: {fileID: 224489640982486502}
+  textContainer: {fileID: 4187372009249731028}
+  selectionContainer: {fileID: 5687678700953552278}
+  labelContainer: {fileID: 5979198796719344735}
+  mainText: {fileID: 4992574013619506835}
+  lineNumberPanel: {fileID: 224039019142120276}
+  lineNumberContent: {fileID: 224749342996812946}
+  lineNumberText: {fileID: 8288928912187489347}
+  lineLabelIconsPanel: {fileID: 2179097416862821447}
+  lineLabelIconsContent: {fileID: 6015498875889028244}
+  caret: {fileID: 1833745760542384}
+  verticalScrollbar: {fileID: 114926909872171700}
+  horizontalScrollbar: {fileID: 114803381886405840}
+  lockMask: {fileID: 1940041573265608}
+  tooltip: {fileID: 4259688365497890687}
+  tooltipText: {fileID: 6908403585034542731}
+  characterWidth: 8.40237
+  characterHeight: 16.552801
 --- !u!1 &1455669603869710
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,8 +462,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 36.40237, y: 0}
-  m_SizeDelta: {x: -36.40237, y: 0}
+  m_AnchoredPosition: {x: 61, y: 0}
+  m_SizeDelta: {x: -61, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &222659821547495414
 CanvasRenderer:
@@ -591,7 +591,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 16.40237, y: 0}
+  m_SizeDelta: {x: 45, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &222206795073177274
 CanvasRenderer:
@@ -1669,8 +1669,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 16.40237, y: 0}
-  m_SizeDelta: {x: 20, y: 0}
+  m_AnchoredPosition: {x: 45, y: 0}
+  m_SizeDelta: {x: 16, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &3372840965060968588
 CanvasRenderer:
@@ -1706,7 +1706,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 0.2}
+  m_Color: {r: 0.33962262, g: 0.33962262, b: 0.33962262, a: 0.2}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
