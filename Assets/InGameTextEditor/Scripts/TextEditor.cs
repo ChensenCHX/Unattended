@@ -2447,6 +2447,7 @@ namespace InGameTextEditor
                 verticalScrollbar.size = 1f;
                 verticalScrollbar.value = 0f;
                 verticalScrollbar.interactable = false;
+                verticalScrollbar.gameObject.SetActive(false);
             }
             else
             {

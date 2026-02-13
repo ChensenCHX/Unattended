@@ -123,6 +123,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!224 &32980035 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 224039019142120276, guid: d53fd87b7d86a40469735ea1ab29f85c,
+    type: 3}
+  m_PrefabInstance: {fileID: 1367849686}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &60049156 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 421835141719502315, guid: 774952a2e2d59db4197cf3216ecfadd8,
@@ -2078,7 +2084,7 @@ Canvas:
   m_RenderMode: 0
   m_Camera: {fileID: 330585545}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
@@ -2206,6 +2212,23 @@ MonoBehaviour:
   lineIconContainerTransform: {fileID: 1480696553}
   labelIconSprite: {fileID: 21300000, guid: 0393dddae4f40447e8aa33f6786dbf70, type: 3}
   breakpointLabelColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!114 &1219436986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542735506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb59d52c5acf40ca86fc3a5dc6132adc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textEditor: {fileID: 1219436979}
+  mainWindow: {fileID: 1102307102}
+  codeWindow: {fileID: 2053650681}
+  lineNumberBar: {fileID: 32980035}
+  verticalScrollbar: {fileID: 1644797304}
 --- !u!1001 &1240179955
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2754,10 +2777,25 @@ PrefabInstance:
       propertyPath: lineNumberMinWidth
       value: 36
       objectReference: {fileID: 0}
+    - target: {fileID: 114662724014931294, guid: d53fd87b7d86a40469735ea1ab29f85c,
+        type: 3}
+      propertyPath: showVerticalScrollbar
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 224039019142120276, guid: d53fd87b7d86a40469735ea1ab29f85c,
         type: 3}
       propertyPath: m_SizeDelta.x
       value: 36
+      objectReference: {fileID: 0}
+    - target: {fileID: 224299824152407374, guid: d53fd87b7d86a40469735ea1ab29f85c,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224299824152407374, guid: d53fd87b7d86a40469735ea1ab29f85c,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224537337030871512, guid: d53fd87b7d86a40469735ea1ab29f85c,
         type: 3}
@@ -2859,10 +2897,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 224609477492141532, guid: d53fd87b7d86a40469735ea1ab29f85c,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -12
+      objectReference: {fileID: 0}
+    - target: {fileID: 224609477492141532, guid: d53fd87b7d86a40469735ea1ab29f85c,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -6
+      objectReference: {fileID: 0}
     - target: {fileID: 224909684747876842, guid: d53fd87b7d86a40469735ea1ab29f85c,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -52
+      value: -64
       objectReference: {fileID: 0}
     - target: {fileID: 224909684747876842, guid: d53fd87b7d86a40469735ea1ab29f85c,
         type: 3}
@@ -2891,6 +2939,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1219436983}
+    - targetCorrespondingSourceObject: {fileID: 1134388053291424, guid: d53fd87b7d86a40469735ea1ab29f85c,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1219436986}
   m_SourcePrefab: {fileID: 100100000, guid: d53fd87b7d86a40469735ea1ab29f85c, type: 3}
 --- !u!4 &1404972090 stripped
 Transform:
@@ -3451,6 +3503,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b3e9f93dcaf0d3745ae7c9989fa499e2, type: 3}
+--- !u!224 &1644797304 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 224822264346365564, guid: d53fd87b7d86a40469735ea1ab29f85c,
+    type: 3}
+  m_PrefabInstance: {fileID: 1367849686}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1680642963
 PrefabInstance:
   m_ObjectHideFlags: 0

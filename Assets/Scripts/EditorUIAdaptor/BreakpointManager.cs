@@ -35,7 +35,7 @@ namespace EditorUIAdaptor
             if (line.Labels.Count != 0)
             {
                 line.RemoveLabels();
-                // TODO:: send breakpoint change message here
+                // TODO:: send remove breakpoint message here
             }
             else
             {
@@ -44,14 +44,18 @@ namespace EditorUIAdaptor
                     labelIconSprite, breakpointLabelColor,
                     null, 
                     Line.Label.DeleteCondition.ANYTHING_CHANGES);
-                // TODO:: send breakpoint change message here
+                // TODO:: send add breakpoint message here
             }
         }
 
         public override bool Initialized { get; } = true;
         public override void Init() { }
-        public override void OnLineChanged(Line line)
+        
+        private int lastExecFrame = -1;
+        public override void OnLineChanged(Line _)
         {
+            if (Time.frameCount == lastExecFrame) return;   // 一个update执行一次就可以 没必要每行都要触发
+            lastExecFrame = Time.frameCount;
             // TODO:: send breakpoint change message here
             // delete every breakpoints
         }
