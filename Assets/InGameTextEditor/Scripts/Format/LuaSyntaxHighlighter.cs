@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
@@ -33,11 +34,13 @@ namespace InGameTextEditor.Format
             "and","true","false","nil","or","not","local","self","..."
         };
 
-        Regex regex;
+        static Regex regex;
         // Strict valid escape sequences for Lua 5.2: \a \b \f \n \r \t \v \\\ " ' \z<ws>* and octal \ddd (0-7) and hex \xHH
         static readonly Regex validEscapeRegex = new Regex(@"\\(?:(?:[0-7]{1,3})|(?:x[0-9A-Fa-f]{1,2})|(?:z\s*)|[abfnrtv""'\\])", RegexOptions.Compiled);
+        // compiled regex for long bracket opener like --[[ or [==[  (captures optional -- and equals sequence)
+        static readonly Regex longBracketOpenRegex = new Regex(@"(--)?\[(=*)\[", RegexOptions.Compiled);
 
-        bool initialized = false;
+        static bool initialized = false;
         public override bool Initialized => initialized;
 
         // ===========================
@@ -46,11 +49,11 @@ namespace InGameTextEditor.Format
 
         public override void Init()
         {
+            if (initialized) return;
             string pattern = "";
 
             pattern += @"(?<comment>--(?!\[=*\[).*$)";
             pattern += @"|(?<label>::[a-zA-Z_]\w*::)";
-            // `self` is handled as a keywordvalue now
             pattern += @"|(?<string>""(?:[^""\\]|\\.)*"")";
             pattern += @"|(?<string>'(?:[^'\\]|\\.)*')";
             pattern += @"|(?<number>\b\d+(\.\d+)?\b)";
@@ -114,24 +117,96 @@ namespace InGameTextEditor.Format
             if (HandleLongState(line, text, groups, prevLongComment, prevLongString, equalsCount))
                 return;
 
-            Match longMatch = Regex.Match(text, @"(--)?\[(=*)\[");
+            // If the line contains an unquoted '--' that is not immediately followed by '[' (i.e. "-- [["),
+            // treat the rest of the line as a single-line comment and return.
+            int firstDash = FindFirstUnquotedDashDash(text);
+            if (firstDash >= 0)
+            {
+                bool immediateBracket = (firstDash + 2 < text.Length && text[firstDash + 2] == '[');
+                if (!immediateBracket)
+                {
+                    if (firstDash > 0)
+                        ApplyRegex(text.Substring(0, firstDash), 0, groups);
+
+                    groups.Add(new TextFormatGroup(firstDash, text.Length - 1, textStyleComment));
+                    line.SetProperty("endsWithLongComment", false);
+                    line.SetProperty("endsWithLongString", false);
+                    line.SetProperty("longBracketEqualsCount", 0);
+                    line.ApplyTextFormat(groups);
+                    return;
+                }
+            }
+
+            Match longMatch = longBracketOpenRegex.Match(text);
 
             if (longMatch.Success)
             {
                 bool isComment = longMatch.Groups[1].Success;
                 int eqCount = longMatch.Groups[2].Value.Length;
+                int openerIndex = longMatch.Index;
 
-                groups.Add(new TextFormatGroup(
-                    longMatch.Index,
-                    text.Length - 1,
-                    isComment ? textStyleComment : textStyleString));
+                // Find any unquoted '--' before the opener and get its index
+                int dashIndex = FindUnquotedDashDashBefore(openerIndex, text);
 
-                line.SetProperty("endsWithLongComment", isComment);
-                line.SetProperty("endsWithLongString", !isComment);
-                line.SetProperty("longBracketEqualsCount", eqCount);
+                // If there is an unquoted '--' before the opener and it is NOT immediately adjacent
+                // to the opener (i.e. there is whitespace between '--' and '['), then treat the
+                // '--' as a normal single-line comment start and do NOT start a long comment.
+                if (!isComment && dashIndex >= 0 && dashIndex + 2 < openerIndex)
+                {
+                    if (dashIndex > 0)
+                        ApplyRegex(text.Substring(0, dashIndex), 0, groups);
 
-                line.ApplyTextFormat(groups);
-                return;
+                    groups.Add(new TextFormatGroup(dashIndex, text.Length - 1, textStyleComment));
+
+                    line.SetProperty("endsWithLongComment", false);
+                    line.SetProperty("endsWithLongString", false);
+                    line.SetProperty("longBracketEqualsCount", 0);
+
+                    line.ApplyTextFormat(groups);
+                    return;
+                }
+
+                // Determine if there's a closer on the same line
+                string closeToken = "]" + new string('=', eqCount) + "]";
+                int closeIndex = text.IndexOf(closeToken, openerIndex + longMatch.Length);
+
+                // If '--[[' without space (dashIndex + 2 == openerIndex), it's a long comment opener
+                if (!isComment && dashIndex >= 0 && dashIndex + 2 == openerIndex)
+                    isComment = true;
+
+                // Color prefix before opener
+                if (openerIndex > 0)
+                    ApplyRegex(text.Substring(0, openerIndex), 0, groups);
+
+                if (closeIndex >= 0)
+                {
+                    // closer exists on same line: color only the [==[ ... ]==] segment
+                    int endIdx = closeIndex + closeToken.Length - 1;
+                    groups.Add(new TextFormatGroup(openerIndex, endIdx, isComment ? textStyleComment : textStyleString));
+
+                    // process the rest after closer
+                    if (endIdx + 1 < text.Length)
+                        ApplyRegex(text.Substring(endIdx + 1), endIdx + 1, groups);
+
+                    line.SetProperty("endsWithLongComment", false);
+                    line.SetProperty("endsWithLongString", false);
+                    line.SetProperty("longBracketEqualsCount", 0);
+
+                    line.ApplyTextFormat(groups);
+                    return;
+                }
+                else
+                {
+                    // no closer: color from opener to line end and enter multi-line state
+                    groups.Add(new TextFormatGroup(openerIndex, text.Length - 1, isComment ? textStyleComment : textStyleString));
+
+                    line.SetProperty("endsWithLongComment", isComment);
+                    line.SetProperty("endsWithLongString", !isComment);
+                    line.SetProperty("longBracketEqualsCount", eqCount);
+
+                    line.ApplyTextFormat(groups);
+                    return;
+                }
             }
 
             ApplyRegex(text, 0, groups);
@@ -171,11 +246,35 @@ namespace InGameTextEditor.Format
                 // - 若找不到结束标记，则把从开头到行尾作为新的多行状态处理并返回。
                 int scanPos = 0;
                 int baseOffset = endIndex + endToken.Length;
+                int processedUpTo = endIndex + endToken.Length - 1;
                 while (scanPos < rest.Length)
                 {
                     // use substring to get a Match starting at scanPos
                     string restSub = rest.Substring(scanPos);
-                    Match innerMatch = Regex.Match(restSub, "(--)?\\[(=*)\\[");
+                        // If restSub contains an unquoted '--' that is not immediately followed by '[',
+                        // treat the remainder of the line as a single-line comment and finish.
+                        int dashRelInSub = FindFirstUnquotedDashDash(restSub);
+                        if (dashRelInSub >= 0)
+                        {
+                            int dashAbs = baseOffset + scanPos + dashRelInSub;
+                            bool immediateBracket = (dashRelInSub + 2 < restSub.Length && restSub[dashRelInSub + 2] == '[');
+                            if (!immediateBracket)
+                            {
+                                // process any unprocessed text before the '--' within rest
+                                if (dashRelInSub > 0)
+                                    ApplyRegex(restSub.Substring(0, dashRelInSub), baseOffset + scanPos, groups);
+
+                                groups.Add(new TextFormatGroup(dashAbs, text.Length - 1, textStyleComment));
+
+                                line.SetProperty("endsWithLongComment", false);
+                                line.SetProperty("endsWithLongString", false);
+                                line.SetProperty("longBracketEqualsCount", 0);
+
+                                line.ApplyTextFormat(groups);
+                                return true;
+                            }
+                        }
+                    Match innerMatch = longBracketOpenRegex.Match(restSub);
                     if (!innerMatch.Success)
                     {
                         // no more openers, process the tail and finish
@@ -194,6 +293,7 @@ namespace InGameTextEditor.Format
                     if (innerMatch.Index > 0)
                     {
                         ApplyRegex(restSub.Substring(0, innerMatch.Index), baseOffset + scanPos, groups);
+                        processedUpTo = Math.Max(processedUpTo, baseOffset + innerMatch.Index - 1);
                     }
 
                     bool isComment2 = innerMatch.Groups[1].Success;
@@ -203,6 +303,40 @@ namespace InGameTextEditor.Format
                     int openerRel = scanPos + innerMatch.Index;
                     int openerAbs = baseOffset + openerRel;
 
+                    // If there is an unquoted '--' before this opener and it's separated by whitespace,
+                    // treat the '--' as a single-line comment start and stop processing further openers.
+                    int dashIndex = FindUnquotedDashDashBefore(openerAbs, text);
+                    if (dashIndex >= baseOffset)
+                    {
+                        // dashIndexRel is the index inside rest
+                        int dashIndexRel = dashIndex - baseOffset;
+                        if (dashIndex + 2 < openerAbs)
+                        {
+                            // only process if the dash is in the unprocessed suffix (no overlap)
+                            if (dashIndexRel >= scanPos)
+                            {
+                                // process any unprocessed text before the '--' within rest
+                                if (dashIndexRel > scanPos)
+                                    ApplyRegex(rest.Substring(scanPos, dashIndexRel - scanPos), baseOffset + scanPos, groups);
+
+                                // color the rest as a single-line comment
+                                groups.Add(new TextFormatGroup(dashIndex, text.Length - 1, textStyleComment));
+
+                                line.SetProperty("endsWithLongComment", false);
+                                line.SetProperty("endsWithLongString", false);
+                                line.SetProperty("longBracketEqualsCount", 0);
+
+                                line.ApplyTextFormat(groups);
+                                return true;
+                            }
+                            // otherwise the dash is within already processed area; ignore it
+                        }
+                        else if (dashIndex + 2 == openerAbs)
+                        {
+                            isComment2 = true; // '--[[' without space => long comment
+                        }
+                    }
+
                     // search for the corresponding closer within rest starting after the opener
                     string closeToken2 = "]" + new string('=', eq2) + "]";
                     int closeRel = rest.IndexOf(closeToken2, openerRel + innerMatch.Length);
@@ -211,10 +345,14 @@ namespace InGameTextEditor.Format
                     {
                         // closer exists on same line: color the whole [==[ ... ]==] segment and continue
                         int closerAbsEnd = baseOffset + closeRel + closeToken2.Length - 1;
-                        groups.Add(new TextFormatGroup(
-                            openerAbs,
-                            closerAbsEnd,
-                            isComment2 ? textStyleComment : textStyleString));
+                        if (openerAbs > processedUpTo)
+                        {
+                            groups.Add(new TextFormatGroup(
+                                openerAbs,
+                                closerAbsEnd,
+                                isComment2 ? textStyleComment : textStyleString));
+                            processedUpTo = closerAbsEnd;
+                        }
 
                         // advance scanPos to after the closer
                         scanPos = closeRel + closeToken2.Length;
@@ -223,10 +361,14 @@ namespace InGameTextEditor.Format
                     else
                     {
                         // no closer on this line: the opener starts a multi-line block that continues
-                        groups.Add(new TextFormatGroup(
-                            openerAbs,
-                            text.Length - 1,
-                            isComment2 ? textStyleComment : textStyleString));
+                        if (openerAbs > processedUpTo)
+                        {
+                            groups.Add(new TextFormatGroup(
+                                openerAbs,
+                                text.Length - 1,
+                                isComment2 ? textStyleComment : textStyleString));
+                            processedUpTo = text.Length - 1;
+                        }
 
                         line.SetProperty("endsWithLongComment", isComment2);
                         line.SetProperty("endsWithLongString", !isComment2);
@@ -411,6 +553,85 @@ namespace InGameTextEditor.Format
                 i++;
 
             return (i < text.Length && text[i] == '[');
+        }
+
+        bool HasUnquotedDashDashBefore(int pos, string text)
+        {
+            bool inSingle = false, inDouble = false;
+            for (int i = 0; i < pos - 1; i++)
+            {
+                char c = text[i];
+                if (c == '\'' && !inDouble)
+                {
+                    // toggle single quote, ignore escaped ones
+                    if (i == 0 || text[i - 1] != '\\')
+                        inSingle = !inSingle;
+                }
+                else if (c == '"' && !inSingle)
+                {
+                    if (i == 0 || text[i - 1] != '\\')
+                        inDouble = !inDouble;
+                }
+
+                if (!inSingle && !inDouble && c == '-' && i + 1 < pos && text[i + 1] == '-')
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        int FindUnquotedDashDashBefore(int pos, string text)
+        {
+            bool inSingle = false, inDouble = false;
+            for (int i = 0; i < pos - 1; i++)
+            {
+                char c = text[i];
+                if (c == '\'' && !inDouble)
+                {
+                    if (i == 0 || text[i - 1] != '\\')
+                        inSingle = !inSingle;
+                }
+                else if (c == '"' && !inSingle)
+                {
+                    if (i == 0 || text[i - 1] != '\\')
+                        inDouble = !inDouble;
+                }
+
+                if (!inSingle && !inDouble && c == '-' && i + 1 < pos && text[i + 1] == '-')
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        int FindFirstUnquotedDashDash(string text)
+        {
+            bool inSingle = false, inDouble = false;
+            for (int i = 0; i < text.Length - 1; i++)
+            {
+                char c = text[i];
+                if (c == '\'' && !inDouble)
+                {
+                    if (i == 0 || text[i - 1] != '\\')
+                        inSingle = !inSingle;
+                }
+                else if (c == '"' && !inSingle)
+                {
+                    if (i == 0 || text[i - 1] != '\\')
+                        inDouble = !inDouble;
+                }
+
+                if (!inSingle && !inDouble && c == '-' && i + 1 < text.Length && text[i + 1] == '-')
+                {
+                    return i;
+                }
+            }
+
+            return -1;
         }
     }
 }
