@@ -16,7 +16,7 @@ namespace InGameTextEditor.Format
         public TextStyle textStyleNumber        = new TextStyle(new Color(0.60f, 1.00f, 0.40f));
         public TextStyle textStyleKeyword       = new TextStyle(new Color(0.72f, 0.27f, 0.69f));
         public TextStyle textStyleKeywordValue  = new TextStyle(new Color(0.22f, 0.57f, 0.87f));
-        public TextStyle textStyleFunction      = new TextStyle(new Color(1.00f, 1.00f, 0.23f));
+        public TextStyle textStyleFunction      = new TextStyle(new Color(1.00f, 1.00f, 0.15f));
         public TextStyle textStyleMember        = new TextStyle(new Color(0.39f, 0.77f, 1.00f));
         public TextStyle textStyleLabel         = new TextStyle(new Color(0.28f, 0.93f, 0.76f));
         public TextStyle textStyleEscape        = new TextStyle(new Color(1.00f, 0.80f, 0.20f));
@@ -537,9 +537,17 @@ namespace InGameTextEditor.Format
             {
                 groups.Add(new TextFormatGroup(start, end, textStyleFunction));
             }
-            else if (c == '.' || c == ':' || c == '[')
+            else if (c == '.')
             {
-                // '[' that is not a long-bracket opener is an indexing/member access
+                // '..' is the string concatenation operator; if this is concatenation
+                // (two dots) do NOT treat as member access.
+                if (next + 1 < text.Length && text[next + 1] == '.')
+                    return;
+
+                groups.Add(new TextFormatGroup(start, end, textStyleMember));
+            }
+            else if (c == ':' || c == '[')
+            {
                 groups.Add(new TextFormatGroup(start, end, textStyleMember));
             }
         }
