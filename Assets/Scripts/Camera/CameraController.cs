@@ -1,9 +1,11 @@
 using System;
 using GlobalSettings;
 using UnityEngine;
+using Utils;
 
-public class CameraController : MonoBehaviour
+public class CameraController : SingletonMono<CameraController>
 {
+    public Camera Camera => _camera;
     private Camera _camera;
 
     [Header("移动设置")]
@@ -19,16 +21,17 @@ public class CameraController : MonoBehaviour
 
     private Vector3 _moveVelocity;
     private float _rotationVelocity;
+    private Vector3 _extraMovement;
     private static int moveLock = 0;
     public static void Lock() => moveLock++;
     public static void Unlock() => moveLock = Math.Max(moveLock - 1, 0);
-    
-    void Awake()
+    public void AddExtraMovement(Vector3 movement) { if (moveLock == 0) _extraMovement += movement; }
+
+    void Start()
     {
         _camera = Camera.main;
         _targetPosition = _camera.transform.position;
     }
-
     void Update()
     {
         if (moveLock == 0) HandleInput();
@@ -55,7 +58,11 @@ public class CameraController : MonoBehaviour
             var zoomDirection = scroll * _zoomSpeed * _targetPosition.y * _camera.transform.forward;
             if (_targetPosition.y + zoomDirection.y >= _minZoom && _targetPosition.y + zoomDirection.y <= _maxZoom) _targetPosition += zoomDirection;
         }
-        if (moveDirection.magnitude > 0.1f) _targetPosition += _moveSpeed * Mathf.Sqrt(_targetPosition.y) * Time.deltaTime * moveDirection.normalized;
+        
+        if (moveDirection.magnitude > 0.1f) _targetPosition += _moveSpeed * Mathf.Sqrt(_targetPosition.y) * Time.deltaTime * (moveDirection.normalized);
+        else _targetPosition += _extraMovement;
+        
+        _extraMovement = Vector3.zero;
     }
 
     private void CameraMove()
@@ -70,4 +77,6 @@ public class CameraController : MonoBehaviour
             _moveSmoothTime
         );
     }
+    
+    
 }
