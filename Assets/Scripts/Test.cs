@@ -1,5 +1,6 @@
 ﻿using System;
 using CodeExecutor;
+using EditorUIAdaptor;
 using GlobalSettings;
 using UnityEngine;
 
@@ -29,6 +30,8 @@ for i=0, 5000 do
     move(2)
 end
             ");
+        
+        EditorWindowManager.Instance.CreateEditorWindow();
     }
 
     private bool printed = false;

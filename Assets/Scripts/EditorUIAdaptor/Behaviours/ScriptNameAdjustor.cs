@@ -15,6 +15,7 @@ namespace EditorUIAdaptor
         public TMP_InputField scriptNameInput;
         
         private string previousValidName;
+        public string ScriptName => previousValidName;
         private static readonly string[] reservedNames = new string[]
         {
             "CON", "PRN", "AUX", "NUL",
