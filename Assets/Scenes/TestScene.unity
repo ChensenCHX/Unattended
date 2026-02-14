@@ -1264,7 +1264,7 @@ MonoBehaviour:
   cameraTransform: {fileID: 330585546}
   canvasRectTransform: {fileID: 1219046585}
   rectTransform: {fileID: 1089932246}
-  defaultY: 3
+  defaultY: 5
 --- !u!1001 &1145618706
 PrefabInstance:
   m_ObjectHideFlags: 0
