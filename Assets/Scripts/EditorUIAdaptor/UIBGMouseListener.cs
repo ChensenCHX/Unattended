@@ -14,23 +14,20 @@ namespace EditorUIAdaptor
         public void OnPointerDown(PointerEventData eventData) => EventSystem.current.SetSelectedGameObject(gameObject);
 
         private static Plane _groundPlane = new Plane(Vector3.up, 0);
-        private Vector3 lastPoint;
         public void OnDrag(PointerEventData eventData)
         {
-            var ray = CameraController.Instance.Camera.ScreenPointToRay(eventData.position);
-            if (!_groundPlane.Raycast(ray, out var enter)) throw new InvalidOperationException("This should never happen!");
-            var thisPoint = ray.GetPoint(enter);
-            var offset = thisPoint - lastPoint;
-            CameraController.Instance.AddExtraMovement(new Vector3(-offset.x, 0, -offset.z));
-            lastPoint = thisPoint;
+            var ray1 = CameraController.Instance.Camera.ScreenPointToRay(eventData.delta);
+            var ray2 = CameraController.Instance.Camera.ScreenPointToRay(Vector3.zero);
+            if (!_groundPlane.Raycast(ray1, out var enter1) || !_groundPlane.Raycast(ray2, out var enter2)) 
+                throw new InvalidOperationException("This should never happen!");
+            
+            var movPoint = ray1.GetPoint(enter1);
+            var refPoint = ray2.GetPoint(enter2);
+            var offset = refPoint - movPoint;
+            CameraController.Instance.AddExtraMovement(new Vector3(offset.x, 0, offset.z));
         }
 
-        public void OnBeginDrag(PointerEventData eventData)
-        {
-            var ray = CameraController.Instance.Camera.ScreenPointToRay(eventData.position);
-            if (!_groundPlane.Raycast(ray, out var enter)) throw new InvalidOperationException("This should never happen!");
-            lastPoint = ray.GetPoint(enter);
-        }
+        public void OnBeginDrag(PointerEventData eventData) { }
         public void OnEndDrag(PointerEventData eventData) { }
     }
 }
