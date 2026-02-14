@@ -386,7 +386,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
-  m_LocalPosition: {x: 1, y: 16, z: 1}
+  m_LocalPosition: {x: -1, y: 3, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1208,6 +1208,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1089932246}
   - component: {fileID: 1089932247}
+  - component: {fileID: 1089932248}
   m_Layer: 5
   m_Name: CodeEditorRoot
   m_TagString: Untagged
@@ -1248,6 +1249,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CodeEditorPrefab: {fileID: 8071341930939248335, guid: 0ab1f2c0e38629348ada76846c3b8437,
     type: 3}
+--- !u!114 &1089932248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1089932245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a5982cfea29c4e4a86c1e86f844daef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraTransform: {fileID: 330585546}
+  canvasRectTransform: {fileID: 1219046585}
+  rectTransform: {fileID: 1089932246}
+  defaultY: 3
 --- !u!1001 &1145618706
 PrefabInstance:
   m_ObjectHideFlags: 0

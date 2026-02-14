@@ -1,3 +1,4 @@
+using EditorUIAdaptor.Behaviours;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -7,8 +8,8 @@ namespace EditorUIAdaptor
     {
         public RectTransform editorHolder;
 
-        public void OnBeginDrag(PointerEventData eventData) { }
-        public void OnDrag(PointerEventData eventData) => editorHolder.anchoredPosition += eventData.delta;
-        public void OnEndDrag(PointerEventData eventData) { }
+        public void OnBeginDrag(PointerEventData eventData) => CameraController.Lock();
+        public void OnDrag(PointerEventData eventData) => editorHolder.anchoredPosition += eventData.delta / AnchoredToWorld.Instance.EditorScale;
+        public void OnEndDrag(PointerEventData eventData) => EventSystem.current.SetSelectedGameObject(UIBGMouseListener.Instance.gameObject);
     }
 }

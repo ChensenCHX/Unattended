@@ -23,7 +23,7 @@ public class CameraController : SingletonMono<CameraController>
     private float _rotationVelocity;
     private Vector3 _extraMovement;
     private static int moveLock = 0;
-    public static void Lock() => moveLock++;
+    public static void Lock() => moveLock = 1;
     public static void Unlock() => moveLock = Math.Max(moveLock - 1, 0);
     public void AddExtraMovement(Vector3 movement) { if (moveLock == 0) _extraMovement += movement; }
 

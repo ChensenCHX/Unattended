@@ -2,10 +2,11 @@ using System;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Utils;
 
 namespace EditorUIAdaptor
 {
-    public class UIBGMouseListener : MonoBehaviour, ISelectHandler, IDeselectHandler, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
+    public class UIBGMouseListener : SingletonMono<UIBGMouseListener>, ISelectHandler, IDeselectHandler, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
     {
         private void Start() => EventSystem.current.SetSelectedGameObject(gameObject);
 
