@@ -3,7 +3,7 @@ using CodeExecutor;
 using TMPro;
 using UnityEngine;
 
-namespace EditorUIAdaptor
+namespace EditorUIAdaptor.Behaviours
 {
     public class ScriptNameAdjustor : MonoBehaviour
     {

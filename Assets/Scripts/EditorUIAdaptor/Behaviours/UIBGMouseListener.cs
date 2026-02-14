@@ -1,10 +1,9 @@
 using System;
-using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Utils;
 
-namespace EditorUIAdaptor
+namespace EditorUIAdaptor.Behaviours
 {
     public class UIBGMouseListener : SingletonMono<UIBGMouseListener>, ISelectHandler, IDeselectHandler, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
     {

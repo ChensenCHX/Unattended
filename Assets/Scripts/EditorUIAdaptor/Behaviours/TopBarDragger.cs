@@ -1,8 +1,7 @@
-using EditorUIAdaptor.Behaviours;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace EditorUIAdaptor
+namespace EditorUIAdaptor.Behaviours
 {
     public class TopBarDragger : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
