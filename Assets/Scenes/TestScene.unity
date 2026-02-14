@@ -1249,6 +1249,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CodeEditorPrefab: {fileID: 8071341930939248335, guid: 0ab1f2c0e38629348ada76846c3b8437,
     type: 3}
+  RectTransform: {fileID: 1089932246}
 --- !u!114 &1089932248
 MonoBehaviour:
   m_ObjectHideFlags: 0

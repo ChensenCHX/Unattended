@@ -15,7 +15,7 @@ namespace EditorUIAdaptor.Behaviours
         public Vector2 GetWindowSize() => rectTransform.sizeDelta;
         public Vector2 GetWindowPosition() => rectTransform.anchoredPosition;
 
-        public void Init(string windowName=null, string text=null, int x=0, int y=0, int width=0, int height=0)
+        public void Init(string windowName=null, string text=null, float x=0, float y=0, float width=0, float height=0)
         {
             scriptName.Init(windowName);
             textEditor.SetText(text ?? "", true);   // TODO:: try not immediately set later

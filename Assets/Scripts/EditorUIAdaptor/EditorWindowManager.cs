@@ -9,13 +9,14 @@ namespace EditorUIAdaptor
     public class EditorWindowManager : SingletonMono<EditorWindowManager>
     {
         public GameObject CodeEditorPrefab;
-
+        public RectTransform RectTransform;
+        
         private readonly List<EditorWindowHandler> windowHandlers = new();
         
         [CanBeNull] 
         public EditorWindowHandler FindWindow(string windowName) => windowHandlers.Find(w => w.GetWindowName() == windowName);
         public IReadOnlyList<EditorWindowHandler> GetAllWindows() => windowHandlers;
-        public void CreateEditorWindow(string windowName=null, string text=null, int x=0, int y=0, int width=0, int height=0)
+        public void CreateEditorWindow(string windowName=null, string text=null, float x=0, float y=0, float width=0, float height=0)
         {
             var windowObj = Instantiate(CodeEditorPrefab, transform);
             var windowHandler = windowObj.GetComponent<EditorWindowHandler>();
