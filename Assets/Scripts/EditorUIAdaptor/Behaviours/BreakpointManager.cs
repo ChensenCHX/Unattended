@@ -1,10 +1,9 @@
-﻿using System;
-using InGameTextEditor;
+﻿using InGameTextEditor;
 using InGameTextEditor.Format;
 using UnityEngine;
 using TextEditor = InGameTextEditor.TextEditor;
 
-namespace EditorUIAdaptor
+namespace EditorUIAdaptor.Behaviours
 {
     public class BreakpointManager : TextFormatter
     {

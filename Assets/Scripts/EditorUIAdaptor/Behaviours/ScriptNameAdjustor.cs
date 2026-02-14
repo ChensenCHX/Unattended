@@ -22,11 +22,13 @@ namespace EditorUIAdaptor
             "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
         };
         
-        void Start()
+        public void Init(string scriptName=null)
         {
-            previousValidName = CodeService.Instance.GetSafeFileName();
+            previousValidName = scriptName ?? CodeService.Instance.GetSafeFileName();
             scriptNameInput.text = previousValidName;
             AdjustWidth(previousValidName);
+            
+            // TODO:: notify code service here
             
             scriptNameInput.onValidateInput = ValidateChar;
             scriptNameInput.onEndEdit.AddListener(OnEndEdit);
