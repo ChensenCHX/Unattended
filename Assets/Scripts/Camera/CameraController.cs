@@ -31,8 +31,7 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        if (moveLock > 0) return;
-        HandleInput();
+        if (moveLock == 0) HandleInput();
         CameraMove();
     }
 
