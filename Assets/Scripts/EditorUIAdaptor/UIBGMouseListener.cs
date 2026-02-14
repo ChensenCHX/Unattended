@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace EditorUIAdaptor
 {
-    public class FocusDetector : MonoBehaviour, ISelectHandler, IDeselectHandler, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
+    public class UIBGMouseListener : MonoBehaviour, ISelectHandler, IDeselectHandler, IPointerDownHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
     {
         private void Start() => EventSystem.current.SetSelectedGameObject(gameObject);
 

@@ -3899,7 +3899,7 @@ GameObject:
   - component: {fileID: 1936408989}
   - component: {fileID: 1936408991}
   m_Layer: 5
-  m_Name: BackgroundClickChecker
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
