@@ -1,9 +1,6 @@
 using System;
-using Riten.Native.Cursors;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
-using Cursor = UnityEngine.Cursor;
 
 namespace EditorUIAdaptor.Behaviours
 {
