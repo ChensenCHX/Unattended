@@ -5,7 +5,7 @@ using InGameTextEditor;
 using InGameTextEditor.Format;
 using UnityEngine;
 
-namespace EditorUIAdaptor
+namespace EditorUIAdaptor.Behaviours
 {
     public class LuaSyntaxHighlighter : TextFormatter
     {
