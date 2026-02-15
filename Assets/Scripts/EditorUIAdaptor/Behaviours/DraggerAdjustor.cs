@@ -1,7 +1,9 @@
 using System;
+using Riten.Native.Cursors;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
+using Cursor = UnityEngine.Cursor;
 
 namespace EditorUIAdaptor.Behaviours
 {
@@ -12,12 +14,11 @@ namespace EditorUIAdaptor.Behaviours
         Corner,
     }
     
-    public class DraggerAdjustor : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+    public class DraggerAdjustor : MonoBehaviour, IDragHandler, IEndDragHandler
     {
         [SerializeField] private WindowAdjustor windowAdjustor;
         [SerializeField] private DraggerSide side;
-
-
+        
         public void OnDrag(PointerEventData eventData)
         {
             var newSize = side switch
@@ -30,14 +31,5 @@ namespace EditorUIAdaptor.Behaviours
             windowAdjustor.TryResizeWindow(newSize.x, newSize.y);
         }
         public void OnEndDrag(PointerEventData eventData) => EventSystem.current.SetSelectedGameObject(UIBGMouseListener.Instance.gameObject);
-
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            // TODO:: change cursor type here
-        }
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            // TODO:: change cursor type here
-        }
     }
 }
