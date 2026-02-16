@@ -113,7 +113,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1800454806235025284}
-  - component: {fileID: 2368413479345965283}
+  - component: {fileID: 1253432615317942320}
+  - component: {fileID: 5388103819326299140}
   m_Layer: 5
   m_Name: Close
   m_TagString: Untagged
@@ -142,7 +143,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 32, y: 32}
   m_Pivot: {x: 1, y: 1}
---- !u!114 &2368413479345965283
+--- !u!114 &1253432615317942320
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -151,7 +152,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1304541300756446591}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -167,12 +168,11 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.5137255, g: 0.60784316, b: 0.050980393, a: 1}
     m_PressedColor: {r: 0.69411767, g: 0.8235294, b: 0.050980393, a: 1}
     m_SelectedColor: {r: 0.5137255, g: 0.60784316, b: 0.050980393, a: 1}
-    m_DisabledColor: {r: 0.25361058, g: 0.3018868, b: 0.04271979, a: 1}
+    m_DisabledColor: {r: 0.25490198, g: 0.3019608, b: 0.043137256, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300002, guid: 88dca061d041a2a4596563e6a38f66c8,
-      type: 3}
+    m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
     m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
@@ -184,13 +184,34 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 8476048852272122967}
-  toggleTransition: 0
-  graphic: {fileID: 0}
-  m_Group: {fileID: 0}
-  onValueChanged:
+  m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
-  m_IsOn: 0
+      m_Calls:
+      - m_Target: {fileID: 5388103819326299140}
+        m_TargetAssemblyTypeName: EditorUIAdaptor.Behaviours.CloseEditorWindow, Assembly-CSharp
+        m_MethodName: OnClickThis
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5388103819326299140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1304541300756446591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f4bff720c4508e4394fc93495d61d45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scriptName: {fileID: 2046266101321678758}
 --- !u!1 &1415621909303783520
 GameObject:
   m_ObjectHideFlags: 0
@@ -2196,7 +2217,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scriptName: {fileID: 2046266101321678758}
-  Icon: {fileID: 2359626272558098295}
+  closeButton: {fileID: 1253432615317942320}
+  icon: {fileID: 2359626272558098295}
   disableSprite: {fileID: 21300000, guid: af205b89c9f708f4999e3196997c41e7, type: 3}
   enableSprite: {fileID: 21300000, guid: 51e690e7e995815488f6e7e784481447, type: 3}
 --- !u!1001 &367638802088480419
