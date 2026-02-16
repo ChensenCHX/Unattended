@@ -18,7 +18,7 @@ namespace EditorUIAdaptor.Behaviours
             if (bypassCodeZone)
             {
                 var bypassWidth = Mathf.Max(480f, width);
-                var bypassHeight = Mathf.Max(52f, height);  // layout magic number
+                var bypassHeight = Mathf.Max(42f, height);  // layout magic number
                 if (bypassWidth < width ||  bypassHeight < height) success = false;
                 
                 mainWindow.sizeDelta = new Vector2(bypassWidth, bypassHeight);
