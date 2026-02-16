@@ -1,14 +1,36 @@
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using CodeExecutor;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 namespace EditorUIAdaptor.Behaviours
 {
+    public static class TMPInputFieldHack
+    {
+        private static readonly FieldInfo caretField;
+
+        static TMPInputFieldHack()
+        {
+            caretField = typeof(TMP_InputField)
+                .GetField("caretRectTrans", BindingFlags.NonPublic | BindingFlags.Instance);
+        }
+
+        /// FUCK TMP_InputField,,,,,,
+        public static RectTransform GetCaretRect(TMP_InputField input)
+        {
+            if (caretField == null) return null;
+            return caretField.GetValue(input) as RectTransform;
+        }
+    }
+    
     public class ScriptNameAdjustor : MonoBehaviour
     {
         private const float MIN_WIDTH = 32f;
-        private const float MAX_WIDTH = 254f;
+        private const float MAX_WIDTH = 256f;
     
         public RectTransform scriptNameHolder;
         public TextMeshProUGUI scriptNameText;
@@ -31,9 +53,15 @@ namespace EditorUIAdaptor.Behaviours
             
             // TODO:: notify code service here
             
-            scriptNameInput.onValidateInput = ValidateChar;
+            scriptNameInput.onValueChanged.AddListener(OnValueChanged);
             scriptNameInput.onEndEdit.AddListener(OnEndEdit);
-            scriptNameInput.onValueChanged.AddListener(AdjustWidth);
+        }
+
+        private void OnValueChanged(string value)
+        {
+            var filtered = FilterToValidFileName(value);
+            if (filtered != value) scriptNameInput.SetTextWithoutNotify(filtered); 
+            AdjustWidth(filtered);
         }
         
         private void OnEndEdit(string currentText)
@@ -43,21 +71,38 @@ namespace EditorUIAdaptor.Behaviours
                 || !IsValidFileName(currentText)
                 || CodeService.Instance.CheckScriptExist(currentText))
             {
-                scriptNameInput.text = previousValidName; return;
+                scriptNameInput.SetTextWithoutNotify(previousValidName); 
+                AdjustWidth(previousValidName);
+                return;
             }
 
             CodeService.Instance.RenameExistScript(previousValidName, currentText);
             previousValidName = currentText;
+            AdjustWidth(previousValidName);
         }
-        private static char ValidateChar(string text, int charIndex, char addedChar)
+        
+        private static string FilterToValidFileName(string input)
         {
-            return (char.IsLetterOrDigit(addedChar) || addedChar == '_') ? addedChar : '\0';
+            if (string.IsNullOrEmpty(input)) return input;
+            var sb = new StringBuilder(input.Length);
+            foreach (var c in input.Where(
+                         c => c is >= 'a' and <= 'z' or >= 'A' and <= 'Z' or >= '0' and <= '9' or '_'))
+                sb.Append(c);
+            
+            return sb.ToString();
         }
         private void AdjustWidth(string newName)
         {
             scriptNameHolder.sizeDelta = new Vector2(
                 Mathf.Clamp(scriptNameText.GetPreferredValues(newName).x + 5f, MIN_WIDTH, MAX_WIDTH),
                 scriptNameHolder.sizeDelta.y);
+
+            var rt = scriptNameInput.textComponent.rectTransform;
+            rt.offsetMin = new Vector2(0, rt.offsetMin.y);   // 设置 Left
+            rt.offsetMax = new Vector2(0, rt.offsetMax.y);  // 设置 Right
+            rt = TMPInputFieldHack.GetCaretRect(scriptNameInput);
+            rt.offsetMin = new Vector2(0, rt.offsetMin.y);   // 设置 Left
+            rt.offsetMax = new Vector2(0, rt.offsetMax.y);  // 设置 Right
         }
         
         private static bool IsValidFileName(string fileName)
