@@ -12,9 +12,19 @@ namespace EditorUIAdaptor.Behaviours
         public RectTransform codeWindow;
         public RectTransform lineNumberBar;
         
-        public bool TryResizeWindow(float width, float height)
+        public bool TryResizeWindow(float width, float height, bool bypassCodeZone=false)
         {
             var success = true;
+            if (bypassCodeZone)
+            {
+                var bypassWidth = Mathf.Max(480f, width);
+                var bypassHeight = Mathf.Max(52f, height);  // layout magic number
+                if (bypassWidth < width ||  bypassHeight < height) success = false;
+                
+                mainWindow.sizeDelta = new Vector2(bypassWidth, bypassHeight);
+                return success;
+            }
+            
             var minWidth = Mathf.Max(480f, 
                 textEditor.LongestLineWidth
                     + textEditor.CharacterWidth
