@@ -8,20 +8,23 @@ namespace EditorUIAdaptor.Behaviours
     public class LinkToIDE : MonoBehaviour
     {
         public ScriptNameAdjustor scriptName;
-        public Image Icon;
+        public Button closeButton;
+        public Image icon;
         public Sprite disableSprite;
         public Sprite enableSprite;
 
         private void OnEnableThis()
         {
             EventSystem.current.SetSelectedGameObject(UIBGMouseListener.Instance.gameObject);
-            Icon.sprite = enableSprite;
+            icon.sprite = enableSprite;
+            closeButton.interactable = false;
             // TODO:: send message to code service
         }
         private void OnDisableThis()
         {
             EventSystem.current.SetSelectedGameObject(UIBGMouseListener.Instance.gameObject);
-            Icon.sprite = disableSprite;
+            icon.sprite = disableSprite;
+            closeButton.interactable = true;
             // TODO:: send message to code service
         }
         
