@@ -147,6 +147,8 @@ namespace CodeExecutor
         public LuaVM(LuaVMConfigurer configurer, string scriptName, string scriptCode)
         {
             luaVM = new Script(configurer.GetCoreModules());
+            LuaVMLoader.Instance.Clear();
+            luaVM.Options.ScriptLoader = LuaVMLoader.Instance;
             luaVMConfigurer = configurer;
             configurer.OnStartVM(this);
             
