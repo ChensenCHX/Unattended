@@ -38,5 +38,7 @@ namespace EditorUIAdaptor
             if (handler != null) Destroy(handler.gameObject);
             // TODO:: notify code service to remove this script
         }
+        public void LockAllWindowsInput() { foreach (var editorHandler in windowHandlers) editorHandler.GetTextEditor().DisableInput = true; }
+        public void UnlockAllWindowsInput() { foreach (var editorHandler in windowHandlers) editorHandler.GetTextEditor().DisableInput = false; }
     }
 }

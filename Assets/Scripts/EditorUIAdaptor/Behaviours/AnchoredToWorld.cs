@@ -29,7 +29,7 @@ namespace EditorUIAdaptor.Behaviours
                     var current = result.gameObject.transform;
                     while (current != null && current.parent != transform) current = current.parent;
 
-                    if (current == null || current.parent != transform) continue;
+                    if (current == null || current.parent != transform || current.GetComponent<EditorWindowHandler>().GetTextEditor().DisableInput) continue;
                     current.SetAsLastSibling(); break;
                 }
             }
