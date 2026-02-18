@@ -10,17 +10,14 @@ namespace CodeExecutor
     public class LuaVMLoader : Singleton<LuaVMLoader>, IScriptLoader
     {
         public readonly HashSet<EditorWindowHandler> LoadedScripts = new();
-        private readonly Dictionary<string, string> scriptCache = new();
         public void Clear() => LoadedScripts.Clear();
         public object LoadFile(string file, Table globalContext)
         {
-            if (scriptCache.TryGetValue(file, out var loadedFile)) return loadedFile;
             var window = EditorWindowManager.Instance.FindWindow(file.ToLowerInvariant());
             if (window == null) throw new LuaVMException($"Couldn't find script '{file}'.");
             LoadedScripts.Add(window);
             window.SetRunningState(CodeService.WorkingState.Running);
-            scriptCache[file] = window.GetScript();
-            return scriptCache;
+            return window.GetScript();
         }
 
         public string ResolveFileName(string filename, Table globalContext) => filename;

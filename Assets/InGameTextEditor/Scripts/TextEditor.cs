@@ -2279,7 +2279,7 @@ namespace InGameTextEditor
         void SetSelection(Selection textSelection, bool immediately = false)
         {
             // check if selection is valid
-            if (textSelection == null || !textSelection.IsValid)
+            if (textSelection != null && !textSelection.IsValid)
                 throw new UnityException("Invalid selection");
 
             // create operation

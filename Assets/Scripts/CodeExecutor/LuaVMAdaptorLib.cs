@@ -17,7 +17,7 @@ namespace CodeExecutor
                 var func = args.AsType(0, "new_thread", DataType.Function);
                 var thread = vm.CreateCoroutine(func).Coroutine;
                 var haveBot = BotManager.Instance.GetBotByID(ctx.GetCallingCoroutine().ReferenceID, out var bot);
-                if (!haveBot) throw new LuaVMException("Fatal error: try alloc new bot but have no known father.");
+                if (!haveBot) throw new ScriptRuntimeException("Fatal error: try alloc new bot but have no known father.");
                 
                 var success = luaVM.AttachThread(thread, bot.X, bot.Y);
                 return success ? DynValue.NewNumber(thread.ReferenceID) : DynValue.False;
@@ -76,7 +76,7 @@ namespace CodeExecutor
             vm.Globals.Set("get_x_pos", DynValue.NewCallback((ctx, _) =>
                 {
                     var haveBot = BotManager.Instance.GetBotByID(ctx.GetCallingCoroutine().ReferenceID, out var bot);
-                    if (!haveBot) throw new LuaVMException("Fatal error: cannot find this thread's bot.");
+                    if (!haveBot) throw new ScriptRuntimeException("Fatal error: cannot find this thread's bot.");
 
                     return DynValue.NewNumber(bot.X);
                 }
@@ -84,7 +84,7 @@ namespace CodeExecutor
             vm.Globals.Set("get_y_pos", DynValue.NewCallback((ctx, _) =>
                 {
                     var haveBot = BotManager.Instance.GetBotByID(ctx.GetCallingCoroutine().ReferenceID, out var bot);
-                    if (!haveBot) throw new LuaVMException("Fatal error: cannot find this thread's bot.");
+                    if (!haveBot) throw new ScriptRuntimeException("Fatal error: cannot find this thread's bot.");
 
                     return DynValue.NewNumber(bot.Y);
                 }
@@ -97,7 +97,7 @@ namespace CodeExecutor
             vm.Globals.Set("move", DynValue.NewCallback((ctx, args) =>
                 {
                     var haveBot = BotManager.Instance.GetBotByID(ctx.GetCallingCoroutine().ReferenceID, out var bot);
-                    if (!haveBot) throw new LuaVMException("Fatal error: cannot find this thread's bot.");
+                    if (!haveBot) throw new ScriptRuntimeException("Fatal error: cannot find this thread's bot.");
                     
                     var direction = args.AsInt(0, "move");
                     ctx.GetCallingCoroutine().AutoYieldCounter = 0;     // 涉及Bot移动的操作都需要立即让出当前执行
@@ -124,10 +124,10 @@ namespace CodeExecutor
             vm.Globals.Set("use_item", DynValue.NewCallback((ctx, args) =>
                 {
                     var haveBot = BotManager.Instance.GetBotByID(ctx.GetCallingCoroutine().ReferenceID, out var bot);
-                    if (!haveBot) throw new LuaVMException("Fatal error: cannot find this thread's bot.");
+                    if (!haveBot) throw new ScriptRuntimeException("Fatal error: cannot find this thread's bot.");
                     
                     var item = args.AsInt(0, "use_item");
-                    if (!Enum.IsDefined(typeof(ItemType), item)) throw new LuaVMException($"Error: type '{item}' is not a valid item type.");
+                    if (!Enum.IsDefined(typeof(ItemType), item)) throw new ScriptRuntimeException($"Error: type '{item}' is not a valid item type.");
 
                     return bot.TryAddItem((ItemType)item);
                 }
@@ -139,7 +139,7 @@ namespace CodeExecutor
             vm.Globals.Set("can_harvest", DynValue.NewCallback((ctx, _) =>
                 {
                     var haveBot = BotManager.Instance.GetBotByID(ctx.GetCallingCoroutine().ReferenceID, out var bot);
-                    if (!haveBot) throw new LuaVMException("Fatal error: cannot find this thread's bot.");
+                    if (!haveBot) throw new ScriptRuntimeException("Fatal error: cannot find this thread's bot.");
                     
                     return bot.CanHarvest();
                 }
@@ -151,7 +151,7 @@ namespace CodeExecutor
             vm.Globals.Set("harvest", DynValue.NewCallback((ctx, _) =>
                 {
                     var haveBot = BotManager.Instance.GetBotByID(ctx.GetCallingCoroutine().ReferenceID, out var bot);
-                    if (!haveBot) throw new LuaVMException("Fatal error: cannot find this thread's bot.");
+                    if (!haveBot) throw new ScriptRuntimeException("Fatal error: cannot find this thread's bot.");
                     bot.Harvest();
                     ctx.GetCallingCoroutine().AutoYieldCounter = 0;     // 涉及Bot移动的操作都需要立即让出当前执行
                     return DynValue.Nil;
@@ -164,11 +164,11 @@ namespace CodeExecutor
             vm.Globals.Set("build", DynValue.NewCallback((ctx, args) =>
                 {
                     var haveBot = BotManager.Instance.GetBotByID(ctx.GetCallingCoroutine().ReferenceID, out var bot);
-                    if (!haveBot) throw new LuaVMException("Fatal error: cannot find this thread's bot.");
+                    if (!haveBot) throw new ScriptRuntimeException("Fatal error: cannot find this thread's bot.");
                     
                     var type = args.AsInt(0, "build");
                     ctx.GetCallingCoroutine().AutoYieldCounter = 0;     // 涉及Bot移动的操作都需要立即让出当前执行
-                    if (!Enum.IsDefined(typeof(FacilityType), type)) throw new LuaVMException($"Error: type '{type}' is not a valid type.");
+                    if (!Enum.IsDefined(typeof(FacilityType), type)) throw new ScriptRuntimeException($"Error: type '{type}' is not a valid type.");
                     return bot.TrySetFacility((FacilityType)type);
                 }
             ));
@@ -179,7 +179,7 @@ namespace CodeExecutor
             vm.Globals.Set("interact_with", DynValue.NewCallback((ctx, args) => 
                 {
                     var haveBot = BotManager.Instance.GetBotByID(ctx.GetCallingCoroutine().ReferenceID, out var bot);
-                    if (!haveBot) throw new LuaVMException("Fatal error: cannot find this thread's bot.");
+                    if (!haveBot) throw new ScriptRuntimeException("Fatal error: cannot find this thread's bot.");
                     
                     return bot.InteractWith(args);
                 }
@@ -189,7 +189,7 @@ namespace CodeExecutor
         public static bool CheckCurrentBotIsBusy(LuaVM luaVM, Coroutine thread)
         {
             if (!BotManager.Instance.GetBotByID(thread.ReferenceID, out var bot)) 
-                throw new LuaVMException($"Fatal error: thread id {thread.ReferenceID} have no bot!");
+                throw new ScriptRuntimeException($"Fatal error: thread id {thread.ReferenceID} have no bot!");
 
             return bot.BotIsWorking;
         }

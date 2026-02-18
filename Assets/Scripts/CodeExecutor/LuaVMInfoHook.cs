@@ -13,6 +13,7 @@ namespace CodeExecutor
         public int CurrentLineEnd { get; init; }
         public int CurrentCharStart { get; init; }
         public int CurrentCharEnd { get; init; }
+        public string ScriptName { get; init; }
         # endregion
         
         # region 方法
@@ -63,6 +64,7 @@ namespace CodeExecutor
                 CurrentLineEnd = sourceref.ToLine,
                 CurrentCharStart = sourceref.FromChar,
                 CurrentCharEnd = sourceref.ToChar,
+                ScriptName = dbgSvc.OwnerScript.GetSourceCode(sourceref.SourceIdx).Name,
             };
             runtimeInfos.Remove(runtimeInfo);
             runtimeInfos.Add(runtimeInfo);
