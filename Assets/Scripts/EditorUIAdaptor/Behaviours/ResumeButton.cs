@@ -40,7 +40,7 @@ namespace EditorUIAdaptor.Behaviours
                     CodeService.WorkingState.Stopped => stoppedImage,
                     _ => throw new ArgumentOutOfRangeException(nameof(_runningState), _runningState, null)
                 };
-                editor.GetTextEditor().disableInput = _runningState is not CodeService.WorkingState.Stopped;
+                editor.GetTextEditor().DisableInput = _runningState is not CodeService.WorkingState.Stopped;
             }
         }
         public void OnClickThis()

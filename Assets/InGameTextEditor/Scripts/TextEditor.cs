@@ -229,6 +229,17 @@ namespace InGameTextEditor
         /// </summary>
         public bool disableInput = false;
 
+        private int disableCount;
+        public bool DisableInput
+        {
+            get => disableInput;
+            set
+            {
+                if (value) disableCount++; else disableCount--;
+                disableInput = disableCount > 0;
+            }
+        }
+
         /// <summary>
         /// Deactivate editor when application loses focus.
         /// </summary>
@@ -494,6 +505,8 @@ namespace InGameTextEditor
         /// The tooltip text.
         /// </summary>
         public TextMeshProUGUI tooltipText;
+
+        public GameObject containerObject;
 
         // list of lines, each representing one line of text in the editor
         List<Line> lines = new List<Line>();
@@ -1488,9 +1501,10 @@ namespace InGameTextEditor
                 mousePosition += new Vector2(-mainMarginLeft, mainMarginTop);
 
                 // detect if mouse is hovering over editor
-                mouseHoverEditor = RectTransformUtility.RectangleContainsScreenPoint(GetComponent<RectTransform>(), Input.mousePosition, guiCamera);
-                mouseHoverMainPanel = RectTransformUtility.RectangleContainsScreenPoint(mainPanel.GetComponent<RectTransform>(), Input.mousePosition, guiCamera);
-                mouseHoverLineNumberPanel = RectTransformUtility.RectangleContainsScreenPoint(lineNumberPanel.GetComponent<RectTransform>(), Input.mousePosition, guiCamera);
+                var isFocused = containerObject.transform.GetSiblingIndex() == containerObject.transform.parent.childCount - 1;
+                mouseHoverEditor = isFocused && RectTransformUtility.RectangleContainsScreenPoint(GetComponent<RectTransform>(), Input.mousePosition, guiCamera);
+                mouseHoverMainPanel = isFocused && RectTransformUtility.RectangleContainsScreenPoint(mainPanel.GetComponent<RectTransform>(), Input.mousePosition, guiCamera);
+                mouseHoverLineNumberPanel = isFocused && RectTransformUtility.RectangleContainsScreenPoint(lineNumberPanel.GetComponent<RectTransform>(), Input.mousePosition, guiCamera);
                 // follow caret when mouse button released
                 if (Input.GetMouseButtonUp(0) && mouseHoverMainPanel && !doubleClick && !tripleClick)
                     FollowCaret();

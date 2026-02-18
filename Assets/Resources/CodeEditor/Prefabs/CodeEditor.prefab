@@ -2552,6 +2552,11 @@ PrefabInstance:
       objectReference: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 114662724014931294, guid: d53fd87b7d86a40469735ea1ab29f85c,
         type: 3}
+      propertyPath: containerObject
+      value: 
+      objectReference: {fileID: 8071341930939248335}
+    - target: {fileID: 114662724014931294, guid: d53fd87b7d86a40469735ea1ab29f85c,
+        type: 3}
       propertyPath: lineNumberMinWidth
       value: 36
       objectReference: {fileID: 0}
