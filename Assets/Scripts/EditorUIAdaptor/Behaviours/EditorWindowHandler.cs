@@ -20,6 +20,7 @@ namespace EditorUIAdaptor.Behaviours
         public Vector2 GetWindowSize() => rectTransform.sizeDelta;
         public Vector2 GetWindowPosition() => rectTransform.anchoredPosition;
         public TextEditor GetTextEditor() => textEditor;
+        public ScriptNameAdjustor GetScriptNameAdjustor() => scriptName;
 
         private readonly TextPosition highlightLeft = new(0, 0);
         private readonly TextPosition highlightRight = new(0, 0);

@@ -55,7 +55,7 @@ namespace CodeExecutor
         public void SetSourceCode(SourceCode src) 
         {
             codes[src.Name] = ValueTuple.Create(src, new HashSet<int>());
-            var windowHandler = EditorWindowManager.Instance.FindWindow(src.Name);
+            var windowHandler = EditorWindowManager.Instance.FindWindow(src.Name.ToUpperInvariant());
             if (windowHandler != null) ResetLineBreakpoints(windowHandler.GetWindowName(), windowHandler.GetBreakpoints());
         }
         public void SetByteCode(string[] byteCode) { }

@@ -1,4 +1,5 @@
 using System;
+using CodeExecutor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -7,7 +8,7 @@ namespace EditorUIAdaptor.Behaviours
 {
     public class LinkToIDE : MonoBehaviour
     {
-        public ScriptNameAdjustor scriptName;
+        public EditorWindowHandler windowHandler;
         public Button closeButton;
         public Image icon;
         public Sprite disableSprite;
@@ -18,14 +19,16 @@ namespace EditorUIAdaptor.Behaviours
             EventSystem.current.SetSelectedGameObject(UIBGMouseListener.Instance.gameObject);
             icon.sprite = enableSprite;
             closeButton.interactable = false;
-            // TODO:: send message to code service
+            windowHandler.GetTextEditor().DisableInput = true;
+            CodeService.Instance.StartListeningOutsideChange(windowHandler);
         }
         private void OnDisableThis()
         {
             EventSystem.current.SetSelectedGameObject(UIBGMouseListener.Instance.gameObject);
             icon.sprite = disableSprite;
             closeButton.interactable = true;
-            // TODO:: send message to code service
+            windowHandler.GetTextEditor().DisableInput = false;
+            CodeService.Instance.StopListeningOutsideChange(windowHandler);
         }
         
         public void OnStatuChanged(bool statu) { if (statu) OnEnableThis(); else OnDisableThis(); }

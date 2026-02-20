@@ -2518,7 +2518,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b3788c8f01fc284bb2415dba202973f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scriptName: {fileID: 2046266101321678758}
+  windowHandler: {fileID: 8163973996043839753}
   closeButton: {fileID: 1253432615317942320}
   icon: {fileID: 2359626272558098295}
   disableSprite: {fileID: 21300000, guid: af205b89c9f708f4999e3196997c41e7, type: 3}

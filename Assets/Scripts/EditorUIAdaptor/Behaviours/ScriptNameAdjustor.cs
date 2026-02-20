@@ -37,7 +37,12 @@ namespace EditorUIAdaptor.Behaviours
         public TMP_InputField scriptNameInput;
         
         private string previousValidName;
-        public string ScriptName => previousValidName;
+        public string ScriptName
+        {
+            get => previousValidName;
+            set => OnEndEdit(value);
+        }
+
         private static readonly string[] reservedNames = new string[]
         {
             "CON", "PRN", "AUX", "NUL",
