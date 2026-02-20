@@ -40,7 +40,11 @@ namespace CodeExecutor
         {
             if (LuaVMLoader.Instance.LoadedScripts.Contains(EditorWindowManager.Instance.FindWindow(newName))) StopExecute();
         }
-        public void RemoveExistScript(EditorWindowHandler handler) { if (LuaVMLoader.Instance.LoadedScripts.Contains(handler)) StopExecute(); }
+        public void RemoveExistScript(EditorWindowHandler handler)
+        {
+            StopListeningOutsideChange(handler);
+            if (LuaVMLoader.Instance.LoadedScripts.Contains(handler)) StopExecute();
+        }
         
         public void AddBreakpoint(EditorWindowHandler windowHandler, int lineAt) => luaVM?.AddBreakPoint(windowHandler.GetWindowName(), lineAt);
         public void RemoveBreakpoint(EditorWindowHandler windowHandler, int lineAt) => luaVM?.RemoveBreakPoint(windowHandler.GetWindowName(), lineAt);
