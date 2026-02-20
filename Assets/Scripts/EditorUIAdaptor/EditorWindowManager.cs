@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CodeExecutor;
 using EditorUIAdaptor.Behaviours;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -34,9 +35,10 @@ namespace EditorUIAdaptor
                 if (w.GetWindowName().ToUpperInvariant() != windowName) return false;
                 handler = w; return true;
             });
-            
-            if (handler != null) Destroy(handler.gameObject);
-            // TODO:: notify code service to remove this script
+
+            if (handler == null) return;
+            CodeService.Instance.RemoveExistScript(handler);
+            Destroy(handler.gameObject);
         }
         public void LockAllWindowsInput() { foreach (var editorHandler in windowHandlers) editorHandler.GetTextEditor().DisableInput = true; }
         public void UnlockAllWindowsInput() { foreach (var editorHandler in windowHandlers) editorHandler.GetTextEditor().DisableInput = false; }

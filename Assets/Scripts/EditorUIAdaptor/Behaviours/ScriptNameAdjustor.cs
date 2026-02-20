@@ -51,8 +51,6 @@ namespace EditorUIAdaptor.Behaviours
             scriptNameInput.text = previousValidName;
             AdjustWidth(previousValidName);
             
-            // TODO:: notify code service here
-            
             scriptNameInput.onValueChanged.AddListener(OnValueChanged);
             scriptNameInput.onEndEdit.AddListener(OnEndEdit);
         }

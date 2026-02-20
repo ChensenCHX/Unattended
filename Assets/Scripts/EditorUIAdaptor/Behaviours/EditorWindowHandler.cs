@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using CodeExecutor;
 using InGameTextEditor;
 using UnityEngine;
@@ -37,10 +38,16 @@ namespace EditorUIAdaptor.Behaviours
             stepButton.RunningState = runningState;
         }
 
+        private readonly HashSet<int> breakpointList = new();
+        public void AddBreakpoint(int lineAt) => breakpointList.Add(lineAt);
+        public void RemoveBreakpoint(int lineAt) => breakpointList.Remove(lineAt);
+        public void ClearBreakpoints() => breakpointList.Clear();
+        public HashSet<int> GetBreakpoints() => breakpointList;
+
         public void Init(string windowName=null, string text=null, float x=0, float y=0, float width=0, float height=0)
         {
             scriptName.Init(windowName);
-            textEditor.SetText(text ?? "", true);   // TODO:: try not immediately set later
+            textEditor.SetText(text ?? "", true);
             rectTransform.anchoredPosition = new Vector2(x, y);
             windowAdjustor.TryResizeWindow(width, height);
         }

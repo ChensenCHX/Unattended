@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using EditorUIAdaptor;
 using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Debugging;
+using UnityEngine;
+using Coroutine = MoonSharp.Interpreter.Coroutine;
 
 namespace CodeExecutor
 {
@@ -29,7 +32,7 @@ namespace CodeExecutor
     internal class LuaVMInfoHook : IDebugger
     {
         # region 内部量
-        private readonly Dictionary<string, Tuple<SourceCode, HashSet<int>>> codes = new();
+        private readonly Dictionary<string, ValueTuple<SourceCode, HashSet<int>>> codes = new();
         private DebugService dbgSvc;
         private Coroutine lastThread;
         private readonly DebuggerAction dbgAction = new DebuggerAction { Action = DebuggerAction.ActionType.StepIn };
@@ -49,7 +52,12 @@ namespace CodeExecutor
         public bool NeedWatchItemInfo => false;
         public DebuggerCaps GetDebuggerCaps() => DebuggerCaps.CanDebugSourceCode;
         public void SetDebugService(DebugService debugService) => dbgSvc = debugService;
-        public void SetSourceCode(SourceCode src) => codes[src.Name] = Tuple.Create(src, new HashSet<int>());
+        public void SetSourceCode(SourceCode src) 
+        {
+            codes[src.Name] = ValueTuple.Create(src, new HashSet<int>());
+            var windowHandler = EditorWindowManager.Instance.FindWindow(src.Name);
+            if (windowHandler != null) ResetLineBreakpoints(windowHandler.GetWindowName(), windowHandler.GetBreakpoints());
+        }
         public void SetByteCode(string[] byteCode) { }
         public bool IsPauseRequested() => false;
         public bool SignalRuntimeException(ScriptRuntimeException ex) => false;

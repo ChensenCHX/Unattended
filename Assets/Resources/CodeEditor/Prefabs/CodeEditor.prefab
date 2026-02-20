@@ -2858,6 +2858,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83938ddc80804087bec5a8164b31d1dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  windowHandler: {fileID: 8163973996043839753}
   textEditor: {fileID: 327989443430527997}
   lineIconTransform: {fileID: 1956717301658428132}
   lineIconContainerTransform: {fileID: 6224332927174623799}

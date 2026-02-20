@@ -1,4 +1,5 @@
-﻿using InGameTextEditor;
+﻿using CodeExecutor;
+using InGameTextEditor;
 using InGameTextEditor.Format;
 using UnityEngine;
 using TextEditor = InGameTextEditor.TextEditor;
@@ -7,6 +8,7 @@ namespace EditorUIAdaptor.Behaviours
 {
     public class BreakpointManager : TextFormatter
     {
+        public EditorWindowHandler windowHandler;
         public TextEditor textEditor;
         public RectTransform lineIconTransform;
         public RectTransform lineIconContainerTransform;
@@ -23,6 +25,7 @@ namespace EditorUIAdaptor.Behaviours
             mouseDownBefore = mouseDownNow;
             if (!textEditor.EditorActive) return;           // skip if not active
             if (!Input.GetMouseButton(0)) return;           // skip if no input
+            if (windowHandler.transform.GetSiblingIndex() != windowHandler.transform.parent.childCount - 1) return; // skip if not first editor
             if (!RectTransformUtility.RectangleContainsScreenPoint(lineIconTransform, Input.mousePosition, null)) return;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(lineIconTransform, Input.mousePosition, null, out var mousePosition);
 
@@ -34,7 +37,8 @@ namespace EditorUIAdaptor.Behaviours
             if (line.Labels.Count != 0)
             {
                 line.RemoveLabels();
-                // TODO:: send remove breakpoint message here
+                windowHandler.RemoveBreakpoint(lineAt + 1);
+                CodeService.Instance.RemoveBreakpoint(windowHandler, lineAt + 1);
             }
             else
             {
@@ -43,7 +47,8 @@ namespace EditorUIAdaptor.Behaviours
                     labelIconSprite, breakpointLabelColor,
                     null, 
                     Line.Label.DeleteCondition.ANYTHING_CHANGES);
-                // TODO:: send add breakpoint message here
+                windowHandler.AddBreakpoint(lineAt + 1);
+                CodeService.Instance.AddBreakpoint(windowHandler, lineAt + 1);
             }
         }
 
@@ -55,8 +60,9 @@ namespace EditorUIAdaptor.Behaviours
         {
             if (Time.frameCount == lastExecFrame) return;   // 一个update执行一次就可以 没必要每行都要触发
             lastExecFrame = Time.frameCount;
-            // TODO:: send breakpoint change message here
-            // delete every breakpoints
+            
+            windowHandler.ClearBreakpoints();
+            CodeService.Instance.ResetBreakpoint(windowHandler);
         }
     }
 }

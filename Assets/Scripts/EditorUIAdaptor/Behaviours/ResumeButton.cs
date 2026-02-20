@@ -17,6 +17,7 @@ namespace EditorUIAdaptor.Behaviours
         public Sprite pausedImage;
         public Sprite stoppedImage;
 
+        private CodeService.WorkingState _lastState = CodeService.WorkingState.Stopped;
         private CodeService.WorkingState _runningState = CodeService.WorkingState.Stopped;
         public CodeService.WorkingState RunningState
         {
@@ -40,7 +41,11 @@ namespace EditorUIAdaptor.Behaviours
                     CodeService.WorkingState.Stopped => stoppedImage,
                     _ => throw new ArgumentOutOfRangeException(nameof(_runningState), _runningState, null)
                 };
-                editor.GetTextEditor().DisableInput = _runningState is not CodeService.WorkingState.Stopped;
+                if (_lastState is CodeService.WorkingState.Stopped && _runningState is not CodeService.WorkingState.Stopped)
+                    editor.GetTextEditor().DisableInput = true;
+                if (_lastState is not CodeService.WorkingState.Stopped && _runningState is CodeService.WorkingState.Stopped)
+                    editor.GetTextEditor().DisableInput = false;
+                _lastState = _runningState;
             }
         }
         public void OnClickThis()
