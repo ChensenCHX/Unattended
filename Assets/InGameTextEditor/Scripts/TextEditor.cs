@@ -240,6 +240,18 @@ namespace InGameTextEditor
             }
         }
 
+        private bool disableFocus = false;
+        private int disableFocusCount;
+        public bool DisableFocus
+        {
+            get => disableFocus;
+            set
+            {
+                if (value) disableFocusCount++; else disableFocusCount--;
+                disableFocus = disableFocusCount > 0;
+            }
+        }
+
         /// <summary>
         /// Deactivate editor when application loses focus.
         /// </summary>
@@ -1501,7 +1513,7 @@ namespace InGameTextEditor
                 mousePosition += new Vector2(-mainMarginLeft, mainMarginTop);
 
                 // detect if mouse is hovering over editor
-                var isFocused = containerObject.transform.GetSiblingIndex() == containerObject.transform.parent.childCount - 1;
+                var isFocused = !disableFocus && containerObject.transform.GetSiblingIndex() == containerObject.transform.parent.childCount - 1;
                 mouseHoverEditor = isFocused && RectTransformUtility.RectangleContainsScreenPoint(GetComponent<RectTransform>(), Input.mousePosition, guiCamera);
                 mouseHoverMainPanel = isFocused && RectTransformUtility.RectangleContainsScreenPoint(mainPanel.GetComponent<RectTransform>(), Input.mousePosition, guiCamera);
                 mouseHoverLineNumberPanel = isFocused && RectTransformUtility.RectangleContainsScreenPoint(lineNumberPanel.GetComponent<RectTransform>(), Input.mousePosition, guiCamera);

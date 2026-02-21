@@ -17,7 +17,7 @@ namespace EditorUIAdaptor.Behaviours
         {
             gameObject.SetActive(true);
             notifyText.text = $" 真的要删除脚本 \"{scriptName}\" 吗？\n它将会被移动到回收站文件夹";
-            EditorWindowManager.Instance.LockAllWindowsInput();
+            EditorWindowManager.Instance.LockAllWindowsFocus();
             
             UnityAction confirmAction = null;
             UnityAction rejectAction = null;
@@ -26,7 +26,7 @@ namespace EditorUIAdaptor.Behaviours
                 confirmButton.onClick.RemoveListener(confirmAction);
                 rejectButton.onClick.RemoveListener(rejectAction);
                 gameObject.SetActive(false);
-                EditorWindowManager.Instance.UnlockAllWindowsInput();
+                EditorWindowManager.Instance.UnlockAllWindowsFocus();
                 EventSystem.current.SetSelectedGameObject(UIBGMouseListener.Instance.gameObject);
             };
             rejectAction = () =>
@@ -34,7 +34,7 @@ namespace EditorUIAdaptor.Behaviours
                 confirmButton.onClick.RemoveListener(confirmAction);
                 rejectButton.onClick.RemoveListener(rejectAction);
                 gameObject.SetActive(false);
-                EditorWindowManager.Instance.UnlockAllWindowsInput();
+                EditorWindowManager.Instance.UnlockAllWindowsFocus();
                 EventSystem.current.SetSelectedGameObject(UIBGMouseListener.Instance.gameObject);
             };
             

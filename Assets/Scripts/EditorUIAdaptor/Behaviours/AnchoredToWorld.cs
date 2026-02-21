@@ -27,8 +27,10 @@ namespace EditorUIAdaptor.Behaviours
                 foreach (var result in raycastResults)
                 {
                     var current = result.gameObject.transform;
-                    while (current != null && current.parent != transform) current = current.parent;
-
+                    Debug.Log(result.gameObject.name);
+                    while (current != null && current.parent != transform && current != transform.parent) current = current.parent;
+                    
+                    if (current == transform.parent) break;
                     if (current == null || current.parent != transform || current.GetComponent<EditorWindowHandler>().GetTextEditor().DisableInput) continue;
                     current.SetAsLastSibling(); break;
                 }

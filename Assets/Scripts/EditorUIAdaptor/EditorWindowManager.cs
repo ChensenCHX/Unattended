@@ -40,5 +40,8 @@ namespace EditorUIAdaptor
         }
         public void LockAllWindowsInput() { foreach (var editorHandler in windowHandlers) editorHandler.GetTextEditor().DisableInput = true; }
         public void UnlockAllWindowsInput() { foreach (var editorHandler in windowHandlers) editorHandler.GetTextEditor().DisableInput = false; }
+        
+        public void LockAllWindowsFocus() { foreach (var editorHandler in windowHandlers) editorHandler.GetTextEditor().DisableFocus = true; }
+        public void UnlockAllWindowsFocus() { foreach (var editorHandler in windowHandlers) editorHandler.GetTextEditor().DisableFocus = false; }
     }
 }
