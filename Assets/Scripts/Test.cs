@@ -31,23 +31,23 @@ public class Test : MonoBehaviour
 //     move(2)
 // end
 //             ");
-        EditorWindowManager.Instance.CreateEditorWindow();
+//        EditorWindowManager.Instance.CreateEditorWindow();
     }
 
 //    private bool printed = false;
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            var screenCenter = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                EditorWindowManager.Instance.RectTransform,
-                screenCenter,
-                null,
-                out var localPos
-                );
-            EditorWindowManager.Instance.CreateEditorWindow(null, null, (int)localPos.x, (int)localPos.y);
-        }
+        // if (Input.GetKeyDown(KeyCode.P))
+        // {
+        //     var screenCenter = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
+        //     RectTransformUtility.ScreenPointToLocalPointInRectangle(
+        //         EditorWindowManager.Instance.RectTransform,
+        //         screenCenter,
+        //         null,
+        //         out var localPos
+        //         );
+        //     EditorWindowManager.Instance.CreateEditorWindow(null, null, (int)localPos.x, (int)localPos.y);
+        // }
         
         // if (luaVM.CouldResume())
         //     luaVM.ResumeUntilLimit(LuaVMConfigurer.MaxInstructionPerResume * 10);
