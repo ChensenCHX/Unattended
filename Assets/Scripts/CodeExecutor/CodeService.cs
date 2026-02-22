@@ -3,11 +3,10 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using CodeExecutor;
 using EditorUIAdaptor;
 using EditorUIAdaptor.Behaviours;
 using InGameTextEditor;
-using Unity.VisualScripting;
+using Michsky.MUIP;
 using UnityEngine;
 using Utils;
 
@@ -22,6 +21,8 @@ namespace CodeExecutor
             Paused,
             Stopped,
         }
+        public NotificationManager exceptionNotification;
+        public NotificationManager printNotification;
         
         private int fileOpCount = 0;
         private LuaVM luaVM;
@@ -46,9 +47,29 @@ namespace CodeExecutor
             if (LuaVMLoader.Instance.LoadedScripts.Contains(handler)) StopExecute();
         }
         
-        public void AddBreakpoint(EditorWindowHandler windowHandler, int lineAt) => luaVM?.AddBreakPoint(windowHandler.GetWindowName(), lineAt);
-        public void RemoveBreakpoint(EditorWindowHandler windowHandler, int lineAt) => luaVM?.RemoveBreakPoint(windowHandler.GetWindowName(), lineAt);
-        public void ResetBreakpoint(EditorWindowHandler windowHandler) => luaVM?.SetBreakPoints(windowHandler.GetWindowName(), windowHandler.GetBreakpoints());
+        public void AddBreakpoint(EditorWindowHandler windowHandler, int lineAt)
+        {
+            if (luaVM is null || !luaVM.CouldResume()) return;
+            luaVM.AddBreakPoint(windowHandler.GetWindowName(), lineAt);
+        }
+        public void RemoveBreakpoint(EditorWindowHandler windowHandler, int lineAt)
+        {
+            if (luaVM is null || !luaVM.CouldResume()) return;
+            luaVM.RemoveBreakPoint(windowHandler.GetWindowName(), lineAt);
+        }
+        public void ResetBreakpoint(EditorWindowHandler windowHandler) 
+        {
+            if (luaVM is null || !luaVM.CouldResume()) return;
+            luaVM.SetBreakPoints(windowHandler.GetWindowName(), windowHandler.GetBreakpoints());
+        }
+
+        private bool printedBefore = true;
+        private string printMessage = "";
+        private void SendPrintMessage(string message)
+        {
+            printedBefore = false;
+            printMessage = message;
+        }
         
         public void StartExecute(string scriptName)
         {
@@ -76,7 +97,7 @@ namespace CodeExecutor
                         LuaVMAdaptorLib.Harvest(vm);
                         LuaVMAdaptorLib.TrySetFacility(vm);
                         LuaVMAdaptorLib.InteractWith(vm);
-                        vm.GetLuaVM().Options.DebugPrint = Debug.Log;
+                        vm.GetLuaVM().Options.DebugPrint = SendPrintMessage;
                     }, vm => { }, LuaVMAdaptorLib.CheckCurrentBotIsBusy),
                 scriptName, script);
             LuaVMLoader.Instance.LoadedScripts.Add(window);
@@ -124,6 +145,22 @@ namespace CodeExecutor
         private void Update()
         {
             scriptWatcher.RunTasks();
+            if (!printedBefore)
+            {
+                printNotification.Close();
+                var cutted = false;
+                var str = printMessage;
+                var pos = str.IndexOf('\n', 0, 32);
+                if (pos == -1) { cutted = true; pos = str.Length; }
+                if (pos > 1024) { cutted = true; pos = 1024; }
+
+                var msg = cutted ? str.Substring(0, pos) + "\n...(too long, truncated)" : str;
+                printNotification.description = msg;
+                printNotification.UpdateUI();
+                printNotification.Open();
+                printedBefore = true;
+            }
+            
             switch (CurrentState)
             {
                 case WorkingState.Running: 
@@ -152,7 +189,20 @@ namespace CodeExecutor
                 window?.HighlightZone(rtInfo.CurrentLineStart-1, rtInfo.CurrentCharStart, rtInfo.CurrentLineEnd-1, rtInfo.CurrentCharEnd);
             }
             if (luaVM.CouldResume()) return;
-            if (luaVM.State == RunningState.Faulted) Debug.Log(luaVM.ExceptionWhat.DecoratedMessage);    
+            if (luaVM.State == RunningState.Faulted)
+            {
+                exceptionNotification.Close();
+                var cutted = false;
+                var str = luaVM.ExceptionWhat.DecoratedMessage;
+                var pos = str.IndexOf('\n', 0, 32);
+                if (pos == -1) { cutted = true; pos = str.Length; }
+                if (pos > 1024) { cutted = true; pos = 1024; }
+
+                var msg = cutted ? str.Substring(0, pos) + "\n...(too long, truncated)" : str;
+                exceptionNotification.description = msg;
+                exceptionNotification.UpdateUI();
+                exceptionNotification.Open();
+            }
             StopExecute();
             // TODO:: replace this later. need a better way to print exception
         }
