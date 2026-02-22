@@ -18,13 +18,14 @@ namespace EditorUIAdaptor
         [CanBeNull] 
         public EditorWindowHandler FindWindow(string windowName) => windowHandlers.Find(w => w.GetWindowName().Equals(windowName, StringComparison.InvariantCultureIgnoreCase));
         public IReadOnlyList<EditorWindowHandler> GetAllWindows() => windowHandlers;
-        public void CreateEditorWindow(string windowName=null, string text=null, float x=0, float y=0, float width=0, float height=0)
+        public void CreateEditorWindow(string windowName, string text=null, float x=0, float y=0, float width=0, float height=0)
         {
             var windowObj = Instantiate(CodeEditorPrefab, transform);
             var windowHandler = windowObj.GetComponent<EditorWindowHandler>();
             windowHandler.Init(windowName, text, x, y, width, height);
             windowHandlers.Add(windowHandler);
         }
+        public void CreateEditorWindow() => CreateEditorWindow(null);
         public void RemoveEditorWindow(string windowName)
         {
             EditorWindowHandler handler = null;

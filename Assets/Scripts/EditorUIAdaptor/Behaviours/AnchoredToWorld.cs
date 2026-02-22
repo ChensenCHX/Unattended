@@ -27,7 +27,6 @@ namespace EditorUIAdaptor.Behaviours
                 foreach (var result in raycastResults)
                 {
                     var current = result.gameObject.transform;
-                    Debug.Log(result.gameObject.name);
                     while (current != null && current.parent != transform && current != transform.parent) current = current.parent;
                     
                     if (current == transform.parent) break;
