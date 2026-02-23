@@ -1,5 +1,7 @@
 using EditorUIAdaptor;
+using EditorUIAdaptor.Behaviours;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace UI.InGameUI
 {
@@ -18,6 +20,7 @@ namespace UI.InGameUI
         }
         private void OnDisableThis()
         {
+            EventSystem.current.SetSelectedGameObject(UIBGMouseListener.Instance.gameObject);
             EditorWindowManager.Instance.UnlockAllWindowsFocus();
             newCodeEditorButtonObj.SetActive(true);
             newInfoWindowButtonObj.SetActive(true);
