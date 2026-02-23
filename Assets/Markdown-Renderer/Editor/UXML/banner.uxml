@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Musician/Editor/USS/banner.uss?fileID=7433441132597879392&amp;guid=442374e9e4188a644be2af391de43ebe&amp;type=3#banner" />
+    <ui:VisualElement name="banner-container" class="banner" style="flex-grow: 0; align-items: center; height: 160px;">
+        <ui:VisualElement name="background-container" style="flex-grow: 0; left: -5px; top: -5px; right: -5px; bottom: -5px; position: absolute; background-image: url(&quot;project://database/Assets/Musician/Editor/Assets/background.png?fileID=2800000&amp;guid=ce2d337a65dfb674ca5aa05fd0028844&amp;type=3#background&quot;);">
+            <ui:VisualElement name="background-image" style="flex-grow: 1;" />
+            <ui:VisualElement name="banner-line" style="flex-grow: 0; height: 1px; justify-content: flex-end; width: auto; align-items: center; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-bottom: 5px; margin-right: 0; margin-left: 0; scale: 1 1; flex-direction: column; align-self: stretch; background-color: rgb(255, 255, 255);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="banner-content" style="flex-grow: 1; margin-left: 0; flex-direction: row;">
+            <ui:VisualElement name="banner-text-container" style="flex-grow: 1;">
+                <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="title" style="-unity-text-align: upper-center; font-size: 28px; -unity-font-style: bold;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

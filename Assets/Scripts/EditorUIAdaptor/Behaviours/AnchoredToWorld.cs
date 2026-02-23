@@ -30,7 +30,9 @@ namespace EditorUIAdaptor.Behaviours
                     while (current != null && current.parent != transform && current != transform.parent) current = current.parent;
                     
                     if (current == transform.parent) break;
-                    if (current == null || current.parent != transform || current.GetComponent<EditorWindowHandler>().GetTextEditor().DisableInput) continue;
+                    if (current == null 
+                        || current.parent != transform 
+                        || (current.GetComponent<EditorWindowHandler>()?.GetTextEditor().DisableInput ?? true)) continue;
                     current.SetAsLastSibling(); break;
                 }
             }
