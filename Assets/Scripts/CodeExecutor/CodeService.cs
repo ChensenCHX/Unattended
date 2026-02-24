@@ -150,7 +150,7 @@ namespace CodeExecutor
                 printNotification.Close();
                 var cutted = false;
                 var str = printMessage;
-                var pos = str.IndexOf('\n', 0, 32);
+                var pos = str.IndexOfNth('\n', 32);
                 if (pos != -1) { cutted = true; pos = str.Length; }
                 if (pos > 1024) { cutted = true; pos = 1024; }
 
@@ -194,7 +194,7 @@ namespace CodeExecutor
                 exceptionNotification.Close();
                 var cutted = false;
                 var str = luaVM.ExceptionWhat.DecoratedMessage;
-                var pos = str.IndexOf('\n', 0, 32);
+                var pos = str.IndexOfNth('\n', 32);
                 if (pos != -1) { cutted = true; pos = str.Length; }
                 if (pos > 1024) { cutted = true; pos = 1024; }
 
