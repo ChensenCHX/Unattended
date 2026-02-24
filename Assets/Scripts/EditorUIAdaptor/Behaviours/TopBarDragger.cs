@@ -22,6 +22,7 @@ namespace EditorUIAdaptor.Behaviours
         }
         public void OnDrag(PointerEventData eventData)
         {
+            if (!IsPointInsideScreen(eventData.position)) return;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 EditorWindowManager.Instance.RectTransform,
                 
@@ -32,5 +33,11 @@ namespace EditorUIAdaptor.Behaviours
             editorHolder.anchoredPosition = offset + position;
         }
         public void OnEndDrag(PointerEventData eventData) => EventSystem.current.SetSelectedGameObject(UIBGMouseListener.Instance.gameObject);
+        
+        private static bool IsPointInsideScreen(Vector2 screenPoint)
+        {
+            return screenPoint.x >= 0 && screenPoint.x <= Screen.width &&
+                   screenPoint.y >= 0 && screenPoint.y <= Screen.height;
+        }
     }
 }
