@@ -9,6 +9,7 @@ using InGameTextEditor.Format;
 using InGameTextEditor.History;
 using InGameTextEditor.Operations;
 using TMPro;
+using UnityEditor.PackageManager.UI;
 using Action = InGameTextEditor.History.Action;
 
 namespace InGameTextEditor
@@ -1501,7 +1502,7 @@ namespace InGameTextEditor
                 switch (renderMode)
                 {
                     case RenderMode.ScreenSpaceCamera: guiCamera = GetComponentInParent<Canvas>().worldCamera; break;
-                    case RenderMode.WorldSpace: guiCamera = Camera.main; break;
+                    case RenderMode.WorldSpace: guiCamera = WindowCamera.Instance.Camera; break;
                     case RenderMode.ScreenSpaceOverlay:
                     default: break;
                 }
