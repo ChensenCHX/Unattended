@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using UnityEngine;
 
 namespace MarkdownToUnity.Runtime
 {
     public static class SyntaxHighlighter
     {
-        private static readonly string KeywordColor = "blue";
-        private static readonly string StringColor = "orange";
-        private static readonly string CommentColor = "green";
-        private static readonly string NumberColor = "magenta";
-        private static readonly string PropertyColor = "cyan"; 
-        private static readonly string FunctionColor = "yellow";
+        private static readonly string KeywordColor = "#0000FF";
+        private static readonly string StringColor = "#C9A26D";
+        private static readonly string CommentColor = "#00FF00";
+        private static readonly string NumberColor = "#FF00FF";
+        private static readonly string PropertyColor = "#00FFFF"; 
+        private static readonly string FunctionColor = "#FFEB04";
 
 
         private static readonly Dictionary<string, HashSet<string>> LanguageKeywords =
