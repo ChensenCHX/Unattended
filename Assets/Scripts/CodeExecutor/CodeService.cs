@@ -151,7 +151,7 @@ namespace CodeExecutor
                 var cutted = false;
                 var str = printMessage;
                 var pos = str.IndexOf('\n', 0, 32);
-                if (pos == -1) { cutted = true; pos = str.Length; }
+                if (pos != -1) { cutted = true; pos = str.Length; }
                 if (pos > 1024) { cutted = true; pos = 1024; }
 
                 var msg = cutted ? str.Substring(0, pos) + "\n...(too long, truncated)" : str;
@@ -195,7 +195,7 @@ namespace CodeExecutor
                 var cutted = false;
                 var str = luaVM.ExceptionWhat.DecoratedMessage;
                 var pos = str.IndexOf('\n', 0, 32);
-                if (pos == -1) { cutted = true; pos = str.Length; }
+                if (pos != -1) { cutted = true; pos = str.Length; }
                 if (pos > 1024) { cutted = true; pos = 1024; }
 
                 var msg = cutted ? str.Substring(0, pos) + "\n...(too long, truncated)" : str;
