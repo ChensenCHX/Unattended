@@ -4,6 +4,7 @@ using CodeExecutor;
 using EditorUIAdaptor;
 using GlobalSettings;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Test : MonoBehaviour
 {
@@ -35,8 +36,22 @@ public class Test : MonoBehaviour
     }
 
 //    private bool printed = false;
+
+    private GameObject lastSelected;
+    private int lastCameraLockState;
     void Update()
     {
+        if (lastCameraLockState != CameraController.moveLock)
+        {
+            Debug.Log($"MoveLock change: from '{lastCameraLockState}' to '{CameraController.moveLock}'");
+            lastCameraLockState = CameraController.moveLock;
+        }
+
+        if (EventSystem.current.currentSelectedGameObject != lastSelected)
+        {
+            Debug.Log($"EventSystem selected change: from '{lastSelected}' to '{EventSystem.current.currentSelectedGameObject}'");
+            lastSelected = EventSystem.current.currentSelectedGameObject;
+        }
         // if (Input.GetKeyDown(KeyCode.P))
         // {
         //     var screenCenter = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
@@ -48,7 +63,7 @@ public class Test : MonoBehaviour
         //         );
         //     EditorWindowManager.Instance.CreateEditorWindow(null, null, (int)localPos.x, (int)localPos.y);
         // }
-        
+
         // if (luaVM.CouldResume())
         //     luaVM.ResumeUntilLimit(LuaVMConfigurer.MaxInstructionPerResume * 10);
         // else if (!printed)

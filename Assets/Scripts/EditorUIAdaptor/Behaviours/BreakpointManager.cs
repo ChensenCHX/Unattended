@@ -26,8 +26,8 @@ namespace EditorUIAdaptor.Behaviours
             if (!textEditor.EditorActive) return;           // skip if not active
             if (!Input.GetMouseButton(0)) return;           // skip if no input
             if (windowHandler.transform.GetSiblingIndex() != windowHandler.transform.parent.childCount - 1) return; // skip if not first editor
-            if (!RectTransformUtility.RectangleContainsScreenPoint(lineIconTransform, Input.mousePosition, null)) return;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(lineIconTransform, Input.mousePosition, null, out var mousePosition);
+            if (!RectTransformUtility.RectangleContainsScreenPoint(lineIconTransform, Input.mousePosition, WindowCamera.Instance.Camera)) return;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(lineIconTransform, Input.mousePosition, WindowCamera.Instance.Camera, out var mousePosition);
 
             var lineAt = (int)((-mousePosition.y + lineIconContainerTransform.anchoredPosition.y) / textEditor.CharacterHeight);
             if (lineAt >= textEditor.Lines.Count) return;   // illegal line (not exist)

@@ -1,5 +1,7 @@
 using EditorUIAdaptor;
+using EditorUIAdaptor.Behaviours;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace UI.InGameUI
 {
@@ -11,11 +13,12 @@ namespace UI.InGameUI
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 EditorWindowManager.Instance.RectTransform,
                 screenPoint,
-                null,
+                WindowCamera.Instance.Camera,
                 out var localPoint
             );
             
             EditorWindowManager.Instance.CreateEditorWindow(null, null, localPoint.x, localPoint.y);
+            EventSystem.current.SetSelectedGameObject(UIBGMouseListener.Instance.gameObject);
         }
     }
 }
