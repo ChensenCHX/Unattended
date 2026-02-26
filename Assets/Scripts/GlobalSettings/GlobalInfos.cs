@@ -60,14 +60,28 @@ namespace GlobalSettings
         public int IterBaseYield = 1;
         public int OpusBaseYield = 1;
 
-        public double ManaCount = 512.0;
-        public double EtherCount = 512.0;
-        public double MelodiaCount = 512.0;
-        public double ChronosCount = 512.0;
-        public double SignumCount = 512.0;
-        public double IterCount = 512.0;
-        public double OpusCount = 512.0;
-
+        public event Action<double> OnManaCountChange;
+        private double manaCount;
+        public double ManaCount { get => manaCount; set { manaCount = value; OnManaCountChange?.Invoke(value); } }
+        public event Action<double> OnEtherCountChange;
+        private double etherCount;
+        public double EtherCount { get => etherCount; set { etherCount = value; OnEtherCountChange?.Invoke(value); } }
+        public event Action<double> OnMelodiaCountChange;
+        private double melodiaCount;
+        public double MelodiaCount { get => melodiaCount; set { melodiaCount = value; OnMelodiaCountChange?.Invoke(value); } }
+        public event Action<double> OnChronosCountChange;
+        private double chronosCount;
+        public double ChronosCount { get => chronosCount; set { chronosCount = value; OnChronosCountChange?.Invoke(value); } }
+        public event Action<double> OnSignumCountChange;
+        private double signumCount;
+        public double SignumCount { get => signumCount; set { signumCount = value; OnSignumCountChange?.Invoke(value); } }
+        public event Action<double> OnIterCountChange;
+        private double iterCount;
+        public double IterCount { get => iterCount; set { iterCount = value; OnIterCountChange?.Invoke(value); } }
+        public event Action<double> OnOpusCountChange;
+        private double opusCount;
+        public double OpusCount { get => opusCount; set { opusCount = value; OnOpusCountChange?.Invoke(value); } }
+        
         public bool TryConsumeItem(ItemType type, int count) => type switch
         {
             ItemType.None           => false,
@@ -81,6 +95,38 @@ namespace GlobalSettings
             ItemType.ItemTypeCount  => false,
             _                       => throw new NotImplementedException(),
         };
+        public void SubscribeItemCountEventByType(ItemType type, Action<double> action)
+        {
+            switch(type)
+            {
+                case ItemType.None: throw new ArgumentOutOfRangeException();
+                case ItemType.Mana: OnManaCountChange += action; break;
+                case ItemType.Ether: OnEtherCountChange += action; break;
+                case ItemType.Melodia: OnMelodiaCountChange += action; break;
+                case ItemType.Chronos: OnChronosCountChange += action; break;
+                case ItemType.Signum: OnSignumCountChange += action; break;
+                case ItemType.Iter: OnIterCountChange += action; break;
+                case ItemType.Opus: OnOpusCountChange += action; break;
+                case ItemType.ItemTypeCount: throw new ArgumentOutOfRangeException();
+                default: throw new NotImplementedException();
+            }
+        }
+        public void UnsubscribeItemCountEventByType(ItemType type, Action<double> action)
+        {
+            switch(type)
+            {
+                case ItemType.None: throw new ArgumentOutOfRangeException();
+                case ItemType.Mana: OnManaCountChange -= action; break;
+                case ItemType.Ether: OnEtherCountChange -= action; break;
+                case ItemType.Melodia: OnMelodiaCountChange -= action; break;
+                case ItemType.Chronos: OnChronosCountChange -= action; break;
+                case ItemType.Signum: OnSignumCountChange -= action; break;
+                case ItemType.Iter: OnIterCountChange -= action; break;
+                case ItemType.Opus: OnOpusCountChange -= action; break;
+                case ItemType.ItemTypeCount: throw new ArgumentOutOfRangeException();
+                default: throw new NotImplementedException();
+            }
+        }
         public double GetItemCountByType(ItemType type) => type switch
         {
             ItemType.None           => 0,
@@ -136,4 +182,6 @@ namespace GlobalSettings
             _                       => FacilityType.Empty,
         };
     }
+
+    public delegate void PropertyChange();
 }
