@@ -30,7 +30,7 @@ namespace EditorUIAdaptor.Behaviours
             highlightLeft.lineIndex = startLine; highlightLeft.colIndex = startChar;
             highlightRight.lineIndex = endLine; highlightRight.colIndex = endChar;
             highlightSelector.start = highlightLeft; highlightSelector.end = highlightRight;
-            textEditor.Selection = highlightSelector;
+            textEditor.HighlightZone(highlightSelector);
         }
         public void StopHighlightZone() => textEditor.Selection = null;
         public void SetRunningState(CodeService.WorkingState runningState)

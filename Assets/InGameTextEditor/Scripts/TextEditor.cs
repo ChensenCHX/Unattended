@@ -10,6 +10,7 @@ using InGameTextEditor.History;
 using InGameTextEditor.Operations;
 using TMPro;
 using UnityEditor.PackageManager.UI;
+using Utils;
 using Action = InGameTextEditor.History.Action;
 
 namespace InGameTextEditor
@@ -2343,6 +2344,67 @@ namespace InGameTextEditor
             selectionRect.GetComponent<RectTransform>().sizeDelta = new Vector2(bottomRight.x - topLeft.x, topLeft.y - bottomRight.y);
             selectionRect.transform.SetAsLastSibling();
             selectionRects.Add(selectionRect);
+        }
+
+
+        public void HighlightZone(Selection selectionZone)
+        {
+            Vector2 startPos = lines[selectionZone.start.lineIndex].GetCaretPosition(selectionZone.start);
+            Vector2 endPos = lines[selectionZone.end.lineIndex].GetCaretPosition(selectionZone.end);
+
+            // switch startPos and endPos if selection is reversed
+            if ((Mathf.Approximately(startPos.y, endPos.y) && startPos.x > endPos.x) || (!Mathf.Approximately(startPos.y, endPos.y) && startPos.y < endPos.y))
+            {
+                Vector2 tmpPos = endPos;
+                endPos = startPos;
+                startPos = tmpPos;
+            }
+
+            if (Mathf.Approximately(startPos.y, endPos.y))
+            {
+                // single line
+                AddHighlightRect(startPos, new Vector2(endPos.x, endPos.y - characterHeight));
+            }
+            else
+            {
+                float maxSelectionWidth = Mathf.Max(Mathf.FloorToInt(horizontalSpaceAvailable / characterWidth) * characterWidth, longestLineWidth);
+
+                // first line
+                AddHighlightRect(startPos, new Vector2(maxSelectionWidth, startPos.y - characterHeight));
+
+                // intermediate lines
+                if (!Mathf.Approximately(startPos.y - characterHeight, endPos.y))
+                    AddHighlightRect(new Vector2(0f, startPos.y - characterHeight), new Vector2(maxSelectionWidth, endPos.y));
+
+                // last line
+                AddHighlightRect(new Vector2(0f, endPos.y), new Vector2(endPos.x, endPos.y - characterHeight));
+            }
+        }
+
+        private Dictionary<ValueTuple<int, int, int, int>, SelectionObject> selectionObjCache = new();
+        void AddHighlightRect(Vector2 topLeft, Vector2 bottomRight)
+        {
+            var key = ValueTuple.Create((int)topLeft.x, (int)topLeft.y, (int)bottomRight.x, (int)bottomRight.y);
+            if (selectionObjCache.TryGetValue(key, out var cacheObj))
+            {
+                if (cacheObj.Using)
+                {
+                    cacheObj.GetComponent<Image>().color = selectionInactiveColor;
+                    cacheObj.transform.SetAsLastSibling();
+                    cacheObj.ReUse(); 
+                    return;
+                }
+                selectionObjCache.Remove(key);
+            }
+            // create selection background
+            var highlightRect = GameObjectPool<SelectionObject>.Alloc(SelectionObject.BuildObject);
+            highlightRect.transform.SetParent(selectionContainer);
+            highlightRect.GetComponent<Image>().color = selectionInactiveColor;
+            highlightRect.GetComponent<RectTransform>().anchoredPosition = new Vector2(mainMarginLeft + topLeft.x, -mainMarginTop + topLeft.y);
+            highlightRect.GetComponent<RectTransform>().localScale = Vector3.one;
+            highlightRect.GetComponent<RectTransform>().sizeDelta = new Vector2(bottomRight.x - topLeft.x, topLeft.y - bottomRight.y);
+            highlightRect.transform.SetAsLastSibling();
+            selectionObjCache[key] = highlightRect;
         }
 
         // rebuilds all text lines

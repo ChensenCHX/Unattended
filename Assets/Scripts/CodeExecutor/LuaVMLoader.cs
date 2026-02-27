@@ -14,7 +14,7 @@ namespace CodeExecutor
         public object LoadFile(string file, Table globalContext)
         {
             var window = EditorWindowManager.Instance.FindWindow(file.ToUpperInvariant());
-            if (window == null) throw new LuaVMException($"Couldn't find script '{file}'.");
+            if (window == null) throw new ScriptRuntimeException($"Couldn't find script '{file}'.");
             LoadedScripts.Add(window);
             window.SetRunningState(CodeService.WorkingState.Running);
             return window.GetScript();

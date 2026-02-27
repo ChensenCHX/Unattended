@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using Utils;
 
 namespace InGameTextEditor
 {
@@ -90,6 +95,59 @@ namespace InGameTextEditor
             hashCode = hashCode * -1521134295 + EqualityComparer<TextPosition>.Default.GetHashCode(start);
             hashCode = hashCode * -1521134295 + EqualityComparer<TextPosition>.Default.GetHashCode(end);
             return hashCode;
+        }
+    }
+
+    public class SelectionObject : MonoBehaviour, IPoolable<SelectionObject>
+    {
+        public static SelectionObject BuildObject()
+        {
+            var highlightRect = new GameObject("Highlight");
+            
+            var selectionObject = highlightRect.AddComponent<SelectionObject>();
+            highlightRect.AddComponent<Image>();
+            highlightRect.GetComponent<RectTransform>().localPosition = Vector3.zero;
+            highlightRect.GetComponent<RectTransform>().localRotation = Quaternion.identity;
+            highlightRect.GetComponent<RectTransform>().anchorMin = new Vector2(0f, 1f);
+            highlightRect.GetComponent<RectTransform>().anchorMax = new Vector2(0f, 1f);
+            highlightRect.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);
+            highlightRect.GetComponent<RectTransform>().pivot = new Vector2(0f, 1f);
+            return selectionObject;
+        }
+        
+        private Coroutine lastCoroutine;
+        public void ReUse()
+        {
+            StopCoroutine(lastCoroutine);
+            lastCoroutine = StartCoroutine(FadeOut());
+        }
+        
+        public bool Using { get; private set; }
+        public void FreeThis() => throw new AccessViolationException("Can't manually free this object!");
+        public void OnAlloc() 
+        {
+            lastCoroutine = StartCoroutine(FadeOut());
+            Using = true;
+        }
+
+        private Image image;
+        private const float FADE_DURATION = 0.2f;
+        IEnumerator FadeOut()
+        {
+            image ??= GetComponent<Image>(); yield return null;
+            var startColor = image.color;
+            var endColor = new Color(startColor.r, startColor.g, startColor.b, 0f);
+            var elapsedTime = 0f;
+            while (elapsedTime < FADE_DURATION)
+            {
+                elapsedTime += Time.deltaTime;
+                var alpha = Mathf.Lerp(1f, 0f, elapsedTime / FADE_DURATION);
+                image.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
+                yield return null;
+            }
+            image.color = endColor;
+            GameObjectPool<SelectionObject>.Free(this);
+            Using = false;
         }
     }
 }

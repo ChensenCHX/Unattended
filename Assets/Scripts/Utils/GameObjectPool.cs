@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Workspace;
-using Workspace.Facilities.Impl;
 
 namespace Utils
 {
@@ -18,7 +18,22 @@ namespace Utils
         {
             if (pool.Count == 0)
             {
-                var obj = Object.Instantiate(prefab, WorkspaceManager.Instance.transform);
+                var obj = UnityEngine.Object.Instantiate(prefab, WorkspaceManager.Instance.transform);
+                var objMono = obj.GetComponent<T>();
+                objMono.OnAlloc();
+                return objMono;
+            }
+            
+            var curr = pool.Pop();
+            curr.gameObject.SetActive(true);
+            curr.OnAlloc();
+            return curr;
+        }
+        public static T Alloc(Func<T> factory)
+        {
+            if (pool.Count == 0)
+            {
+                var obj = factory();
                 var objMono = obj.GetComponent<T>();
                 objMono.OnAlloc();
                 return objMono;
