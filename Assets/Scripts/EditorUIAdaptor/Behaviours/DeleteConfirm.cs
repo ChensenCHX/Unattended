@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -12,11 +13,13 @@ namespace EditorUIAdaptor.Behaviours
         [SerializeField] private Button rejectButton;
         [SerializeField] private Button confirmButton;
         [SerializeField] private TextMeshProUGUI notifyText;
+        
+        public string TextFormatTemplate { get; set; }
         private void Start() => gameObject.SetActive(false);
         public void PopDeleteConfirm(string scriptName, UnityAction confirmCallback)
         {
             gameObject.SetActive(true);
-            notifyText.text = $" 真的要删除脚本 \"{scriptName}\" 吗？\n它将会被移动到回收站文件夹";
+            notifyText.text = string.Format(TextFormatTemplate, scriptName);
             EditorWindowManager.Instance.LockAllWindowsFocus();
             
             UnityAction confirmAction = null;

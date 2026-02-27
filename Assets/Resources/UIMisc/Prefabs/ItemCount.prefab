@@ -105,7 +105,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 127
@@ -883,6 +883,7 @@ GameObject:
   - component: {fileID: 3258236842038563128}
   - component: {fileID: 3939652795035602864}
   - component: {fileID: 2015340386600221296}
+  - component: {fileID: 6963729102779212198}
   m_Layer: 5
   m_Name: ItemCount
   m_TagString: Untagged
@@ -924,7 +925,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a81a9e081a4afa64dae6b9d42bc38c9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  description: Placeholder
+  description: 
   delay: 0.2
   tooltipRect: {fileID: 2906756465385068242}
   descriptionText: {fileID: 1542477498958270071}
@@ -947,3 +948,44 @@ MonoBehaviour:
   itemSprite: {fileID: 0}
   itemCount: {fileID: 8515216831782814746}
   itemImage: {fileID: 8638467020026778751}
+  tooltipContent: {fileID: 3939652795035602864}
+--- !u!114 &6963729102779212198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7843074497124703337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2015340386600221296}
+        m_TargetAssemblyTypeName: UI.InGameUI.ItemCountRenderer, Assembly-CSharp
+        m_MethodName: set_TooltipText
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  references:
+    version: 2
+    RefIds: []

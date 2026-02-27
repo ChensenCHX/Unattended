@@ -13,6 +13,7 @@ namespace Michsky.MUIP
     {
         // Content
         public Sprite icon;
+        public string Title { get => title; set { title = value; UpdateUI(); } }
         public string title = "Notification Title";
         [TextArea(1, 4)] public string description = "Notification description";
 

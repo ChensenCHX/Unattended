@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using GlobalSettings;
 using Items;
+using Michsky.MUIP;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,9 @@ namespace UI.InGameUI
         [SerializeField] private Sprite itemSprite;
         [SerializeField] private TextMeshProUGUI itemCount;
         [SerializeField] private Image itemImage;
+        [SerializeField] private TooltipContent tooltipContent;
+
+        public string TooltipText { set => tooltipContent.description = value; }
         
         private static readonly ReadOnlyCollection<string> suffixes = new(new [] { "", "K", "M", "G", "T", "P", "E", "Z", "Y", "R", "Q" });
         private static string ToMetricString(double value)
