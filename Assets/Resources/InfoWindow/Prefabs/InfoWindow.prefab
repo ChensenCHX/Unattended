@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2127558604086861503}
   - component: {fileID: 5205740121603903474}
   - component: {fileID: 4262367994249816335}
+  - component: {fileID: 3573259613750302012}
   m_Layer: 6
   m_Name: WidthHeightDragger
   m_TagString: Untagged
@@ -89,6 +90,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorTypeInThisDomain: 9
+--- !u!114 &3573259613750302012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919044258425619162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9bbffbae47d400db2118bc3b184c086, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  windowRectTransform: {fileID: 752812678419315542}
+  side: 2
 --- !u!1 &1304541300756446591
 GameObject:
   m_ObjectHideFlags: 0
@@ -99,6 +114,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1800454806235025284}
   - component: {fileID: 1253432615317942320}
+  - component: {fileID: 8247242714530391705}
   m_Layer: 6
   m_Name: Close
   m_TagString: Untagged
@@ -170,7 +186,32 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8476048852272122967}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8247242714530391705}
+        m_TargetAssemblyTypeName: UI.InGameUI.InfoWindow.CloseWindow, Assembly-CSharp
+        m_MethodName: OnClickThis
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &8247242714530391705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1304541300756446591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74affff945144cacaa9a929daa0753b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  windowObject: {fileID: 8071341930939248335}
 --- !u!1 &1388539051027004532
 GameObject:
   m_ObjectHideFlags: 0
@@ -652,6 +693,7 @@ GameObject:
   - component: {fileID: 8029783782467383641}
   - component: {fileID: 7491751421752360507}
   - component: {fileID: 3893292031986974364}
+  - component: {fileID: 8248902158922969704}
   m_Layer: 6
   m_Name: HeightDragger
   m_TagString: Untagged
@@ -729,6 +771,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorTypeInThisDomain: 7
+--- !u!114 &8248902158922969704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2900000226512756995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9bbffbae47d400db2118bc3b184c086, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  windowRectTransform: {fileID: 752812678419315542}
+  side: 1
 --- !u!1 &2977446241341531302
 GameObject:
   m_ObjectHideFlags: 0
@@ -1336,6 +1392,7 @@ GameObject:
   - component: {fileID: 3909651490706035912}
   - component: {fileID: 7464866361954841074}
   - component: {fileID: 6943637654125440252}
+  - component: {fileID: 8132125934052452808}
   m_Layer: 6
   m_Name: WidthDragger
   m_TagString: Untagged
@@ -1413,6 +1470,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorTypeInThisDomain: 8
+--- !u!114 &8132125934052452808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8474541839994539516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9bbffbae47d400db2118bc3b184c086, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  windowRectTransform: {fileID: 752812678419315542}
+  side: 0
 --- !u!1001 &7286131473288947208
 PrefabInstance:
   m_ObjectHideFlags: 0

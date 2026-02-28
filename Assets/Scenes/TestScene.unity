@@ -4413,6 +4413,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1163488221}
   - component: {fileID: 1163488222}
+  - component: {fileID: 1163488223}
   m_Layer: 5
   m_Name: NewInfoWindow
   m_TagString: Untagged
@@ -4484,7 +4485,33 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1178255720}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1163488223}
+        m_TargetAssemblyTypeName: UI.InGameUI.NewInfoWindow, Assembly-CSharp
+        m_MethodName: CreateNewWindow
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1163488223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163488220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7419830f7e5b4221a60ce6982631a31b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoWindowPrefab: {fileID: 8071341930939248335, guid: 82a92b998b783d94d90eee182d0cf5d4,
+    type: 3}
 --- !u!1 &1178255718
 GameObject:
   m_ObjectHideFlags: 0
