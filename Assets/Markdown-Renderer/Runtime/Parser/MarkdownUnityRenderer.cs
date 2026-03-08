@@ -405,7 +405,18 @@ namespace MarkdownToUnity.Runtime {
             pressObject.transform.SetParent(textComponent.transform);
 
             var button = pressObject.AddComponent<Button>();
-            button.onClick.AddListener(() => Application.OpenURL(linkBlock.Uri));
+            button.onClick.AddListener(() =>
+            {
+                if (linkBlock.Uri.StartsWith("chapter:"))
+                {
+                    parent.parent.parent.parent.GetComponent<MarkdownRenderer>()
+                        .ShowChapter(linkBlock.Uri["chapter:".Length..] + ".zip");
+                }
+                else
+                {
+                    Application.OpenURL(linkBlock.Uri);
+                }
+            });
 
             var image = pressObject.AddComponent<Image>();
             image.color = new Color(1, 1, 1, 0);
