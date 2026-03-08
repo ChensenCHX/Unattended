@@ -1,4 +1,3 @@
-#define UI_ELEMENTS_UXML_ATTRIBUTES
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -12,90 +11,101 @@ namespace MusiciMarkdownToUnity.Editor
         DiagonalBottomLeftToTopRight,
         Radial
     }
-#if UNITY_6000_0_OR_NEWER
+
+    #if UNITY_6000_0_OR_NEWER
     [UxmlElement]
-#endif
+    #endif
+
     public partial class GradientElement : VisualElement
     {
-#if !UNITY_6000_0_OR_NEWER
-        // 那没办法 手工注册吧
-        public new class UxmlFactory : UxmlFactory<GradientElement, UxmlTraits> { }
-        public new class UxmlTraits : VisualElement.UxmlTraits
-        {
-            UxmlEnumAttributeDescription<GradientDirection> m_Direction = new UxmlEnumAttributeDescription<GradientDirection> { name = "gradient-direction", defaultValue = GradientDirection.Horizontal };
-            UxmlColorAttributeDescription m_From = new UxmlColorAttributeDescription { name = "gradient-from", defaultValue = new Color(0.2f, 0.4f, 0.8f) };
-            UxmlColorAttributeDescription m_To = new UxmlColorAttributeDescription { name = "gradient-to", defaultValue = new Color(0.1f, 0.1f, 0.1f) };
-            UxmlBoolAttributeDescription m_Gamma = new UxmlBoolAttributeDescription { name = "use-gamma-correction", defaultValue = true };
+        readonly Vertex[] _vertices = new Vertex[4];
+        static readonly ushort[] _indices = { 0, 1, 2, 2, 3, 0 };
+        private GradientDirection _direction = GradientDirection.Horizontal;
+        private Color _from = new Color(0.2f, 0.4f, 0.8f);
+        private Color _to = new Color(0.1f, 0.1f, 0.1f);
+        private bool _gamma = true;
 
-            public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
+#if UNITY_6000_0_OR_NEWER
+        [UxmlAttribute]
+#endif
+        public GradientDirection GradientDirection
+        {
+            get => _direction;
+            set
             {
-                base.Init(ve, bag, cc);
-                var element = ve as GradientElement;
-                element.GradientDirection = m_Direction.GetValueFromBag(bag, cc);
-                element.GradientFrom = m_From.GetValueFromBag(bag, cc);
-                element.GradientTo = m_To.GetValueFromBag(bag, cc);
-                element.UseGammaCorrection = m_Gamma.GetValueFromBag(bag, cc);
+                if (_direction == value) return;
+                _direction = value;
+                MarkDirtyRepaint();
             }
         }
-#endif
-        
-        static readonly Vertex[] _vertices = new Vertex[4];
-        static readonly ushort[] _indices = { 0, 1, 2, 2, 3, 0 };
-        private VisualElement _gradient;
 
 #if UNITY_6000_0_OR_NEWER
         [UxmlAttribute]
 #endif
-        public GradientDirection GradientDirection { get; set; } = GradientDirection.Horizontal;
+        public Color GradientFrom
+        {
+            get => _from;
+            set
+            {
+                if (_from == value) return;
+                _from = value;
+                MarkDirtyRepaint();
+            }
+        }
 
 #if UNITY_6000_0_OR_NEWER
         [UxmlAttribute]
 #endif
-        public Color GradientFrom { get; set; } = new Color(0.2f, 0.4f, 0.8f);
+        public Color GradientTo
+        {
+            get => _to;
+            set
+            {
+                if (_to == value) return;
+                _to = value;
+                MarkDirtyRepaint();
+            }
+        }
 
 #if UNITY_6000_0_OR_NEWER
         [UxmlAttribute]
 #endif
-        public Color GradientTo { get; set; } = new Color(0.1f, 0.1f, 0.1f);
-
-#if UNITY_6000_0_OR_NEWER
-        [UxmlAttribute]
-#endif
-        public bool UseGammaCorrection { get; set; } = true;
+        public bool UseGammaCorrection
+        {
+            get => _gamma;
+            set
+            {
+                if (_gamma == value) return;
+                _gamma = value;
+                MarkDirtyRepaint();
+            }
+        }
 
         public GradientElement()
         {
-            style.overflow = Overflow.Hidden;
-
-            _gradient = new VisualElement { name = "Gradient" };
-            _gradient.style.width = new StyleLength(new Length(100, LengthUnit.Percent));
-            _gradient.style.height = new StyleLength(new Length(100, LengthUnit.Percent));
-
-            _gradient.generateVisualContent += GenerateVisualContent;
-            hierarchy.Add(_gradient);
-
-            RegisterCallback<GeometryChangedEvent>(_ => _gradient.MarkDirtyRepaint());
+            generateVisualContent += GenerateVisualContent;
         }
 
-        private void GenerateVisualContent(MeshGenerationContext ctx)
+        void GenerateVisualContent(MeshGenerationContext ctx)
         {
-            var rect = _gradient.contentRect;
-            if (rect.width < 0.1f || rect.height < 0.1f)
+            Rect rect = contentRect;
+
+            if (rect.width < 0.01f || rect.height < 0.01f)
                 return;
 
             UpdateVerticesPosition(rect);
             UpdateVerticesTint(rect);
 
-            var meshWriteData = ctx.Allocate(_vertices.Length, _indices.Length);
-            meshWriteData.SetAllVertices(_vertices);
-            meshWriteData.SetAllIndices(_indices);
+            var mesh = ctx.Allocate(4, 6);
+            mesh.SetAllVertices(_vertices);
+            mesh.SetAllIndices(_indices);
         }
 
-        private static void UpdateVerticesPosition(Rect rect)
+        void UpdateVerticesPosition(Rect rect)
         {
-            float left = 0f;
+            float left = 0;
             float right = rect.width;
-            float top = 0f;
+            float top = 0;
             float bottom = rect.height;
 
             _vertices[0].position = new Vector3(left, bottom, Vertex.nearZ);
@@ -104,7 +114,7 @@ namespace MusiciMarkdownToUnity.Editor
             _vertices[3].position = new Vector3(right, bottom, Vertex.nearZ);
         }
 
-        private void UpdateVerticesTint(Rect rect)
+        void UpdateVerticesTint(Rect rect)
         {
             Color from = UseGammaCorrection ? GradientFrom.gamma : GradientFrom.linear;
             Color to = UseGammaCorrection ? GradientTo.gamma : GradientTo.linear;
@@ -140,32 +150,55 @@ namespace MusiciMarkdownToUnity.Editor
                     break;
 
                 case GradientDirection.Radial:
-                    ApplyRadialTint(rect, from, to);
+                    Color mid = Color.Lerp(from, to, 0.5f);
+                    _vertices[0].tint = mid;
+                    _vertices[1].tint = from;
+                    _vertices[2].tint = mid;
+                    _vertices[3].tint = to;
                     break;
             }
-        }
-
-        private static void ApplyRadialTint(Rect rect, Color from, Color to)
-        {
-            Color mid = Color.Lerp(from, to, 0.5f);
-            _vertices[0].tint = mid;
-            _vertices[1].tint = from;
-            _vertices[2].tint = mid;
-            _vertices[3].tint = to;
         }
 
         public void SetColors(Color from, Color to)
         {
             GradientFrom = from;
             GradientTo = to;
-            _gradient.MarkDirtyRepaint();
         }
 
         public void SetDirection(GradientDirection dir)
         {
             GradientDirection = dir;
-            _gradient.MarkDirtyRepaint();
         }
+
+#if !UNITY_6000_0_OR_NEWER
+        public new class UxmlFactory : UxmlFactory<GradientElement, UxmlTraits> { }
+
+        public new class UxmlTraits : VisualElement.UxmlTraits
+        {
+            UxmlEnumAttributeDescription<GradientDirection> direction =
+                new() { name = "gradient-direction", defaultValue = GradientDirection.Horizontal };
+
+            UxmlColorAttributeDescription from =
+                new() { name = "gradient-from", defaultValue = new Color(0.2f, 0.4f, 0.8f) };
+
+            UxmlColorAttributeDescription to =
+                new() { name = "gradient-to", defaultValue = new Color(0.1f, 0.1f, 0.1f) };
+
+            UxmlBoolAttributeDescription gamma =
+                new() { name = "use-gamma-correction", defaultValue = true };
+
+            public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
+            {
+                base.Init(ve, bag, cc);
+
+                var e = (GradientElement)ve;
+
+                e.GradientDirection = direction.GetValueFromBag(bag, cc);
+                e.GradientFrom = from.GetValueFromBag(bag, cc);
+                e.GradientTo = to.GetValueFromBag(bag, cc);
+                e.UseGammaCorrection = gamma.GetValueFromBag(bag, cc);
+            }
+        }
+#endif
     }
-   
 }

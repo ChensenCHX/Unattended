@@ -390,7 +390,13 @@ namespace MarkdownToUnity.Runtime {
             textComponent.text = linkBlock.Text;
             textComponent.color = MarkdownUnityRenderer.defaultLinkColor; // Link color
             textComponent.fontStyle = FontStyles.Underline; // Underline for link
-            textComponent.enableWordWrapping = true; // Enable word wrapping
+
+#if UNITY_6000_0_OR_NEWER
+            textComponent.textWrappingMode = TextWrappingModes.Normal;
+#else
+            textComponent.enableWordWrapping = true;
+#endif
+
             textComponent.alignment = TextAlignmentOptions.Left; // Adjust alignment as needed
             textComponent.raycastTarget = false;
 
