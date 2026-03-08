@@ -372,6 +372,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3042444430110995955}
   - component: {fileID: 4355737209012130396}
+  - component: {fileID: 3001247276879588282}
   m_Layer: 6
   m_Name: Minimal
   m_TagString: Untagged
@@ -447,8 +448,40 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3001247276879588282}
+        m_TargetAssemblyTypeName: UI.InGameUI.InfoWindow.MinimalButton, Assembly-CSharp
+        m_MethodName: OnStatuChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
+--- !u!114 &3001247276879588282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1462327050785764407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63e6385bcdf8d5a4cb661082e0b59221, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  windowRectTransform: {fileID: 752812678419315542}
+  draggerRight: {fileID: 8474541839994539516}
+  draggerBottom: {fileID: 2900000226512756995}
+  draggerCorner: {fileID: 919044258425619162}
+  markdownZone: {fileID: 5267631871455243712}
+  icon: {fileID: 7981088680722560563}
+  disableSprite: {fileID: 21300002, guid: 9964955250a501b49ad0d9df1c632e82, type: 3}
+  enableSprite: {fileID: 21300000, guid: a75ddb2acfe03174c87f41bd9fc3f406, type: 3}
 --- !u!1 &1980143259468432379
 GameObject:
   m_ObjectHideFlags: 0
