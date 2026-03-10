@@ -13,10 +13,13 @@ namespace UI.InGameUI.InfoWindow
 
         private void OnChapterChangeByClick(string chapterName) => chapterStack.Push(chapterName);
         public void BackToLastChapter() => markdownRenderer.ShowChapter(chapterStack.Pop(), false);
+        
+        public string GetCurrentChapter() => chapterStack.Peek();
+        public void ForceSetCurrentChapter(string chapterName) => markdownRenderer.ShowChapterInMarkBook(chapterName, markdownRenderer.markzip);
 
         private void Start() 
         {
-            markdownRenderer.ShowChapter(chapterStack.Pop(), false);
+            ForceSetCurrentChapter(chapterStack.Pop());
             markdownRenderer.OnChapterChange += OnChapterChangeByClick;
         }
         private void OnDestroy() => markdownRenderer.OnChapterChange -= OnChapterChangeByClick;

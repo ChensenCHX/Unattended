@@ -4641,6 +4641,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1089932246}
   - component: {fileID: 1089932247}
+  - component: {fileID: 1089932249}
   - component: {fileID: 1089932248}
   m_Layer: 6
   m_Name: WindowsRoot
@@ -4696,6 +4697,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rectTransform: {fileID: 1089932246}
+--- !u!114 &1089932249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1089932245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69e7c8e9647f40b2a3d8b42ec6b093fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InfoWindowPrefab: {fileID: 8071341930939248335, guid: 82a92b998b783d94d90eee182d0cf5d4,
+    type: 3}
+  RectTransform: {fileID: 1089932246}
 --- !u!1 &1105894757
 GameObject:
   m_ObjectHideFlags: 0
@@ -5377,8 +5393,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7419830f7e5b4221a60ce6982631a31b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  infoWindowPrefab: {fileID: 8071341930939248335, guid: 82a92b998b783d94d90eee182d0cf5d4,
-    type: 3}
 --- !u!1 &1178255718
 GameObject:
   m_ObjectHideFlags: 0

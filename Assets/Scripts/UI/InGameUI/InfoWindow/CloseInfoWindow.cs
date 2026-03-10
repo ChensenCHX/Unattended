@@ -4,8 +4,8 @@ namespace UI.InGameUI.InfoWindow
 {
     public class CloseInfoWindow : MonoBehaviour
     {
-        [SerializeField] private GameObject windowObject;
+        [SerializeField] private InfoWindowHandler windowHandler;
         
-        public void OnClickThis() => Destroy(windowObject);
+        public void OnClickThis() => InfoWindowManager.Instance.DeleteWindow(windowHandler);
     }
 }

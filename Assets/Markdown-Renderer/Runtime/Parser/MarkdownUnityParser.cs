@@ -33,7 +33,7 @@ namespace MarkdownToUnity.Runtime
 
         public static Dictionary<string, string> GetChapterDictionary() { return nestedMarkChapters; }
 
-        public static async void OpenMarkbook( TextAsset markBook, string languageMarker = null ) {
+        public static async Task OpenMarkbook( TextAsset markBook, string languageMarker = null ) {
             await ParseMarkdown( markBook, languageMarker );
         }
 

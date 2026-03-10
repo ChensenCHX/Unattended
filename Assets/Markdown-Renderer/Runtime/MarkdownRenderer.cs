@@ -190,9 +190,17 @@ namespace MarkdownToUnity.Runtime {
             if (spinner != null) { spinner.SetActive(false); }
         }
 
-        public void ShowChapterInMarkBook( string chaptername, TextAsset markBook ) {
-            MarkdownUnityParser.OpenMarkbook( markBook );
-            ShowChapter( chaptername );
+        public async void ShowChapterInMarkBook( string chaptername, TextAsset markBook )
+        {
+            try
+            {
+                await MarkdownUnityParser.OpenMarkbook( markBook );
+                ShowChapter( chaptername );
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
 
         public void ShowChapter( string chaptername, bool executeEvent = true ) {
