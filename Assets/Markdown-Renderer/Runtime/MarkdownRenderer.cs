@@ -1,10 +1,8 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO.Compression;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -35,6 +33,8 @@ namespace MarkdownToUnity.Runtime {
         [SerializeField] private bool useLanguageMarker = false;
         [SerializeField] private string languageMarker = "";
 
+        public event Action<string> OnChapterChange;
+        
         public void SetDefaultTextColor(Color defaultTextColor)
         {
             this.defaultTextColor = defaultTextColor;
@@ -195,7 +195,8 @@ namespace MarkdownToUnity.Runtime {
             ShowChapter( chaptername );
         }
 
-        public void ShowChapter( string chaptername ) {
+        public void ShowChapter( string chaptername, bool executeEvent = true ) {
+            if (executeEvent) OnChapterChange?.Invoke(chaptername);
             StartCoroutine(ShowChapterCoroutine(chaptername));
         }
 

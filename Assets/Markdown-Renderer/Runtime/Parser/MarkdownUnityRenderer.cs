@@ -217,6 +217,7 @@ namespace MarkdownToUnity.Runtime {
 
             textComponent.text = textElement.RichText;
             SetDefaultTextComponentStyles(textComponent);
+            textComponent.gameObject.SetActive(true);
 
             return textComponent.gameObject;
         }
@@ -423,6 +424,7 @@ namespace MarkdownToUnity.Runtime {
             var layoutElement = textComponent.gameObject.AddComponent<LayoutElement>();
             layoutElement.preferredHeight = 40; 
 
+            textComponent.gameObject.SetActive(true);
             return textComponent.gameObject;
         }
 
