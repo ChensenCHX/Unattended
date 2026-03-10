@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace MusiciMarkdownToUnity.Editor
+namespace MarkdownToUnity.Editor
 {
     public enum GradientDirection
     {

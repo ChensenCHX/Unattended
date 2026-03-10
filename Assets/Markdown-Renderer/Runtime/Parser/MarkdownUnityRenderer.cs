@@ -210,20 +210,16 @@ namespace MarkdownToUnity.Runtime {
 
             return tableObject;
         }
-
         
         private static GameObject CreateTextBlock(UnityUIMarkdownTextAsset.TextBlock textElement, Transform parent)
         {
             var textComponent = GameObject.Instantiate(textPrefab, parent).GetComponent<TMP_Text>();
 
             textComponent.text = textElement.RichText;
-            textComponent.color = MarkdownUnityRenderer.defaultTextColor;
-            textComponent.font = MarkdownUnityRenderer.defaultFont;
-            textComponent.fontSize = MarkdownUnityRenderer.defaultTextSize;
+            SetDefaultTextComponentStyles(textComponent);
 
             return textComponent.gameObject;
         }
-
 
         private static GameObject CreateImageElement(UnityUIMarkdownTextAsset.ImageBlock imageBlock, Transform parent)
         {
@@ -386,17 +382,13 @@ namespace MarkdownToUnity.Runtime {
         {
             var textComponent = GameObject.Instantiate(textPrefab, parent).GetComponent<TMP_Text>();
             textComponent.transform.name = "LinkElement";
+
+            SetDefaultTextComponentStyles(textComponent);
+
             textComponent.transform.localPosition = Vector3.zero;
             textComponent.text = linkBlock.Text;
             textComponent.color = MarkdownUnityRenderer.defaultLinkColor; // Link color
             textComponent.fontStyle = FontStyles.Underline; // Underline for link
-
-#if UNITY_6000_0_OR_NEWER
-            textComponent.textWrappingMode = TextWrappingModes.Normal;
-#else
-            textComponent.enableWordWrapping = true;
-#endif
-
             textComponent.alignment = TextAlignmentOptions.Left; // Adjust alignment as needed
             textComponent.raycastTarget = false;
 
@@ -438,13 +430,11 @@ namespace MarkdownToUnity.Runtime {
         {
             var blockquoteObject = GameObject.Instantiate(MarkdownUnityRenderer.blockquotePrefab, parent);
 
-            TMP_Text textObj = blockquoteObject.GetComponent<TMP_Text>();
-            if (textObj != null)
+            TMP_Text textComponent = blockquoteObject.GetComponent<TMP_Text>();
+            if (textComponent != null)
             {
-                textObj.text = blockquote.RichText;
-                textObj.color = MarkdownUnityRenderer.defaultTextColor;
-                textObj.font = MarkdownUnityRenderer.defaultFont;
-                textObj.fontSize = MarkdownUnityRenderer.defaultTextSize;
+                textComponent.text = blockquote.RichText;
+                SetDefaultTextComponentStyles(textComponent);
             }
 
             blockquoteObject.SetActive(true);
@@ -458,33 +448,42 @@ namespace MarkdownToUnity.Runtime {
 
             var highlightedCode = SyntaxHighlighter.Highlight(codeBlock.Code, codeBlock.Language);
             
-            TMP_Text textObj = codeBlockObject.GetComponent<TMP_Text>();
-            if (textObj != null)
+            TMP_Text textComponent = codeBlockObject.GetComponent<TMP_Text>();
+            if (textComponent != null)
             {
-                textObj.text = highlightedCode;
-                textObj.color = MarkdownUnityRenderer.defaultTextColor;
-                textObj.font = MarkdownUnityRenderer.defaultFont;
-                textObj.fontSize = MarkdownUnityRenderer.defaultTextSize;
+                textComponent.text = highlightedCode;
+                SetDefaultTextComponentStyles(textComponent);
             }
             
-            TMP_Text codeObj = codeBlockObject.transform.GetChild(1).GetComponent<TMP_Text>();
-            if (codeObj != null)
+            TMP_Text codeComponent = codeBlockObject.transform.GetChild(1).GetComponent<TMP_Text>();
+            if (codeComponent != null)
             {
-                codeObj.text = highlightedCode;
-                codeObj.color = MarkdownUnityRenderer.defaultTextColor;
-                codeObj.font = MarkdownUnityRenderer.defaultFont;
-                codeObj.fontSize = MarkdownUnityRenderer.defaultTextSize;
+                codeComponent.text = highlightedCode;
+                SetDefaultTextComponentStyles(codeComponent);
             }
             
-            TMP_Text languageObj = codeBlockObject.transform.GetChild(2).GetComponent<TMP_Text>();
-            if(languageObj != null) {
-                languageObj.text = codeBlock.Language;
-                languageObj.font = MarkdownUnityRenderer.defaultFont;
+            TMP_Text languageComponent = codeBlockObject.transform.GetChild(2).GetComponent<TMP_Text>();
+            if(languageComponent != null) {
+                languageComponent.text = codeBlock.Language;
+                languageComponent.font = MarkdownUnityRenderer.defaultFont;
             }
 
             codeBlockObject.SetActive(true);
 
             return codeBlockObject;
+        }
+
+        private static void SetDefaultTextComponentStyles(TMP_Text textComponent)
+        {
+            textComponent.color = MarkdownUnityRenderer.defaultTextColor;
+            textComponent.font = MarkdownUnityRenderer.defaultFont;
+            textComponent.fontSize = MarkdownUnityRenderer.defaultTextSize;
+
+#if UNITY_6000_0_OR_NEWER
+            textComponent.textWrappingMode = TextWrappingModes.Normal;
+#else
+            textComponent.enableWordWrapping = true;
+#endif
         }
 
         private static IEnumerator AdjustHeightNextFrame(RectTransform rectTransform, LayoutElement layoutElement) {
