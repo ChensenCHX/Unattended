@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Bots;
+using GlobalSettings;
 using MoonSharp.Interpreter;
 using Utils;
 
@@ -16,6 +17,8 @@ namespace CodeExecutor
         private readonly LuaVMConfigurer luaVMConfigurer;
         private readonly Dictionary<int, Coroutine> userThreads = new();
         private readonly HashSet<LuaVMRuntimeInfo> runtimeInfos = new();
+        
+        private int currentThreadCount;
         # endregion
         
         # region 外部状态量
@@ -105,7 +108,7 @@ namespace CodeExecutor
                 .ToList()
                 .Shuffle()
                 .ForEach(dictPair => {
-                    if (CouldResume()) ResumeWithStep(dictPair.Value, LuaVMConfigurer.MaxInstructionPerResume);
+                    if (CouldResume()) ResumeWithStep(dictPair.Value, GlobalInfos.Instance.MaxVMInstructionPerResume);
                     matchBreakPoint |= luaVMInfoHook.MatchedBreakpoint; 
                 });
             luaVMInfoHook.Mode = InfoHookMode.Normal;
@@ -126,9 +129,9 @@ namespace CodeExecutor
         # region 线程控制
         public bool AttachThread(Coroutine userThread, int x=0, int y=0)
         {
-            if (LuaVMConfigurer.CurrentThreadCount >= LuaVMConfigurer.MaxThreadCount) return false;
+            if (currentThreadCount >= GlobalInfos.Instance.MaxVMThreadCount) return false;
             if (!BotManager.Instance.AllocBot(userThread.ReferenceID, x, y)) return false;
-            LuaVMConfigurer.CurrentThreadCount += 1;
+            currentThreadCount += 1;
             return userThreads.TryAdd(userThread.ReferenceID, userThread);
         }
         public bool TerminateThread(int threadID)
@@ -136,7 +139,7 @@ namespace CodeExecutor
             var success = userThreads.Remove(threadID);
             runtimeInfos.Remove(new LuaVMRuntimeInfo() { ThreadID = threadID });
             BotManager.Instance.ReleaseBot(threadID);
-            if (success) LuaVMConfigurer.CurrentThreadCount -= 1;
+            if (success) currentThreadCount -= 1;
             return success;
         }
         public CoroutineState GetThreadState(int threadID)

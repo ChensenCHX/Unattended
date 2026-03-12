@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using EditorUIAdaptor;
 using EditorUIAdaptor.Behaviours;
+using GlobalSettings;
 using InGameTextEditor;
 using Michsky.MUIP;
 using UnityEngine;
@@ -173,7 +174,7 @@ namespace CodeExecutor
                 case WorkingState.Stepping: 
                     if (luaVM.CouldResume())
                     {
-                        var matchedLineChange = luaVM.ResumeUntilNextStmt(LuaVMConfigurer.MaxInstructionPerResume);
+                        var matchedLineChange = luaVM.ResumeUntilNextStmt(GlobalInfos.Instance.MaxVMInstructionPerResume);
                         if (matchedLineChange) PauseExecute();
                     }
                     break;
@@ -204,7 +205,6 @@ namespace CodeExecutor
                 exceptionNotification.Open();
             }
             StopExecute();
-            // TODO:: replace this later. need a better way to print exception
         }
     }
 }

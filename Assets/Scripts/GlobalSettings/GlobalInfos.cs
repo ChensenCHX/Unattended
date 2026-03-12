@@ -14,6 +14,9 @@ namespace GlobalSettings
         
         public const int MaxWorkspaceEdgeLength = 32;
         public const float BasicMoveTime = 1.0f;
+        
+        public const int MaxVMInstructionPerResume = 100;
+        public const int MaxVMThreadCount = 32;
 
         public const float ManaGrowTimeUpperBound = 0.5f;
         public const float ManaGrowTimeLowerBound = 0.2f;
@@ -51,7 +54,10 @@ namespace GlobalSettings
     {
         public int WorkspaceEdgeLength = 8;
         public float MoveTime = GlobalConsts.BasicMoveTime * 0.05f;
-
+        
+        public int MaxVMInstructionPerResume = 10;
+        public int MaxVMThreadCount = 1;
+        
         public int ManaBaseYield = 1;
         public int EtherBaseYield = 1;
         public int MelodiaBaseYield = 1;

@@ -18,11 +18,6 @@ namespace CodeExecutor
             CoreModules.Metatables,
         };
         private readonly int coreModulesLevel;
-
-        public static readonly int OriginalMaxInstructionPerResume = 100;
-        public static int MaxInstructionPerResume = 100;
-        public static readonly int MaxThreadCount = 32;
-        public static int CurrentThreadCount = 0;
         
         public Action<LuaVM> OnStartVM { get; private set; }
         public Action<LuaVM> OnDispose { get; private set; }
