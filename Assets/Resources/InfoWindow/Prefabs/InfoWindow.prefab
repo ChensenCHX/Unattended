@@ -1438,6 +1438,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5012725a52a4100968370981f7e9201, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rectTransform: {fileID: 752812678419315542}
   markdownRenderer: {fileID: 1042692513744052836}
 --- !u!1 &8474541839994539516
 GameObject:
@@ -2165,6 +2166,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7014075990663868603, guid: a28b138044d5927459e496c43a1d0112,
+        type: 3}
+      propertyPath: m_Value
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7329607279066309352, guid: a28b138044d5927459e496c43a1d0112,
         type: 3}
