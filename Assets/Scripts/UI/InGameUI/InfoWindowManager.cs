@@ -44,11 +44,17 @@ namespace UI.InGameUI
         }
         public void CreateWindow(InfoWindowSaveData data) => CreateWindow(data.CurrentChapter, data.X, data.Y, data.Width, data.Height);
         
-        public void DeleteWindow(InfoWindowHandler window)
+        public void RemoveWindow(InfoWindowHandler window)
         {
             windowHandlers.Remove(window);
             Destroy(window.gameObject);
         }
+        public void RemoveAllWindow()
+        {
+            windowHandlers.ForEach(handler => Destroy(handler.gameObject));
+            windowHandlers.Clear();
+        }
+        
         public IReadOnlyList<InfoWindowHandler> GetAllWindows() => windowHandlers;
     }
 }

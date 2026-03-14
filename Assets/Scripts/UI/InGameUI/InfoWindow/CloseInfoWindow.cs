@@ -6,6 +6,6 @@ namespace UI.InGameUI.InfoWindow
     {
         [SerializeField] private InfoWindowHandler windowHandler;
         
-        public void OnClickThis() => InfoWindowManager.Instance.DeleteWindow(windowHandler);
+        public void OnClickThis() => InfoWindowManager.Instance.RemoveWindow(windowHandler);
     }
 }

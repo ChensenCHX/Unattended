@@ -42,6 +42,16 @@ namespace EditorUIAdaptor
             CodeService.Instance.RemoveExistScript(handler);
             Destroy(handler.gameObject);
         }
+        public void RemoveAllWindow()
+        {
+            windowHandlers.ForEach(handler =>
+            {
+                CodeService.Instance.RemoveExistScript(handler);
+                Destroy(handler.gameObject);
+            });
+            windowHandlers.Clear();
+        }
+        
         public void LockAllWindowsInput() { foreach (var editorHandler in windowHandlers) editorHandler.GetTextEditor().DisableInput = true; }
         public void UnlockAllWindowsInput() { foreach (var editorHandler in windowHandlers) editorHandler.GetTextEditor().DisableInput = false; }
         

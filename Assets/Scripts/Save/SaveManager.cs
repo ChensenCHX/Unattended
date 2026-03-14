@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using CodeExecutor;
 using EditorUIAdaptor;
 using EditorUIAdaptor.Behaviours;
 using GlobalSettings;
@@ -37,7 +38,23 @@ namespace Save
 
         public static void LoadAll()
         {
-            // TODO:: 要先删除所有已有的窗口再根据json创建
+            // TODO:: 需要先中断CodeService的外部修改事件捕获
+            
+            EditorWindowManager.Instance.RemoveAllWindow();
+            InfoWindowManager.Instance.RemoveAllWindow();
+            
+            var editorWindowsPath = Path.Combine(SavePath, nameof(EditorWindowSaveData));
+            var editorWindowSaveDatas = JsonConvert.DeserializeObject<List<EditorWindowSaveData>>(File.ReadAllText(editorWindowsPath));
+            editorWindowSaveDatas.ForEach(data => EditorWindowManager.Instance.CreateEditorWindow(data));
+            
+            var infoWindowsPath = Path.Combine(SavePath, nameof(InfoWindowSaveData));
+            var infoWindowSaveDatas = JsonConvert.DeserializeObject<List<InfoWindowSaveData>>(File.ReadAllText(infoWindowsPath));
+            infoWindowSaveDatas.ForEach(data => InfoWindowManager.Instance.CreateWindow(data));
+            
+            var globalInfosPath = Path.Combine(SavePath, nameof(GlobalInfos));
+            JsonConvert.PopulateObject(File.ReadAllText(globalInfosPath), GlobalInfos.Instance);
+            
+            // TODO:: 在这里恢复CodeService的外部修改事件捕获
         }
     }
 }
