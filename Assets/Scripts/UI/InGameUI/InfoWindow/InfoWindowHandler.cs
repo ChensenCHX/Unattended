@@ -6,6 +6,7 @@ namespace UI.InGameUI.InfoWindow
 {
     public class InfoWindowHandler : MonoBehaviour
     {
+        [SerializeField] private RectTransform rectTransform;
         [SerializeField] private MarkdownRenderer markdownRenderer;
         
         public string CurrentChapter => chapterStack.Peek();
@@ -19,9 +20,35 @@ namespace UI.InGameUI.InfoWindow
 
         private void Start() 
         {
-            ForceSetCurrentChapter(chapterStack.Pop());
             markdownRenderer.OnChapterChange += OnChapterChangeByClick;
         }
+        
+        public void Init(string chapterName)
+        {
+            chapterStack.Push(chapterName);
+            ForceSetCurrentChapter(chapterName);
+        }
+
+        public InfoWindowSaveData SaveWindow()
+        {
+            return new InfoWindowSaveData
+            {
+                CurrentChapter = chapterStack.Peek(),
+                X = rectTransform.anchoredPosition.x,
+                Y = rectTransform.anchoredPosition.y,
+                Width = rectTransform.sizeDelta.x,
+                Height = rectTransform.sizeDelta.y
+            };
+        }
         private void OnDestroy() => markdownRenderer.OnChapterChange -= OnChapterChangeByClick;
+    }
+    
+    public struct InfoWindowSaveData
+    {
+        public string CurrentChapter;
+        public float X;
+        public float Y;
+        public float Width;
+        public float Height;
     }
 }

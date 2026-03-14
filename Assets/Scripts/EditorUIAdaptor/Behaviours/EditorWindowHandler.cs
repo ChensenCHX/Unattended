@@ -52,5 +52,30 @@ namespace EditorUIAdaptor.Behaviours
             rectTransform.anchoredPosition = new Vector2(x, y);
             windowAdjustor.TryResizeWindow(width, height);
         }
+        
+        public EditorWindowSaveData SaveWindow()
+        {
+            CodeService.Instance.SaveScriptFile(this);
+            var scriptPath = CodeService.Instance.GetScriptFilePath(this);
+            return new EditorWindowSaveData
+            {
+                ScriptPath = scriptPath,
+                WindowName = GetWindowName(),
+                X = GetWindowPosition().x,
+                Y = GetWindowPosition().y,
+                Width = GetWindowSize().x,
+                Height = GetWindowSize().y,
+            };
+        }
+    }
+
+    public struct EditorWindowSaveData
+    {
+        public string ScriptPath;
+        public string WindowName;
+        public float X;
+        public float Y;
+        public float Width;
+        public float Height;
     }
 }

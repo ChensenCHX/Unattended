@@ -26,12 +26,14 @@ namespace CodeExecutor
         public NotificationManager printNotification;
         
         private int fileOpCount = 0;
+        private string scriptDirPath;
         private LuaVM luaVM;
         private ScriptWatcher scriptWatcher;
 
         private void Start()
         {
-            scriptWatcher = new ScriptWatcher("Scripts");
+            scriptDirPath = Path.Combine(Application.persistentDataPath, "Scripts");
+            scriptWatcher = new ScriptWatcher(scriptDirPath);
         }
 
         public WorkingState CurrentState { get; private set; } = WorkingState.Stopped;
@@ -134,12 +136,22 @@ namespace CodeExecutor
             CurrentState = WorkingState.Running;
         }
         
-        public void StartListeningOutsideChange(EditorWindowHandler handler)
+        public string GetScriptFilePath(EditorWindowHandler handler)
         {
             var scriptName = handler.GetWindowName();
-            var filePath = Path.Combine(Path.Combine(Application.persistentDataPath, "Scripts"), scriptName + ".lua");
+            var filePath = Path.Combine(scriptDirPath, scriptName + ".lua");
+            return filePath;
+        }
+        public void SaveScriptFile(EditorWindowHandler handler)
+        {
+            var filePath = GetScriptFilePath(handler);
             File.WriteAllText(filePath, handler.GetScript(), Encoding.UTF8);
-            scriptWatcher.TargetScripts.Add(scriptName);
+        }
+        
+        public void StartListeningOutsideChange(EditorWindowHandler handler)
+        {
+            SaveScriptFile(handler);
+            scriptWatcher.TargetScripts.Add(handler.GetWindowName());
         }
         public void StopListeningOutsideChange(EditorWindowHandler handler) => scriptWatcher.TargetScripts.Remove(handler.GetWindowName());
         
@@ -218,9 +230,8 @@ public class ScriptWatcher
     private readonly ConcurrentQueue<EventStruct> mainThreadQueue = new();
     public readonly HashSet<string> TargetScripts = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
     
-    public ScriptWatcher(string folderName)
+    public ScriptWatcher(string path)
     {
-        var path = Path.Combine(Application.persistentDataPath, folderName);
         if (!Directory.Exists(path)) Directory.CreateDirectory(path);
         
         watcher = new FileSystemWatcher(path)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using CodeExecutor;
 using EditorUIAdaptor.Behaviours;
 using JetBrains.Annotations;
@@ -26,6 +27,8 @@ namespace EditorUIAdaptor
             windowHandlers.Add(windowHandler);
         }
         public void CreateEditorWindow() => CreateEditorWindow(null);
+        public void CreateEditorWindow(EditorWindowSaveData data) => CreateEditorWindow(data.WindowName, File.ReadAllText(data.ScriptPath), data.X, data.Y, data.Width, data.Height);
+        
         public void RemoveEditorWindow(string windowName)
         {
             EditorWindowHandler handler = null;
