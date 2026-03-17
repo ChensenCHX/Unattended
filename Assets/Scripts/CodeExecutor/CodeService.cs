@@ -29,6 +29,8 @@ namespace CodeExecutor
         private string scriptDirPath;
         private LuaVM luaVM;
         private ScriptWatcher scriptWatcher;
+        
+        public bool DisableFileSync { get => scriptWatcher.IgnoreSignal; set => scriptWatcher.IgnoreSignal = value; }
 
         private void Start()
         {
@@ -226,8 +228,11 @@ public class ScriptWatcher
     private enum EventType { Change, Create, Delete, Rename, Error }
     private struct EventStruct { public EventType EventType; public string Name; public Action Action; }
     
+    private bool disposed = false;
     private FileSystemWatcher watcher;
     private readonly ConcurrentQueue<EventStruct> mainThreadQueue = new();
+    
+    public bool IgnoreSignal = false;
     public readonly HashSet<string> TargetScripts = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
     
     public ScriptWatcher(string path)
@@ -263,6 +268,7 @@ public class ScriptWatcher
     }
     private void OnChanged(object sender, FileSystemEventArgs e)
     {
+        if (IgnoreSignal) return;
         if (e.ChangeType != WatcherChangeTypes.Changed) return; // 只处理纯change
         var nameWithoutExt = Path.GetFileNameWithoutExtension(e.Name);
         if (!TargetScripts.Contains(nameWithoutExt)) return;
@@ -281,6 +287,7 @@ public class ScriptWatcher
     }
     private void OnCreated(object sender, FileSystemEventArgs e)
     {
+        if (IgnoreSignal) return;
         if (IsDirectory(e.FullPath)) return;                                                                // 过滤文件夹
         var nameWithoutExt = Path.GetFileNameWithoutExtension(e.Name);
         if (!IsValidLuaFileName(nameWithoutExt)) return;
@@ -296,6 +303,7 @@ public class ScriptWatcher
     }
     private void OnRenamed(object sender, RenamedEventArgs e)
     {
+        if (IgnoreSignal) return;
         if (IsDirectory(e.FullPath)) return;                                                                // 过滤文件夹
         var nameWithoutExt = Path.GetFileNameWithoutExtension(e.Name);
         var oldNameWithoutExt = Path.GetFileNameWithoutExtension(e.OldName);
@@ -315,6 +323,7 @@ public class ScriptWatcher
     }
     private void OnDeleted(object sender, FileSystemEventArgs e)
     {
+        if (IgnoreSignal) return;
         var nameWithoutExt = Path.GetFileNameWithoutExtension(e.Name);
         if (!TargetScripts.Contains(nameWithoutExt)) return;
         mainThreadQueue.Enqueue(new EventStruct {
@@ -347,6 +356,7 @@ public class ScriptWatcher
     
     public void Dispose()
     {
+        if (disposed) return; disposed = true;
         if (watcher == null) return;
         watcher.EnableRaisingEvents = false;
         watcher.Dispose();

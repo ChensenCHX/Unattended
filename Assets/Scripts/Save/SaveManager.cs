@@ -38,7 +38,7 @@ namespace Save
 
         public static void LoadAll()
         {
-            // TODO:: 需要先中断CodeService的外部修改事件捕获
+            CodeService.Instance.DisableFileSync = true;
             
             EditorWindowManager.Instance.RemoveAllWindow();
             InfoWindowManager.Instance.RemoveAllWindow();
@@ -54,7 +54,7 @@ namespace Save
             var globalInfosPath = Path.Combine(SavePath, nameof(GlobalInfos));
             JsonConvert.PopulateObject(File.ReadAllText(globalInfosPath), GlobalInfos.Instance);
             
-            // TODO:: 在这里恢复CodeService的外部修改事件捕获
+            CodeService.Instance.DisableFileSync = false;
         }
     }
 }
