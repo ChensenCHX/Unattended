@@ -1,3 +1,4 @@
+using Save;
 using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,16 +17,20 @@ namespace UI.MenuUI
         [SerializeField] private Toggle switchUIButton;
         
         private bool isActive;
-        private void SetActive(bool active)
+        private void SetActive(bool active, bool isNotFirst=true)
         {
-            inGameUIOverlayObject.SetActive(active);
-            worldUICanvasObject.SetActive(active);
-            screenUICanvasObject.SetActive(active);
-            menuUIRootObject.SetActive(!active);
+            menuUIRootObject.SetActive(active);
+            inGameUIOverlayObject.SetActive(!active);
+            worldUICanvasObject.SetActive(!active);
+            screenUICanvasObject.SetActive(!active);
             isActive = active;
+            if (active && isNotFirst) SaveManager.SaveAll();
         } 
         
-        private void Start() => SetActive(false);
+        private void Start()
+        {
+            SetActive(true, false);
+        }
         private void Update()
         {
             if (!Input.GetKeyDown(KeyCode.Escape)) return;

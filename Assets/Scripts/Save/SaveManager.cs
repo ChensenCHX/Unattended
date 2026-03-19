@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using CodeExecutor;
 using EditorUIAdaptor;
@@ -8,6 +10,7 @@ using Newtonsoft.Json;
 using UI.InGameUI;
 using UI.InGameUI.InfoWindow;
 using UnityEngine;
+using Utils;
 
 namespace Save
 {
@@ -44,15 +47,25 @@ namespace Save
             InfoWindowManager.Instance.RemoveAllWindow();
             
             var editorWindowsPath = Path.Combine(SavePath, nameof(EditorWindowSaveData));
-            var editorWindowSaveDatas = JsonConvert.DeserializeObject<List<EditorWindowSaveData>>(File.ReadAllText(editorWindowsPath));
-            editorWindowSaveDatas.ForEach(data => EditorWindowManager.Instance.CreateEditorWindow(data));
+            if (File.Exists(editorWindowsPath))
+            {
+                var editorWindowSaveDatas = JsonConvert.DeserializeObject<List<EditorWindowSaveData>>(File.ReadAllText(editorWindowsPath));
+                editorWindowSaveDatas.ForEach(data => EditorWindowManager.Instance.CreateEditorWindow(data));
+            }
             
             var infoWindowsPath = Path.Combine(SavePath, nameof(InfoWindowSaveData));
-            var infoWindowSaveDatas = JsonConvert.DeserializeObject<List<InfoWindowSaveData>>(File.ReadAllText(infoWindowsPath));
-            infoWindowSaveDatas.ForEach(data => InfoWindowManager.Instance.CreateWindow(data));
+            if (File.Exists(infoWindowsPath))
+            {
+                var infoWindowSaveDatas =
+                    JsonConvert.DeserializeObject<List<InfoWindowSaveData>>(File.ReadAllText(infoWindowsPath));
+                infoWindowSaveDatas.ForEach(data => InfoWindowManager.Instance.CreateWindow(data));
+            }
             
             var globalInfosPath = Path.Combine(SavePath, nameof(GlobalInfos));
-            JsonConvert.PopulateObject(File.ReadAllText(globalInfosPath), GlobalInfos.Instance);
+            if (File.Exists(globalInfosPath))
+            {
+                JsonConvert.PopulateObject(File.ReadAllText(globalInfosPath), GlobalInfos.Instance);
+            }
             
             CodeService.Instance.DisableFileSync = false;
         }

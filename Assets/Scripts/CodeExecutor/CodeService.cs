@@ -32,7 +32,7 @@ namespace CodeExecutor
         
         public bool DisableFileSync { get => scriptWatcher.IgnoreSignal; set => scriptWatcher.IgnoreSignal = value; }
 
-        private void Start()
+        protected override void OnAwake()
         {
             scriptDirPath = Path.Combine(Application.persistentDataPath, "Scripts");
             scriptWatcher = new ScriptWatcher(scriptDirPath);

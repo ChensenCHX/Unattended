@@ -45,10 +45,13 @@ namespace Utils
         {
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             
-            if (!DontDestroy) return;
+            OnAwake();
             
+            if (!DontDestroy) return;
             DontDestroyOnLoad(gameObject);
         }
+
+        protected virtual void OnAwake() { }
 
         public static T Instance { get { lock (_lock) return _instance == null ? _instance = FindObjectOfType<T>() : _instance; } }
     }
