@@ -142,7 +142,7 @@ namespace CodeExecutor
         {
             var scriptName = handler.GetWindowName();
             var filePath = Path.Combine(scriptDirPath, scriptName + ".lua");
-            return filePath;
+            return Path.GetFullPath(filePath);
         }
         public void SaveScriptFile(EditorWindowHandler handler)
         {

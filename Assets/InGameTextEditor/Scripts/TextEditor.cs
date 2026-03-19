@@ -1387,8 +1387,12 @@ namespace InGameTextEditor
             // update layout
             UpdateLayout();
 
-            // set default text
-            SetText(defaultText, true);
+            // set default text only if there is no pending SetText operation
+            // (e.g. when an external caller enqueued SetText before Start)
+            // and current text is empty (avoid overwriting restored text)
+            bool currentTextEmpty = lines.Count == 0 || (lines.Count == 1 && string.IsNullOrEmpty(lines[0].Text));
+            if (operations.Count == 0 && currentTextEmpty)
+                SetText(defaultText, true);
 
             // hide lock mask
             lockMask.SetActive(false);

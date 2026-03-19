@@ -48,7 +48,7 @@ namespace EditorUIAdaptor.Behaviours
         public void Init(string windowName=null, string text=null, float x=0, float y=0, float width=0, float height=0)
         {
             scriptName.Init(windowName);
-            textEditor.SetText(text ?? "", true);
+            textEditor.SetText(text ?? "");
             rectTransform.anchoredPosition = new Vector2(x, y);
             windowAdjustor.TryResizeWindow(width, height);
         }

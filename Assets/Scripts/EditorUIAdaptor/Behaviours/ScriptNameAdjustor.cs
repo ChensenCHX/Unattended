@@ -103,9 +103,10 @@ namespace EditorUIAdaptor.Behaviours
             var rt = scriptNameInput.textComponent.rectTransform;
             rt.offsetMin = new Vector2(0, rt.offsetMin.y);   // 设置 Left
             rt.offsetMax = new Vector2(0, rt.offsetMax.y);  // 设置 Right
-            rt = TMPInputFieldHack.GetCaretRect(scriptNameInput);
-            rt.offsetMin = new Vector2(0, rt.offsetMin.y);   // 设置 Left
-            rt.offsetMax = new Vector2(0, rt.offsetMax.y);  // 设置 Right
+            var rtCaret = TMPInputFieldHack.GetCaretRect(scriptNameInput);
+            if (rtCaret is null) return;
+            rtCaret.offsetMin = new Vector2(0, rt.offsetMin.y);   // 设置 Left
+            rtCaret.offsetMax = new Vector2(0, rt.offsetMax.y);  // 设置 Right
         }
         
         private static bool IsValidFileName(string fileName)
