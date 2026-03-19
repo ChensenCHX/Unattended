@@ -26,6 +26,7 @@ namespace UI.MenuUI
             isActive = active;
             if (active && isNotFirst) SaveManager.SaveAll();
         } 
+        public void SwitchState() => SetActive(!isActive);
         
         private void Start()
         {
