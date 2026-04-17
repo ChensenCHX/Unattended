@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Riten.Native.Cursors;
 using Save;
 using UnityEditor.EditorTools;
 using UnityEngine;
@@ -34,7 +35,7 @@ namespace UI.MenuUI
 
         public void PushPage(int pageIndex)
         {
-            if  (pageIndex < 0 || pageIndex >= menuPages.Count) throw new System.IndexOutOfRangeException();
+            if (pageIndex < 0 || pageIndex >= menuPages.Count) throw new System.IndexOutOfRangeException();
             historyStack.Peek().SetActive(false);
             historyStack.Push(menuPages[pageIndex]);
             historyStack.Peek().SetActive(true);
@@ -46,6 +47,7 @@ namespace UI.MenuUI
             historyStack.Peek().SetActive(true);
             return menuPages.IndexOf(obj);
         }
+        public int FindPage(GameObject pageObj) => menuPages.FindIndex(page => page == pageObj);
         
         protected override void OnAwake()
         {
@@ -58,6 +60,7 @@ namespace UI.MenuUI
         private void Update()
         {
             if (!Input.GetKeyDown(KeyCode.Escape)) return;
+            CursorStack.Clear();    // not a good behavior but uh it's easier than other option
             if (switchUIButton.isOn) { switchUIButton.isOn = false; return; }
             if (historyStack.Count != 0) { PopPage(); return; }
 
