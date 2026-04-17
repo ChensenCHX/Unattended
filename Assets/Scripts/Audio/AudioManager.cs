@@ -24,12 +24,16 @@ namespace Audio
             if (bgmSource == null)
                 bgmSource = gameObject.AddComponent<AudioSource>();
             bgmSource.loop = false;
+            bgmSource.minDistance = float.MaxValue;
+            bgmSource.maxDistance = float.MaxValue;
 
             if (seSource == null)
             {
                 seSource = gameObject.AddComponent<AudioSource>();
             }
             seSource.playOnAwake = false;
+            seSource.minDistance = float.MaxValue; 
+            seSource.maxDistance = float.MaxValue;
         }
     
         public void PlayRandomBGM()
