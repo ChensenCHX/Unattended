@@ -180,17 +180,16 @@ namespace Michsky.MUIP
                     if (saveSelected) { PlayerPrefs.SetInt("Dropdown_" + saveKey, mainItem.itemIndex); }
                 });
             }
-
-            if (selectedImage != null && !enableIcon) { selectedImage.gameObject.SetActive(false); }
-            else if (selectedImage != null) { selectedImage.sprite = items[selectedItemIndex].itemIcon; }
-            if (selectedText != null) { selectedText.text = items[selectedItemIndex].itemName; onItemTextChanged?.Invoke(selectedText); }
-          
             if (saveSelected)
             {
                 if (invokeAtStart) { items[PlayerPrefs.GetInt("Dropdown_" + saveKey)].OnItemSelection.Invoke(); }
-                else { SetDropdownIndex(PlayerPrefs.GetInt("Dropdown_" + saveKey), false); }
+                SetDropdownIndex(PlayerPrefs.GetInt("Dropdown_" + saveKey), false);
             }
             else if (invokeAtStart) { items[selectedItemIndex].OnItemSelection.Invoke(); }
+            
+            if (selectedImage != null && !enableIcon) { selectedImage.gameObject.SetActive(false); }
+            else if (selectedImage != null) { selectedImage.sprite = items[selectedItemIndex].itemIcon; }
+            if (selectedText != null) { selectedText.text = items[selectedItemIndex].itemName; onItemTextChanged?.Invoke(selectedText); }
         }
 
         // Obsolete
