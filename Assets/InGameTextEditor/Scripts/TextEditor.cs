@@ -672,6 +672,7 @@ namespace InGameTextEditor
             get
             {
                 // return selected text from start to end
+                if (lines.Count == 0) return "";
                 return GetSelectedText(new Selection(new TextPosition(0, 0), new TextPosition(lines.Count - 1, lines[lines.Count - 1].Text.Length)));
             }
             set
