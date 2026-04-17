@@ -8,14 +8,19 @@ namespace Audio
 {
     public class AudioManager : SingletonMono<AudioManager>
     {
+        [Header("General")]
+        private float masterVolume = 1.0f;
+        
         [Header("BGM")]
         private AudioSource bgmSource;
         [SerializeField] private List<AudioClip> bgmClips = new();
+        private float bgmVolume = 1.0f;
 
         [Header("SFX")]
         private AudioSource seSource;
         private bool isUninterruptibleSEPlaying;
         private Coroutine bgmLoopCoroutine;
+        private float seVolume = 1.0f;
 
         protected override bool DontDestroy => true;
 
@@ -108,16 +113,23 @@ namespace Audio
             isUninterruptibleSEPlaying = false;
         }
 
+        public void SetMasterVolume(float volume)
+        {
+            if (volume is < 0f or > 1f) { Debug.LogWarning("主音量必须在0到1之间"); return; }
+            masterVolume = volume;
+            SetBGMVolume(bgmVolume);
+            SetSEVolume(seVolume);
+        }
         public void SetBGMVolume(float volume)
         {
             if (volume is < 0f or > 1f) { Debug.LogWarning("BGM音量必须在0到1之间"); return; }
-            bgmSource.volume = volume;
+            bgmSource.volume = volume * masterVolume;
         }
 
-        public void SetSFXVolume(float volume)
+        public void SetSEVolume(float volume)
         {
             if (volume is < 0f or > 1f) { Debug.LogWarning("BGM音量必须在0到1之间"); return; }
-            seSource.volume = volume;
+            seSource.volume = volume * masterVolume;
         }
     }
 }
