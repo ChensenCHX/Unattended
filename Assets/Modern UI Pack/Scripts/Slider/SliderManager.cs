@@ -75,8 +75,8 @@ namespace Michsky.MUIP
             {
                 if (usePercent == true)
                 {
-                    if (valueText != null) { valueText.text = Mathf.Round(mainSlider.value * 1.0f).ToString() + "%"; }
-                    if (popupValueText != null) { popupValueText.text = Mathf.Round(mainSlider.value * 1.0f).ToString() + "%"; }
+                    if (valueText != null) { valueText.text = Mathf.Round(mainSlider.value * 100.0f).ToString() + "%"; }
+                    if (popupValueText != null) { popupValueText.text = Mathf.Round(mainSlider.value * 100.0f).ToString() + "%"; }
                 }
 
                 else
@@ -90,8 +90,8 @@ namespace Michsky.MUIP
             {
                 if (usePercent == true)
                 {
-                    if (valueText != null) { valueText.text = mainSlider.value.ToString("F1") + "%"; }
-                    if (popupValueText != null) { popupValueText.text = mainSlider.value.ToString("F1") + "%"; }
+                    if (valueText != null) { valueText.text = (mainSlider.value*100.0f).ToString("F1") + "%"; }
+                    if (popupValueText != null) { popupValueText.text = (mainSlider.value*100.0f).ToString("F1") + "%"; }
                 }
 
                 else
