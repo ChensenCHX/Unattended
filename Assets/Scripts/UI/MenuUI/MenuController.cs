@@ -52,6 +52,7 @@ namespace UI.MenuUI
         protected override void OnAwake()
         {
             historyStack = new HistoryStack<GameObject>(menuPages[0]);
+            for (var i = 1; i < menuPages.Count; i++) menuPages[i].SetActive(false);
         }
         private void Start()
         {
