@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using Items;
 using UnityEngine;
 using Utils;
+using Workspace;
 using Workspace.Facilities;
 
 namespace GlobalSettings
@@ -52,7 +53,8 @@ namespace GlobalSettings
     }
     public class GlobalInfos : Singleton<GlobalInfos>
     {
-        public int WorkspaceEdgeLength = 8;
+        private int workspaceEdgeLength = 8;
+        public int WorkspaceEdgeLength { get => workspaceEdgeLength; set { workspaceEdgeLength = value; WorkspaceManager.Instance.Resize(value); } }
         public float MoveTime = GlobalConsts.BasicMoveTime * 0.05f;
         
         public int MaxVMInstructionPerResume = 10;
