@@ -55,7 +55,7 @@ namespace GlobalSettings
     {
         private int workspaceEdgeLength = 8;
         public int WorkspaceEdgeLength { get => workspaceEdgeLength; set { workspaceEdgeLength = value; WorkspaceManager.Instance.Resize(value); } }
-        public float MoveTime = GlobalConsts.BasicMoveTime * 0.05f;
+        public float MoveTime = GlobalConsts.BasicMoveTime;
         
         public int MaxVMInstructionPerResume = 10;
         public int MaxVMThreadCount = 1;
