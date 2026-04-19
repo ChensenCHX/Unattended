@@ -2005,7 +2005,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 48}
+  m_SizeDelta: {x: 320, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &273483718
 MonoBehaviour:
@@ -2021,9 +2021,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_StringReference:
     m_TableReference:
-      m_TableCollectionName: 
+      m_TableCollectionName: GUID:fa62445edccc0c446843b40b8cbb3af1
     m_TableEntryReference:
-      m_KeyId: 0
+      m_KeyId: 18255026861506560
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -3751,7 +3751,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 48}
+  m_SizeDelta: {x: 320, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &481869144
 MonoBehaviour:
@@ -3767,9 +3767,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_StringReference:
     m_TableReference:
-      m_TableCollectionName: 
+      m_TableCollectionName: GUID:fa62445edccc0c446843b40b8cbb3af1
     m_TableEntryReference:
-      m_KeyId: 0
+      m_KeyId: 18255093446082560
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -11990,7 +11990,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 48}
+  m_SizeDelta: {x: 320, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1486155059
 MonoBehaviour:
@@ -12006,9 +12006,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_StringReference:
     m_TableReference:
-      m_TableCollectionName: 
+      m_TableCollectionName: GUID:fa62445edccc0c446843b40b8cbb3af1
     m_TableEntryReference:
-      m_KeyId: 0
+      m_KeyId: 18254946045657088
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -13212,7 +13212,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 48}
+  m_SizeDelta: {x: 320, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1576438804
 MonoBehaviour:
@@ -13228,9 +13228,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_StringReference:
     m_TableReference:
-      m_TableCollectionName: 
+      m_TableCollectionName: GUID:fa62445edccc0c446843b40b8cbb3af1
     m_TableEntryReference:
-      m_KeyId: 0
+      m_KeyId: 18255156062846976
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -16548,7 +16548,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 48}
+  m_SizeDelta: {x: 320, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1984295386
 MonoBehaviour:
@@ -16564,9 +16564,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_StringReference:
     m_TableReference:
-      m_TableCollectionName: 
+      m_TableCollectionName: GUID:fa62445edccc0c446843b40b8cbb3af1
     m_TableEntryReference:
-      m_KeyId: 0
+      m_KeyId: 18255200673464320
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -16574,7 +16574,19 @@ MonoBehaviour:
   m_FormatArguments: []
   m_UpdateString:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 908446764}
+        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+        m_MethodName: set_text
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   references:
     version: 2
     RefIds: []
@@ -16764,7 +16776,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 48}
+  m_SizeDelta: {x: 320, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2004737248
 MonoBehaviour:
@@ -16780,9 +16792,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_StringReference:
     m_TableReference:
-      m_TableCollectionName: 
+      m_TableCollectionName: GUID:fa62445edccc0c446843b40b8cbb3af1
     m_TableEntryReference:
-      m_KeyId: 0
+      m_KeyId: 18255230260084736
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
