@@ -1,4 +1,5 @@
-﻿using MoonSharp.Interpreter;
+﻿using DG.Tweening;
+using MoonSharp.Interpreter;
 using UnityEngine;
 using Items;
 using Utils;
@@ -8,6 +9,7 @@ namespace Workspace.Facilities.Impl
     public class FacilityEmpty : Facility, IPoolable<FacilityEmpty>
     {
         public override FacilityType Type { get; } = FacilityType.Empty;
+        public override Tween GrowthTween { get; } = null;
         public override double Progress { get; } = 1;
         public override int X => Mathf.RoundToInt(transform.position.x);
         public override int Y => Mathf.RoundToInt(transform.position.z);
@@ -15,8 +17,7 @@ namespace Workspace.Facilities.Impl
         public override DynValue InteractWith(CallbackArguments args) => DynValue.Nil;
         public override DynValue TryAddItem(ItemType item)
         {
-            // TODO:: maybe some item have effect
-            throw new System.NotImplementedException();
+            return DynValue.False;
         }
         public override void Harvest() { }
         public override DynValue CanHarvest() => DynValue.True;

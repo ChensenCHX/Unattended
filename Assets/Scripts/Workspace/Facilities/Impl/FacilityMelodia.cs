@@ -14,10 +14,12 @@ namespace Workspace.Facilities.Impl
     public class FacilityMelodia : Facility, IPoolable<FacilityMelodia>
     {
         public override FacilityType Type { get; } = FacilityType.Melodia;
+        public override Tween GrowthTween => growthTween;
         public override double Progress => progress;
         public override int X => Mathf.RoundToInt(transform.position.x);
         public override int Y => Mathf.RoundToInt(transform.position.z);
         
+        private Tween growthTween;
         private double progress = 0.0f;
         private static Queue<int> toneQueue = new();
         private Transform objTransform;
@@ -30,8 +32,7 @@ namespace Workspace.Facilities.Impl
         }
         public override DynValue TryAddItem(ItemType item)
         {
-            // TODO:: maybe some usage
-            throw new System.NotImplementedException();
+            return DefaultTryAddItem(item, objTransform);
         }
         private bool _CanHarvest() => progress >= 1.0f;
         public override DynValue CanHarvest() => _CanHarvest() ? DynValue.True : DynValue.False;
@@ -52,7 +53,7 @@ namespace Workspace.Facilities.Impl
             transform.position = new Vector3(x, 0, y);
             tone = Random.Range(0, 32);
             var time = Random.Range(GlobalConsts.MelodiaGrowTimeLowerBound, GlobalConsts.MelodiaGrowTimeUpperBound);
-            objTransform.DOScale(Vector3.one, time)
+            growthTween = objTransform.DOScale(Vector3.one, time)
                 .SetEase(Ease.Linear)
                 .OnUpdate(() => progress = objTransform.localScale.x)
                 .OnComplete(() => progress = 1.0f);

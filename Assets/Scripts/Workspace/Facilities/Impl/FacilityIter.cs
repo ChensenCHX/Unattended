@@ -15,10 +15,12 @@ namespace Workspace.Facilities.Impl
     public class FacilityIter : Facility, IPoolable<FacilityIter>
     {
         public override FacilityType Type { get; } = FacilityType.Iter;
+        public override Tween GrowthTween => growthTween;
         public override double Progress => progress;
         public override int X => Mathf.RoundToInt(transform.position.x);
         public override int Y => Mathf.RoundToInt(transform.position.z);
         
+        private Tween growthTween;
         private double progress = 0.0f;
         private Transform objTransform;
         private Dictionary<FacilityIter, bool> edgeList = new();
@@ -86,8 +88,7 @@ namespace Workspace.Facilities.Impl
         }
         public override DynValue TryAddItem(ItemType item)
         {
-            // TODO:: maybe some usage
-            throw new System.NotImplementedException();
+            return DefaultTryAddItem(item, objTransform);
         }
         private bool _CanHarvest() => progress >= 1.0f;
         public override DynValue CanHarvest() => _CanHarvest() ? DynValue.True : DynValue.False;
@@ -124,7 +125,7 @@ namespace Workspace.Facilities.Impl
                 other.edgeList.Add(this, false);
                 other.edgeWeight.Add(this, weight);
             }
-            objTransform.DOScale(Vector3.one, time)
+            growthTween = objTransform.DOScale(Vector3.one, time)
                 .SetEase(Ease.Linear)
                 .OnUpdate(() => progress = objTransform.localScale.x)
                 .OnComplete(() => progress = 1.0f);

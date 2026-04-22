@@ -14,10 +14,12 @@ namespace Workspace.Facilities.Impl
     public class FacilitySignum : Facility, IPoolable<FacilitySignum>
     {
         public override FacilityType Type { get; } = FacilityType.Signum;
+        public override Tween GrowthTween => growthTween;
         public override double Progress => progress;
         public override int X => Mathf.RoundToInt(transform.position.x);
         public override int Y => Mathf.RoundToInt(transform.position.z);
         
+        private Tween growthTween;
         private double progress = 0.0f;
         private Transform objTransform;
         private int height;
@@ -42,8 +44,7 @@ namespace Workspace.Facilities.Impl
         }
         public override DynValue TryAddItem(ItemType item)
         {
-            // TODO:: maybe some usage
-            throw new System.NotImplementedException();
+            return DefaultTryAddItem(item, objTransform);
         }
         private bool _CanHarvest() => progress >= 1.0f;
         public override DynValue CanHarvest() => _CanHarvest() ? DynValue.True : DynValue.False;
@@ -76,7 +77,7 @@ namespace Workspace.Facilities.Impl
             height = Random.Range(GlobalConsts.SignumHeightLowerBound, GlobalConsts.SignumHeightUpperBound);
             strength = Random.Range(GlobalConsts.SignumStrengthLowerBound, GlobalConsts.SignumStrengthUpperBound);
             var time = Random.Range(GlobalConsts.SignumGrowTimeLowerBound, GlobalConsts.SignumGrowTimeUpperBound);
-            objTransform.DOScale(Vector3.one, time)
+            growthTween = objTransform.DOScale(Vector3.one, time)
                 .SetEase(Ease.Linear)
                 .OnUpdate(() => progress = objTransform.localScale.x)
                 .OnComplete(() => progress = 1.0f);

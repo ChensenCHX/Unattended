@@ -11,18 +11,19 @@ namespace Workspace.Facilities.Impl
     public class FacilityEther : Facility, IPoolable<FacilityEther>
     {
         public override FacilityType Type { get; } = FacilityType.Ether;
+        public override Tween GrowthTween => growthTween;
         public override double Progress => progress;
         public override int X => Mathf.RoundToInt(transform.position.x);
         public override int Y => Mathf.RoundToInt(transform.position.z);
         
+        private Tween growthTween;
         private double progress = 0.0f;
         private Transform objTransform;
 
         public override DynValue InteractWith(CallbackArguments args) => DynValue.Nil;
         public override DynValue TryAddItem(ItemType item)
         {
-            // TODO:: maybe some item have effect
-            throw new System.NotImplementedException();
+            return DefaultTryAddItem(item, objTransform);
         }
 
         private bool _CanHarvest() => progress >= 1.0f;
@@ -47,21 +48,24 @@ namespace Workspace.Facilities.Impl
             transform.position = new Vector3(x, 0, y);
             var time = Random.Range(GlobalConsts.EtherGrowTimeLowerBound, GlobalConsts.EtherGrowTimeUpperBound);
 
-            StartCoroutine(InitCoroutine(time));
+            growthTween = objTransform.DOScale(Vector3.one, time)
+                .SetEase(Ease.Linear)
+                .OnUpdate(() =>
+                {
+                    // 每帧根据设施数量计算当前速度因子 timeMul
+                    int timeMul = 1 << GetNearFacilityCount();
+                    // 调整播放速度：timeMul 越大，timeScale 越小，动画越慢
+                    growthTween.timeScale = 1.0f / timeMul;
+                    progress = objTransform.localScale.x;
+                })
+                .OnComplete(() =>
+                {
+                    // 确保最终缩放精确为 1
+                    objTransform.localScale = Vector3.one;
+                    progress = 1.0f;
+                });
         }
-        private IEnumerator InitCoroutine(float basicGrowthTime)
-        {
-            while (progress < 1.0f)
-            {
-                yield return null;
-                var timeMul = 1 << GetNearFacilityCount();
-                
-                progress += Time.deltaTime / (timeMul * basicGrowthTime);
-                objTransform.localScale = Vector3.one * (float)progress;
-            }
-            progress = 1.0f;
-            objTransform.localScale = Vector3.one;
-        }
+
         
         private void OnDestroy() => objTransform.DOKill();
         

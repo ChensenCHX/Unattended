@@ -10,18 +10,19 @@ namespace Workspace.Facilities.Impl
     public class FacilityMana : Facility, IPoolable<FacilityMana>
     {
         public override FacilityType Type { get; } = FacilityType.Mana;
+        public override Tween GrowthTween => growthTween;
         public override double Progress => progress;
         public override int X => Mathf.RoundToInt(transform.position.x);
         public override int Y => Mathf.RoundToInt(transform.position.z);
         
+        private Tween growthTween;
         private double progress = 0.0f;
         private Transform objTransform;
 
         public override DynValue InteractWith(CallbackArguments args) => DynValue.Nil;
         public override DynValue TryAddItem(ItemType item)
         {
-            // TODO:: maybe some item have effect
-            throw new System.NotImplementedException();
+            return DefaultTryAddItem(item, objTransform);
         }
 
         private bool _CanHarvest() => progress >= 1.0f;
@@ -35,7 +36,7 @@ namespace Workspace.Facilities.Impl
         {
             transform.position = new Vector3(x, 0, y);
             var time = Random.Range(GlobalConsts.ManaGrowTimeLowerBound, GlobalConsts.ManaGrowTimeUpperBound);
-            objTransform.DOScale(Vector3.one, time)
+            growthTween = objTransform.DOScale(Vector3.one, time)
                 .SetEase(Ease.Linear)
                 .OnUpdate(() => progress = objTransform.localScale.x)
                 .OnComplete(() => progress = 1.0f);

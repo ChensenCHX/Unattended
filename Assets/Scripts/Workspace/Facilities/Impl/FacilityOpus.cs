@@ -14,10 +14,12 @@ namespace Workspace.Facilities.Impl
     public class FacilityOpus : Facility, IPoolable<FacilityOpus>
     {
         public override FacilityType Type { get; } = FacilityType.Opus;
+        public override Tween GrowthTween => growthTween;
         public override double Progress => progress;
         public override int X => Mathf.RoundToInt(transform.position.x);
         public override int Y => Mathf.RoundToInt(transform.position.z);
         
+        private Tween growthTween;
         private double progress = 0.0f;
         private Transform objTransform;
         private uint[,] lifegameMap;     // some cursed bit operate used here: bit0~29 as uint30, bit30 as last life state, bit31 as current life state
@@ -173,8 +175,7 @@ namespace Workspace.Facilities.Impl
         }
         public override DynValue TryAddItem(ItemType item)
         {
-            // TODO:: maybe some item have effect
-            throw new System.NotImplementedException();
+            return DefaultTryAddItem(item, objTransform);
         }
 
         private bool _CanHarvest() => progress >= 1.0f;
@@ -211,7 +212,7 @@ namespace Workspace.Facilities.Impl
             var edgeLength = GlobalInfos.Instance.WorkspaceEdgeLength;
             lifegameMap = new uint[edgeLength, edgeLength];
             lifegameMapSize = edgeLength;
-            objTransform.DOScale(Vector3.one, time)
+            growthTween = objTransform.DOScale(Vector3.one, time)
                 .SetEase(Ease.Linear)
                 .OnUpdate(() => progress = objTransform.localScale.x)
                 .OnComplete(() => progress = 1.0f);
