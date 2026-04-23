@@ -50,6 +50,10 @@ namespace GlobalSettings
         public const int OpusGenerateCountUpperBound = 32;
         public const int OpusGenerateCountLowerBound = 16;
 
+        public const int SignumInstructionLimitBoost = 50;
+        public const int MelodiaInstructionLimitBoost = 50;
+
+        public const float IterBotSpeedBoost = 2.0f;
     }
     public class GlobalInfos : Singleton<GlobalInfos>
     {

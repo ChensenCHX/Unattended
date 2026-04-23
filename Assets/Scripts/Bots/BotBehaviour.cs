@@ -1,5 +1,4 @@
-﻿using System;
-using DG.Tweening;
+﻿using DG.Tweening;
 using GlobalSettings;
 using Items;
 using MoonSharp.Interpreter;
@@ -27,11 +26,14 @@ namespace Bots
                 .DORotate(new Vector3(0, 1080, 0), GlobalInfos.Instance.MoveTime, RotateMode.FastBeyond360)
                 .SetEase(Ease.OutQuint)
                 .OnComplete(
-                    () => transform
-                        .DORotate(new Vector3(0, 360, 0), GlobalInfos.Instance.MoveTime, RotateMode.FastBeyond360)
-                        .SetEase(Ease.Linear)
-                        .SetLoops(-1, LoopType.Incremental) // 无限循环
-                    );
+                    () => {
+                        Tween tween = null;
+                        tween = transform
+                            .DORotate(new Vector3(0, 360, 0), GlobalInfos.Instance.MoveTime, RotateMode.FastBeyond360)
+                            .SetEase(Ease.Linear)
+                            .SetLoops(-1, LoopType.Incremental) // 无限循环
+                            .OnUpdate(() => tween.timeScale = GlobalInfos.Instance.TryConsumeItem(ItemType.Iter, 1) ? 1.0f : GlobalConsts.IterBotSpeedBoost);
+                    });
         }
         public void FadeOut()
         {
@@ -54,37 +56,44 @@ namespace Bots
             if (finalPosition.z < 0) finalPosition.z = GlobalInfos.Instance.WorkspaceEdgeLength;
             if (finalPosition.z >= GlobalInfos.Instance.WorkspaceEdgeLength) finalPosition.z = 0;
             
-            transform
+            Tween tween = null;
+            tween = transform
                 .DOMove(finalPosition, GlobalInfos.Instance.MoveTime)
                 .SetEase(Ease.Linear)
-                .OnComplete(() => BotIsWorking = false);
+                .OnComplete(() => BotIsWorking = false)
+                .OnUpdate(() => tween.timeScale = GlobalInfos.Instance.TryConsumeItem(ItemType.Iter, 1) ? 1.0f : GlobalConsts.IterBotSpeedBoost);
         }
         public DynValue CanHarvest() => BotIsWorking ? DynValue.False : WorkspaceManager.Instance.GetFacility(X, Y).CanHarvest();
         public void Harvest()
         {
             if (BotIsWorking) return; BotIsWorking = true;
-            DOTween.Sequence(transform)
+            
+            Sequence sequence = null;
+            sequence = DOTween.Sequence(transform)
                 .Append(transform.DOMove(Vector3.down, GlobalInfos.Instance.MoveTime / 2).SetRelative(true))
                 .AppendCallback(() => WorkspaceManager.Instance.GetFacility(X, Y).Harvest())
                 .Append(transform.DOMove(Vector3.up, GlobalInfos.Instance.MoveTime / 2).SetRelative(true))
-                .OnComplete(() => BotIsWorking = false);
+                .OnComplete(() => BotIsWorking = false)
+                .OnUpdate(() => sequence.timeScale = GlobalInfos.Instance.TryConsumeItem(ItemType.Iter, 1) ? 1.0f : GlobalConsts.IterBotSpeedBoost);
         }
         public DynValue TrySetFacility(FacilityType type)
         {
             if (BotIsWorking) return DynValue.False; BotIsWorking = true;
             var couldTryDo = FacilityFactory.CanBuildOn(type, WorkspaceManager.Instance.GetFacility(X, Y).Type);
             if (!couldTryDo) { BotIsWorking = false; return DynValue.False; }
-            DOTween.Sequence(transform)
+            
+            Sequence sequence = null;
+            sequence = DOTween.Sequence(transform)
                 .Append(transform.DOMove(Vector3.down, GlobalInfos.Instance.MoveTime / 2).SetRelative(true))
                 .AppendCallback(() => WorkspaceManager.Instance.TrySetFacility(X, Y, type))
                 .Append(transform.DOMove(Vector3.up, GlobalInfos.Instance.MoveTime / 2).SetRelative(true))
-                .OnComplete(() => BotIsWorking = false);
+                .OnComplete(() => BotIsWorking = false)
+                .OnUpdate(() => sequence.timeScale = GlobalInfos.Instance.TryConsumeItem(ItemType.Iter, 1) ? 1.0f : GlobalConsts.IterBotSpeedBoost);
             
             return DynValue.True;
         }
         public DynValue InteractWith(CallbackArguments ctx) => WorkspaceManager.Instance.GetFacility(X, Y).InteractWith(ctx);
         public DynValue TryAddItem(ItemType item) => WorkspaceManager.Instance.GetFacility(X, Y).TryAddItem(item);
-        
         
         private void OnDestroy() => transform.DOKill();
     }

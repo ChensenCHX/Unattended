@@ -100,7 +100,7 @@ namespace CodeExecutor
             return statementChanged;
         }
         /// 执行到断点 <returns>达到虚拟机单次指令上限前是否到达任意有效断点行(不包括当前行!)</returns>
-        public bool ResumeUntilBreakPoint()
+        public bool ResumeUntilBreakPoint(int maxInstructionCount)
         {
             var matchBreakPoint = false;
             luaVMInfoHook.Mode = InfoHookMode.LineBreakPoint;
@@ -108,7 +108,7 @@ namespace CodeExecutor
                 .ToList()
                 .Shuffle()
                 .ForEach(dictPair => {
-                    if (CouldResume()) ResumeWithStep(dictPair.Value, GlobalInfos.Instance.MaxVMInstructionPerResume);
+                    if (CouldResume()) ResumeWithStep(dictPair.Value, maxInstructionCount);
                     matchBreakPoint |= luaVMInfoHook.MatchedBreakpoint; 
                 });
             luaVMInfoHook.Mode = InfoHookMode.Normal;

@@ -3,11 +3,15 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Bots;
 using EditorUIAdaptor;
 using EditorUIAdaptor.Behaviours;
 using GlobalSettings;
 using InGameTextEditor;
+using Items;
 using Michsky.MUIP;
+using Unity.Mathematics;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 using Utils;
 
@@ -181,14 +185,32 @@ namespace CodeExecutor
                 case WorkingState.Running: 
                     if (luaVM.CouldResume())
                     {
-                        var matchedBreakpoint = luaVM.ResumeUntilBreakPoint();
+                        var execLimit = math.select(GlobalConsts.MaxVMInstructionPerResume,
+                            GlobalConsts.MaxVMInstructionPerResume + GlobalConsts.SignumInstructionLimitBoost, 
+                            GlobalInfos.Instance.TryConsumeItem(ItemType.Signum, BotManager.Instance.GetRemainBots()));
+                        var basicInstructionCount = GlobalInfos.Instance.MaxVMInstructionPerResume;
+                        var usableInstruction = math.select(basicInstructionCount, 
+                            basicInstructionCount + GlobalConsts.MelodiaInstructionLimitBoost,
+                            GlobalInfos.Instance.TryConsumeItem(ItemType.Melodia, BotManager.Instance.GetRemainBots()));
+                        var instructionCount = math.min(usableInstruction, execLimit);
+                        
+                        var matchedBreakpoint = luaVM.ResumeUntilBreakPoint(instructionCount);
                         if (matchedBreakpoint) PauseExecute();
                     }
                     break;
                 case WorkingState.Stepping: 
                     if (luaVM.CouldResume())
                     {
-                        var matchedLineChange = luaVM.ResumeUntilNextStmt(GlobalInfos.Instance.MaxVMInstructionPerResume);
+                        var execLimit = math.select(GlobalConsts.MaxVMInstructionPerResume,
+                            GlobalConsts.MaxVMInstructionPerResume + GlobalConsts.SignumInstructionLimitBoost, 
+                            GlobalInfos.Instance.TryConsumeItem(ItemType.Signum, BotManager.Instance.GetRemainBots()));
+                        var basicInstructionCount = GlobalInfos.Instance.MaxVMInstructionPerResume;
+                        var usableInstruction = math.select(basicInstructionCount, 
+                            basicInstructionCount + GlobalConsts.MelodiaInstructionLimitBoost,
+                            GlobalInfos.Instance.TryConsumeItem(ItemType.Melodia, BotManager.Instance.GetRemainBots()));
+                        var instructionCount = math.min(usableInstruction, execLimit);
+                        
+                        var matchedLineChange = luaVM.ResumeUntilNextStmt(instructionCount);
                         if (matchedLineChange) PauseExecute();
                     }
                     break;
