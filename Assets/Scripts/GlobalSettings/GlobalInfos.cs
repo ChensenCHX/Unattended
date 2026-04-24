@@ -71,6 +71,12 @@ namespace GlobalSettings
         public int SignumBaseYield = 1;
         public int IterBaseYield = 1;
         public int OpusBaseYield = 1;
+        
+        #region TechTreeLevel
+
+        // public bool ????Unlocked = false;
+        
+        #endregion
 
         public event Action<double> OnManaCountChange;
         private double manaCount;
