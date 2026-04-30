@@ -288,5 +288,67 @@ namespace MoonSharp.Interpreter.CoreLib
 		}
 	}
 
+	/// <summary>
+	/// Class implementing table Lua functions (remove some imba function)
+	/// </summary>
+	[MoonSharpModule(Namespace = "table")]
+	public class BasicTableModule
+	{
+		[MoonSharpModuleMethod]
+		public static DynValue unpack(ScriptExecutionContext executionContext, CallbackArguments args)
+		{
+			DynValue s = args.AsType(0, "unpack", DataType.Table, false);
+			DynValue vi = args.AsType(1, "unpack", DataType.Number, true);
+			DynValue vj = args.AsType(2, "unpack", DataType.Number, true);
+
+			int ii = vi.IsNil() ? 1 : (int)vi.Number;
+			int ij = vj.IsNil() ? GetTableLength(executionContext, s) : (int)vj.Number;
+
+			Table t = s.Table;
+
+			DynValue[] v = new DynValue[ij - ii + 1];
+
+			int tidx = 0;
+			for (int i = ii; i <= ij; i++)
+				v[tidx++] = t.Get(i);
+
+			return DynValue.NewTuple(v);
+		}
+
+		[MoonSharpModuleMethod]
+		public static DynValue pack(ScriptExecutionContext executionContext, CallbackArguments args)
+		{
+			Table t = new Table(executionContext.GetScript());
+			DynValue v = DynValue.NewTable(t);
+
+			for (int i = 0; i < args.Count; i++)
+				t.Set(i + 1, args[i]);
+
+			t.Set("n", DynValue.NewNumber(args.Count));
+
+			return v;
+		}
+
+		private static int GetTableLength(ScriptExecutionContext executionContext, DynValue vlist)
+		{
+			DynValue __len = executionContext.GetMetamethod(vlist, "__len");
+
+			if (__len != null)
+			{
+				DynValue lenv = executionContext.GetScript().Call(__len, vlist);
+
+				double? len = lenv.CastToNumber();
+
+				if (len == null)
+					throw new ScriptRuntimeException("object length is not a number");
+
+				return (int)len;
+			}
+			else
+			{
+				return (int)vlist.Table.Length;
+			}
+		}
+	}
 
 }

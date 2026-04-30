@@ -81,6 +81,7 @@ namespace MoonSharp.Interpreter
 		/// The "json" package (introduced by MoonSharp).
 		/// </summary>
 		Json = 0x10000,
+		BasicTable = 0x20000,
 
 
 		/// <summary>

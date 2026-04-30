@@ -13,7 +13,7 @@ namespace CodeExecutor
             CoreModules.TableIterators,
             CoreModules.Bit32 | CoreModules.Math,
             CoreModules.String,
-            CoreModules.Table,
+            CoreModules.BasicTable,
             CoreModules.LoadMethods,
             CoreModules.Metatables,
         };

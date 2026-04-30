@@ -74,7 +74,17 @@ namespace GlobalSettings
         
         #region TechTreeLevel
 
-        // public bool ????Unlocked = false;
+        public bool LanguageLevel1Unlocked = false;
+        public bool LanguageLevel2Unlocked = false;
+        public bool LanguageLevel3Unlocked = false;
+        public bool LanguageLevel4Unlocked = false;
+        public bool LanguageLevel5Unlocked = false;
+        public bool LanguageLevel6Unlocked = false;
+        public bool LanguageLevel7Unlocked = false;
+        public bool LanguageLevel8Unlocked = false;
+        
+        public bool SpeedLevel1Unlocked = false;
+        public bool SpeedLevel2Unlocked = false;
         
         #endregion
 
