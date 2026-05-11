@@ -57,7 +57,7 @@ namespace GlobalSettings
     }
     public class GlobalInfos : Singleton<GlobalInfos>
     {
-        private int workspaceEdgeLength = 8;
+        private int workspaceEdgeLength = 1;
         public int WorkspaceEdgeLength { get => workspaceEdgeLength; set { workspaceEdgeLength = value; WorkspaceManager.Instance.Resize(value); } }
         public float MoveTime = GlobalConsts.BasicMoveTime;
         
@@ -87,6 +87,12 @@ namespace GlobalSettings
         
         public bool SpeedLevel1Unlocked = false;
         public bool SpeedLevel2Unlocked = false;
+
+        public bool WorkspaceLevel1Unlocked { get => WorkspaceEdgeLength >=  2; set => WorkspaceEdgeLength = value ? Math.Max(WorkspaceEdgeLength,  2) : WorkspaceEdgeLength; }
+        public bool WorkspaceLevel2Unlocked { get => WorkspaceEdgeLength >=  4; set => WorkspaceEdgeLength = value ? Math.Max(WorkspaceEdgeLength,  4) : WorkspaceEdgeLength; }
+        public bool WorkspaceLevel3Unlocked { get => WorkspaceEdgeLength >=  8; set => WorkspaceEdgeLength = value ? Math.Max(WorkspaceEdgeLength,  8) : WorkspaceEdgeLength; }
+        public bool WorkspaceLevel4Unlocked { get => WorkspaceEdgeLength >= 16; set => WorkspaceEdgeLength = value ? Math.Max(WorkspaceEdgeLength, 16) : WorkspaceEdgeLength; }
+        public bool WorkspaceLevel5Unlocked { get => WorkspaceEdgeLength >= 32; set => WorkspaceEdgeLength = value ? Math.Max(WorkspaceEdgeLength, 32) : WorkspaceEdgeLength; }
         
         #endregion
 
