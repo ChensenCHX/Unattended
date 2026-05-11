@@ -90,14 +90,29 @@ namespace CodeExecutor
             var script = window.GetScript();
 
             // TODO:: create vm here with right status, this is only for test
-            luaVM = new LuaVM(new LuaVMConfigurer(8,
+            var coreModulesLevel = 0;
+            var globalInfos = GlobalInfos.Instance;
+            if (globalInfos.LanguageLevel8Unlocked) coreModulesLevel = 8;
+            else if (globalInfos.LanguageLevel7Unlocked) coreModulesLevel = 7;
+            else if (globalInfos.LanguageLevel6Unlocked) coreModulesLevel = 6;
+            else if (globalInfos.LanguageLevel5Unlocked) coreModulesLevel = 5;
+            else if (globalInfos.LanguageLevel4Unlocked) coreModulesLevel = 4;
+            else if (globalInfos.LanguageLevel3Unlocked) coreModulesLevel = 3;
+            else if (globalInfos.LanguageLevel2Unlocked) coreModulesLevel = 2;
+            else if (globalInfos.LanguageLevel1Unlocked) coreModulesLevel = 1;
+                
+            luaVM = new LuaVM(new LuaVMConfigurer(coreModulesLevel,
                     vm =>
                     {
-                        LuaVMAdaptorLib.AtomicCAS(vm);
-                        LuaVMAdaptorLib.CheckThread(vm);
-                        LuaVMAdaptorLib.GetCurrentThreadID(vm);
-                        LuaVMAdaptorLib.HangupCurrentThread(vm);
-                        LuaVMAdaptorLib.NewThread(vm);
+                        if (globalInfos.MutilThreadUnlocked)
+                        {
+                            LuaVMAdaptorLib.AtomicCAS(vm);
+                            LuaVMAdaptorLib.CheckThread(vm);
+                            LuaVMAdaptorLib.GetCurrentThreadID(vm);
+                            LuaVMAdaptorLib.HangupCurrentThread(vm);
+                            LuaVMAdaptorLib.NewThread(vm);
+                        }
+                        
                         LuaVMAdaptorLib.GetCurrentFrameCount(vm);
                         LuaVMAdaptorLib.GetPosition(vm);
                         LuaVMAdaptorLib.Move(vm);

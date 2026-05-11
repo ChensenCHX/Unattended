@@ -83,6 +83,8 @@ namespace GlobalSettings
         public bool LanguageLevel7Unlocked = false;
         public bool LanguageLevel8Unlocked = false;
         
+        public bool MutilThreadUnlocked = false;
+        
         public bool SpeedLevel1Unlocked = false;
         public bool SpeedLevel2Unlocked = false;
         

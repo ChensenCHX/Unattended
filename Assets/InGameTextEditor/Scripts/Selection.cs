@@ -118,7 +118,7 @@ namespace InGameTextEditor
         private Coroutine lastCoroutine;
         public void ReUse()
         {
-            StopCoroutine(lastCoroutine);
+            if (lastCoroutine != null) StopCoroutine(lastCoroutine);
             lastCoroutine = StartCoroutine(FadeOut());
         }
         

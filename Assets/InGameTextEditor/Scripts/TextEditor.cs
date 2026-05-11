@@ -2354,6 +2354,7 @@ namespace InGameTextEditor
 
         public void HighlightZone(Selection selectionZone)
         {
+            if (!gameObject.activeInHierarchy) return;
             Vector2 startPos = lines[selectionZone.start.lineIndex].GetCaretPosition(selectionZone.start);
             Vector2 endPos = lines[selectionZone.end.lineIndex].GetCaretPosition(selectionZone.end);
 
@@ -2389,6 +2390,7 @@ namespace InGameTextEditor
         private Dictionary<ValueTuple<int, int, int, int>, SelectionObject> selectionObjCache = new();
         void AddHighlightRect(Vector2 topLeft, Vector2 bottomRight)
         {
+            if (!gameObject.activeInHierarchy) return;
             var key = ValueTuple.Create((int)topLeft.x, (int)topLeft.y, (int)bottomRight.x, (int)bottomRight.y);
             if (selectionObjCache.TryGetValue(key, out var cacheObj))
             {

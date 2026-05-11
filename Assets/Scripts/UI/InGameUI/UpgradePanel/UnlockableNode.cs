@@ -149,11 +149,14 @@ namespace UI.InGameUI.UpgradePanel
         private bool isPointerInNode = false;
 
         private static readonly Color highlightColorAddon = new Color(0.05f, 0.05f, 0.05f, 1.00f);
-        
+
+        public void OnEnable() => background.color = CurrentColor;
+
         public void OnPointerEnter(PointerEventData eventData) { isPointerInNode = true; background.color = CurrentColor + highlightColorAddon; }
         public void OnPointerExit(PointerEventData eventData) { isPointerInNode = false; background.color = CurrentColor; }
         public void OnPointerClick(PointerEventData eventData)
         {
+            if (CurrentState == NodeState.Achieved) return;
             if (dependentConditions.Any(condition => !condition.GetValue())) return;
             var solved = true;
             costPairs.ForEach(cost => solved &= (GlobalInfos.Instance.GetItemCountByType(cost.type) >= cost.value));
