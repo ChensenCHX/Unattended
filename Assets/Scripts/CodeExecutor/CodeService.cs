@@ -202,11 +202,11 @@ namespace CodeExecutor
                     {
                         var execLimit = math.select(GlobalConsts.MaxVMInstructionPerResume,
                             GlobalConsts.MaxVMInstructionPerResume + GlobalConsts.SignumInstructionLimitBoost, 
-                            GlobalInfos.Instance.TryConsumeItem(ItemType.Signum, BotManager.Instance.GetRemainBots()));
+                            GlobalInfos.Instance.TryConsumeItem(ItemType.Signum, GlobalConsts.SignumBoostCost * BotManager.Instance.GetRemainBots()));
                         var basicInstructionCount = GlobalInfos.Instance.MaxVMInstructionPerResume;
                         var usableInstruction = math.select(basicInstructionCount, 
                             basicInstructionCount + GlobalConsts.MelodiaInstructionLimitBoost,
-                            GlobalInfos.Instance.TryConsumeItem(ItemType.Melodia, BotManager.Instance.GetRemainBots()));
+                            GlobalInfos.Instance.TryConsumeItem(ItemType.Melodia, GlobalConsts.MelodiaBoostCost * BotManager.Instance.GetRemainBots()));
                         var instructionCount = math.min(usableInstruction, execLimit);
                         
                         var matchedBreakpoint = luaVM.ResumeUntilBreakPoint(instructionCount);
@@ -218,11 +218,11 @@ namespace CodeExecutor
                     {
                         var execLimit = math.select(GlobalConsts.MaxVMInstructionPerResume,
                             GlobalConsts.MaxVMInstructionPerResume + GlobalConsts.SignumInstructionLimitBoost, 
-                            GlobalInfos.Instance.TryConsumeItem(ItemType.Signum, BotManager.Instance.GetRemainBots()));
+                            GlobalInfos.Instance.TryConsumeItem(ItemType.Signum, GlobalConsts.SignumBoostCost * BotManager.Instance.GetRemainBots()));
                         var basicInstructionCount = GlobalInfos.Instance.MaxVMInstructionPerResume;
                         var usableInstruction = math.select(basicInstructionCount, 
                             basicInstructionCount + GlobalConsts.MelodiaInstructionLimitBoost,
-                            GlobalInfos.Instance.TryConsumeItem(ItemType.Melodia, BotManager.Instance.GetRemainBots()));
+                            GlobalInfos.Instance.TryConsumeItem(ItemType.Melodia, GlobalConsts.MelodiaBoostCost * BotManager.Instance.GetRemainBots()));
                         var instructionCount = math.min(usableInstruction, execLimit);
                         
                         var matchedLineChange = luaVM.ResumeUntilNextStmt(instructionCount);

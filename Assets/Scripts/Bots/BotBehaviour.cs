@@ -32,7 +32,7 @@ namespace Bots
                             .DORotate(new Vector3(0, 360, 0), GlobalInfos.Instance.MoveTime, RotateMode.FastBeyond360)
                             .SetEase(Ease.Linear)
                             .SetLoops(-1, LoopType.Incremental) // 无限循环
-                            .OnUpdate(() => tween.timeScale = GlobalInfos.Instance.TryConsumeItem(ItemType.Iter, 1) ? 1.0f : GlobalConsts.IterBotSpeedBoost);
+                            .OnUpdate(() => tween.timeScale = GlobalInfos.Instance.TryConsumeItem(ItemType.Iter, GlobalConsts.IterBotSpeedBoostCost) ? 1.0f : GlobalConsts.IterBotSpeedBoost);
                     });
         }
         public void FadeOut()
@@ -61,7 +61,7 @@ namespace Bots
                 .DOMove(finalPosition, GlobalInfos.Instance.MoveTime)
                 .SetEase(Ease.Linear)
                 .OnComplete(() => BotIsWorking = false)
-                .OnUpdate(() => tween.timeScale = GlobalInfos.Instance.TryConsumeItem(ItemType.Iter, 1) ? 1.0f : GlobalConsts.IterBotSpeedBoost);
+                .OnUpdate(() => tween.timeScale = GlobalInfos.Instance.TryConsumeItem(ItemType.Iter, GlobalConsts.IterBotSpeedBoostCost) ? 1.0f : GlobalConsts.IterBotSpeedBoost);
         }
         public DynValue CanHarvest() => BotIsWorking ? DynValue.False : WorkspaceManager.Instance.GetFacility(X, Y).CanHarvest();
         public void Harvest()
@@ -74,7 +74,7 @@ namespace Bots
                 .AppendCallback(() => WorkspaceManager.Instance.GetFacility(X, Y).Harvest())
                 .Append(transform.DOMove(Vector3.up, GlobalInfos.Instance.MoveTime / 2).SetRelative(true))
                 .OnComplete(() => BotIsWorking = false)
-                .OnUpdate(() => sequence.timeScale = GlobalInfos.Instance.TryConsumeItem(ItemType.Iter, 1) ? 1.0f : GlobalConsts.IterBotSpeedBoost);
+                .OnUpdate(() => sequence.timeScale = GlobalInfos.Instance.TryConsumeItem(ItemType.Iter, GlobalConsts.IterBotSpeedBoostCost) ? 1.0f : GlobalConsts.IterBotSpeedBoost);
         }
         public DynValue TrySetFacility(FacilityType type)
         {
@@ -88,7 +88,7 @@ namespace Bots
                 .AppendCallback(() => WorkspaceManager.Instance.TrySetFacility(X, Y, type))
                 .Append(transform.DOMove(Vector3.up, GlobalInfos.Instance.MoveTime / 2).SetRelative(true))
                 .OnComplete(() => BotIsWorking = false)
-                .OnUpdate(() => sequence.timeScale = GlobalInfos.Instance.TryConsumeItem(ItemType.Iter, 1) ? 1.0f : GlobalConsts.IterBotSpeedBoost);
+                .OnUpdate(() => sequence.timeScale = GlobalInfos.Instance.TryConsumeItem(ItemType.Iter, GlobalConsts.IterBotSpeedBoostCost) ? 1.0f : GlobalConsts.IterBotSpeedBoost);
             
             return DynValue.True;
         }

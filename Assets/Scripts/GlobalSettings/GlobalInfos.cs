@@ -52,8 +52,11 @@ namespace GlobalSettings
 
         public const int SignumInstructionLimitBoost = 50;
         public const int MelodiaInstructionLimitBoost = 50;
+        public const double SignumBoostCost = 0.005;
+        public const double MelodiaBoostCost = 0.005;
 
         public const float IterBotSpeedBoost = 2.0f;
+        public const double IterBotSpeedBoostCost = 0.005;
     }
     public class GlobalInfos : Singleton<GlobalInfos>
     {
@@ -83,8 +86,11 @@ namespace GlobalSettings
         public bool LanguageLevel7Unlocked = false;
         public bool LanguageLevel8Unlocked = false;
         
-        public bool SpeedLevel1Unlocked = false;
-        public bool SpeedLevel2Unlocked = false;
+        public bool SpeedLevel1Unlocked { get => MoveTime <= GlobalConsts.BasicMoveTime /  2; set => MoveTime = value ? Math.Min(MoveTime, GlobalConsts.BasicMoveTime /  2) : MoveTime; }
+        public bool SpeedLevel2Unlocked { get => MoveTime <= GlobalConsts.BasicMoveTime /  4; set => MoveTime = value ? Math.Min(MoveTime, GlobalConsts.BasicMoveTime /  4) : MoveTime; }
+        public bool SpeedLevel3Unlocked { get => MoveTime <= GlobalConsts.BasicMoveTime /  8; set => MoveTime = value ? Math.Min(MoveTime, GlobalConsts.BasicMoveTime /  8) : MoveTime; }
+        public bool SpeedLevel4Unlocked { get => MoveTime <= GlobalConsts.BasicMoveTime / 16; set => MoveTime = value ? Math.Min(MoveTime, GlobalConsts.BasicMoveTime / 16) : MoveTime; }
+        public bool SpeedLevel5Unlocked { get => MoveTime <= GlobalConsts.BasicMoveTime / 32; set => MoveTime = value ? Math.Min(MoveTime, GlobalConsts.BasicMoveTime / 32) : MoveTime; }
 
         public bool WorkspaceLevel1Unlocked { get => WorkspaceEdgeLength >=  2; set => WorkspaceEdgeLength = value ? Math.Max(WorkspaceEdgeLength,  2) : WorkspaceEdgeLength; }
         public bool WorkspaceLevel2Unlocked { get => WorkspaceEdgeLength >=  4; set => WorkspaceEdgeLength = value ? Math.Max(WorkspaceEdgeLength,  4) : WorkspaceEdgeLength; }
@@ -123,7 +129,7 @@ namespace GlobalSettings
         private double opusCount;
         public double OpusCount { get => opusCount; set { opusCount = value; OnOpusCountChange?.Invoke(value); } }
         
-        public bool TryConsumeItem(ItemType type, int count) => type switch
+        public bool TryConsumeItem(ItemType type, double count) => type switch
         {
             ItemType.None           => false,
             ItemType.Mana           => ManaCount >= count && (ManaCount -= count) >= 0,

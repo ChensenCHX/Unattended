@@ -88,36 +88,36 @@ namespace UI.InGameUI.UpgradePanel
             var clampedPos = contentRect.anchoredPosition;
 
             // 计算需要调整的偏移量
-            // 左边缘子物体不能超出视口左边
+            // 左边缘子物体不能超出视口右边
             var leftEdge = GetLeftmostEdgeInWorldSpace();
             if (leftEdge.HasValue)
             {
-                var offset = viewMin.x - leftEdge.Value;
-                if (offset > 0)
+                var offset = viewMax.x - leftEdge.Value;
+                if (offset < 0)
                     clampedPos.x += offset;
             }
-            // 右边缘子物体不能超出视口右边
+            // 右边缘子物体不能超出视口左边
             var rightEdge = GetRightmostEdgeInWorldSpace();
             if (rightEdge.HasValue)
             {
-                var offset = viewMax.x - rightEdge.Value;
-                if (offset < 0)
+                var offset = viewMin.x - rightEdge.Value;
+                if (offset > 0)
                     clampedPos.x += offset;
             }
-            // 下边缘子物体不能超出视口下边
+            // 下边缘子物体不能超出视口上边
             var bottomEdge = GetBottommostEdgeInWorldSpace();
             if (bottomEdge.HasValue)
             {
-                var offset = viewMin.y - bottomEdge.Value;
-                if (offset > 0)
+                var offset = viewMax.y - bottomEdge.Value;
+                if (offset < 0)
                     clampedPos.y += offset;
             }
-            // 上边缘子物体不能超出视口上边
+            // 上边缘子物体不能超出视口下边
             var topEdge = GetTopmostEdgeInWorldSpace();
             if (topEdge.HasValue)
             {
-                var offset = viewMax.y - topEdge.Value;
-                if (offset < 0)
+                var offset = viewMin.y - topEdge.Value;
+                if (offset > 0)
                     clampedPos.y += offset;
             }
             

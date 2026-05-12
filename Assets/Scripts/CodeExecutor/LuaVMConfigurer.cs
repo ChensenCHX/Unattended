@@ -25,7 +25,7 @@ namespace CodeExecutor
 
         public CoreModules GetCoreModules() => STDList
             .Take(Math.Min(8, Math.Max(0, coreModulesLevel)))
-            .Aggregate((all, self) => all | self);
+            .Aggregate(CoreModules.None, (all, self) => all | self);
         public LuaVMConfigurer(int coreModulesLevel, 
             Action<LuaVM> onStartVM, Action<LuaVM> onDispose,
             Func<LuaVM, Coroutine, bool> onThreadSwitch)
