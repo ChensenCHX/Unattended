@@ -105,6 +105,12 @@ namespace GlobalSettings
         public bool ThreadCountLevel4Unlocked { get => MaxVMThreadCount >= 16; set => MaxVMThreadCount = value ? Math.Max(MaxVMThreadCount, 16) : MaxVMThreadCount; }
         public bool ThreadCountLevel5Unlocked { get => MaxVMThreadCount >= 32; set => MaxVMThreadCount = value ? Math.Max(MaxVMThreadCount, 32) : MaxVMThreadCount; }
 
+        public bool ExecuteLevel1Unlocked { get => MaxVMInstructionPerResume >=  20; set => MaxVMInstructionPerResume = value ? Math.Max(MaxVMInstructionPerResume,  20) : MaxVMInstructionPerResume; }
+        public bool ExecuteLevel2Unlocked { get => MaxVMInstructionPerResume >=  40; set => MaxVMInstructionPerResume = value ? Math.Max(MaxVMInstructionPerResume,  40) : MaxVMInstructionPerResume; }
+        public bool ExecuteLevel3Unlocked { get => MaxVMInstructionPerResume >=  60; set => MaxVMInstructionPerResume = value ? Math.Max(MaxVMInstructionPerResume,  60) : MaxVMInstructionPerResume; }
+        public bool ExecuteLevel4Unlocked { get => MaxVMInstructionPerResume >=  80; set => MaxVMInstructionPerResume = value ? Math.Max(MaxVMInstructionPerResume,  80) : MaxVMInstructionPerResume; }
+        public bool ExecuteLevel5Unlocked { get => MaxVMInstructionPerResume >= 100; set => MaxVMInstructionPerResume = value ? Math.Max(MaxVMInstructionPerResume, 100) : MaxVMInstructionPerResume; }
+
         #endregion
 
         public event Action<double> OnManaCountChange;
