@@ -83,8 +83,6 @@ namespace GlobalSettings
         public bool LanguageLevel7Unlocked = false;
         public bool LanguageLevel8Unlocked = false;
         
-        public bool MutilThreadUnlocked = false;
-        
         public bool SpeedLevel1Unlocked = false;
         public bool SpeedLevel2Unlocked = false;
 
@@ -94,6 +92,13 @@ namespace GlobalSettings
         public bool WorkspaceLevel4Unlocked { get => WorkspaceEdgeLength >= 16; set => WorkspaceEdgeLength = value ? Math.Max(WorkspaceEdgeLength, 16) : WorkspaceEdgeLength; }
         public bool WorkspaceLevel5Unlocked { get => WorkspaceEdgeLength >= 32; set => WorkspaceEdgeLength = value ? Math.Max(WorkspaceEdgeLength, 32) : WorkspaceEdgeLength; }
         
+        public bool MutilThreadUnlocked = false;
+        public bool ThreadCountLevel1Unlocked { get => MaxVMThreadCount >=  2; set => MaxVMThreadCount = value ? Math.Max(MaxVMThreadCount,  2) : MaxVMThreadCount; }
+        public bool ThreadCountLevel2Unlocked { get => MaxVMThreadCount >=  4; set => MaxVMThreadCount = value ? Math.Max(MaxVMThreadCount,  4) : MaxVMThreadCount; }
+        public bool ThreadCountLevel3Unlocked { get => MaxVMThreadCount >=  8; set => MaxVMThreadCount = value ? Math.Max(MaxVMThreadCount,  8) : MaxVMThreadCount; }
+        public bool ThreadCountLevel4Unlocked { get => MaxVMThreadCount >= 16; set => MaxVMThreadCount = value ? Math.Max(MaxVMThreadCount, 16) : MaxVMThreadCount; }
+        public bool ThreadCountLevel5Unlocked { get => MaxVMThreadCount >= 32; set => MaxVMThreadCount = value ? Math.Max(MaxVMThreadCount, 32) : MaxVMThreadCount; }
+
         #endregion
 
         public event Action<double> OnManaCountChange;
