@@ -121,6 +121,7 @@ namespace CodeExecutor
                         LuaVMAdaptorLib.Harvest(vm);
                         LuaVMAdaptorLib.TrySetFacility(vm);
                         LuaVMAdaptorLib.InteractWith(vm);
+						LuaVMAdaptorLib.GetItemCount(vm);
                         vm.GetLuaVM().Options.DebugPrint = SendPrintMessage;
                     }, vm => { }, LuaVMAdaptorLib.CheckCurrentBotIsBusy),
                 scriptName, script);

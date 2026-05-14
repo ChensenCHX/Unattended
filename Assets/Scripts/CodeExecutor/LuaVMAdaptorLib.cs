@@ -1,5 +1,6 @@
 ﻿using System;
 using Bots;
+using GlobalSettings;
 using Items;
 using MoonSharp.Interpreter;
 using UnityEngine;
@@ -182,6 +183,18 @@ namespace CodeExecutor
                     if (!haveBot) throw new ScriptRuntimeException("Fatal error: cannot find this thread's bot.");
                     
                     return bot.InteractWith(args);
+                }
+            ));
+        }
+        public static void GetItemCount(LuaVM luaVM)
+        {
+            var vm = luaVM.GetLuaVM();
+            vm.Globals.Set("get_item_count", DynValue.NewCallback((ctx, args) => 
+                {
+                    var type = args.AsInt(0, "get_item_count");
+                    if (!Enum.IsDefined(typeof(ItemType), type)) throw new ScriptRuntimeException($"Error: type '{type}' is not a valid type.");
+
+                    return DynValue.NewNumber(GlobalInfos.Instance.GetItemCountByType((ItemType)type));
                 }
             ));
         }
