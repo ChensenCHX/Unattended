@@ -9,7 +9,6 @@ using InGameTextEditor.Format;
 using InGameTextEditor.History;
 using InGameTextEditor.Operations;
 using TMPro;
-using UnityEditor.PackageManager.UI;
 using Utils;
 using Action = InGameTextEditor.History.Action;
 

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using UnityEditor.Localization.Plugins.Google.Columns;
 
 namespace Utils
 {

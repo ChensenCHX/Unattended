@@ -11,7 +11,6 @@ using InGameTextEditor;
 using Items;
 using Michsky.MUIP;
 using Unity.Mathematics;
-using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEngine;
 using Utils;
 
@@ -44,7 +43,7 @@ namespace CodeExecutor
 
         public WorkingState CurrentState { get; private set; } = WorkingState.Stopped;
         
-        public string GetSafeFileName() { fileOpCount++; return fileOpCount.ToString(); }
+        public string GetSafeFileName() { while (CheckScriptExist(fileOpCount.ToString())) fileOpCount++; return fileOpCount.ToString(); }
         public bool CheckScriptExist(string scriptName) => EditorWindowManager.Instance.FindWindow(scriptName) != null;
         public void RenameExistScript(string oldName, string newName)
         {
