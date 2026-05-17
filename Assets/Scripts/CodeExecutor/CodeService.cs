@@ -65,7 +65,7 @@ namespace CodeExecutor
                 .Append('@')
                 .Append(DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"))
                 .Append('@')
-                .Append(GUID.Generate())
+                .Append(Guid.NewGuid().ToString("D"))
                 .Append(".lua");
             
             Debug.Log(info.ScriptPath);
