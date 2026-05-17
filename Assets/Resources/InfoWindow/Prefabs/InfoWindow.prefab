@@ -1481,6 +1481,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rectTransform: {fileID: 752812678419315542}
   markdownRenderer: {fileID: 1042692513744052836}
+  localizeEvent: {fileID: 5419429751055838866}
 --- !u!1 &8474541839994539516
 GameObject:
   m_ObjectHideFlags: 0
@@ -2211,7 +2212,7 @@ PrefabInstance:
     - target: {fileID: 7014075990663868603, guid: a28b138044d5927459e496c43a1d0112,
         type: 3}
       propertyPath: m_Value
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7329607279066309352, guid: a28b138044d5927459e496c43a1d0112,
         type: 3}
@@ -2257,7 +2258,7 @@ PrefabInstance:
         type: 3}
       propertyPath: markzip
       value: 
-      objectReference: {fileID: 4900000, guid: b73fa2d81eb4cb043a93c8ea35e53089, type: 3}
+      objectReference: {fileID: 4900000, guid: d53cc1a062d763948b0ffc2f7609dff0, type: 3}
     - target: {fileID: 7738849549355189356, guid: a28b138044d5927459e496c43a1d0112,
         type: 3}
       propertyPath: defaultFont
@@ -2273,6 +2274,11 @@ PrefabInstance:
         type: 3}
       propertyPath: languageMarker
       value: en
+      objectReference: {fileID: 0}
+    - target: {fileID: 7738849549355189356, guid: a28b138044d5927459e496c43a1d0112,
+        type: 3}
+      propertyPath: tableGridWidth
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 7738849549355189356, guid: a28b138044d5927459e496c43a1d0112,
         type: 3}
@@ -2323,6 +2329,16 @@ PrefabInstance:
         type: 3}
       propertyPath: defaultTextColor.r
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7738849549355189356, guid: a28b138044d5927459e496c43a1d0112,
+        type: 3}
+      propertyPath: tableInnerCellPadding
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7738849549355189356, guid: a28b138044d5927459e496c43a1d0112,
+        type: 3}
+      propertyPath: visualElementScaleFactor
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 7858849777187961289, guid: a28b138044d5927459e496c43a1d0112,
         type: 3}
