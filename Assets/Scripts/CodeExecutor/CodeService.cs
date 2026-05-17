@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Bots;
+using CodeExecutor;
 using EditorUIAdaptor;
 using EditorUIAdaptor.Behaviours;
 using GlobalSettings;
@@ -11,7 +12,6 @@ using InGameTextEditor;
 using Items;
 using Michsky.MUIP;
 using Unity.Mathematics;
-using UnityEditor;
 using UnityEngine;
 using Utils;
 

@@ -300,9 +300,17 @@ namespace InGameTextEditor
                 {
                     lineNumber = value;
 
-                    // update line number text
+                    // update line number text and resize rect to fit new digit count
                     if (lineNumberGameObject != null)
-                        lineNumberGameObject.GetComponent<TextMeshProUGUI>().text = (lineNumber + 1).ToString();
+                    {
+                        var lineNumberString = (lineNumber + 1).ToString();
+                        var textComponent = lineNumberGameObject.GetComponent<TextMeshProUGUI>();
+                        textComponent.text = lineNumberString;
+
+                        var rectTransform = lineNumberGameObject.GetComponent<RectTransform>();
+                        rectTransform.sizeDelta = new Vector2(textEditor.CharacterWidth * (lineNumberString.Length + 1), textEditor.CharacterHeight);
+                        rectTransform.anchoredPosition = new Vector2(-textEditor.lineNumberMarginRight - rectTransform.sizeDelta.x, -textEditor.mainMarginTop + verticalOffset);
+                    }
                 }
             }
         }
