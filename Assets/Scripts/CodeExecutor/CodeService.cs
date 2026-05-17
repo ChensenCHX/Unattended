@@ -11,6 +11,7 @@ using InGameTextEditor;
 using Items;
 using Michsky.MUIP;
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEngine;
 using Utils;
 
@@ -30,6 +31,7 @@ namespace CodeExecutor
         
         private int fileOpCount = 0;
         private string scriptDirPath;
+        private string deletedDirPath;
         private LuaVM luaVM;
         private ScriptWatcher scriptWatcher;
         
@@ -38,6 +40,9 @@ namespace CodeExecutor
         protected override void OnAwake()
         {
             scriptDirPath = Path.Combine(Application.persistentDataPath, "Scripts");
+            deletedDirPath = Path.Combine(Application.persistentDataPath, "Deleted");
+            Directory.CreateDirectory(scriptDirPath);
+            Directory.CreateDirectory(deletedDirPath);
             scriptWatcher = new ScriptWatcher(scriptDirPath);
         }
 
@@ -53,6 +58,20 @@ namespace CodeExecutor
         {
             StopListeningOutsideChange(handler);
             if (LuaVMLoader.Instance.LoadedScripts.Contains(handler)) StopExecute();
+            var info = handler.SaveWindow();
+            var targetPath = new StringBuilder();
+            targetPath
+                .Append(Path.Combine(deletedDirPath, handler.GetWindowName()))
+                .Append('@')
+                .Append(DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"))
+                .Append('@')
+                .Append(GUID.Generate())
+                .Append(".lua");
+            
+            Debug.Log(info.ScriptPath);
+            Debug.Log(targetPath.ToString());
+            
+            File.Move(info.ScriptPath , targetPath.ToString());
         }
         
         public void AddBreakpoint(EditorWindowHandler windowHandler, int lineAt)
@@ -88,7 +107,7 @@ namespace CodeExecutor
             window.SetRunningState(WorkingState.Running);
             var script = window.GetScript();
 
-            // TODO:: create vm here with right status, this is only for test
+            // TODO:: create vm here with right status. p.s. basically done.
             var coreModulesLevel = 0;
             var globalInfos = GlobalInfos.Instance;
             if (globalInfos.LanguageLevel8Unlocked) coreModulesLevel = 8;
