@@ -125,6 +125,7 @@ namespace MarkdownToUnity.Runtime {
         {
             GameObject tableObject = new GameObject("TableElement", typeof(RectTransform));
             tableObject.transform.SetParent(parent);
+            tableObject.transform.localScale = Vector3.one;
 
             VerticalLayoutGroup tableLayout = tableObject.AddComponent<VerticalLayoutGroup>();
             tableLayout.childControlWidth = true;
@@ -145,6 +146,7 @@ namespace MarkdownToUnity.Runtime {
 
                 GameObject rowObject = new GameObject("TableRow", typeof(RectTransform));
                 rowObject.transform.SetParent(tableObject.transform);
+                rowObject.transform.localScale = Vector3.one;
 
                 HorizontalLayoutGroup rowLayout = rowObject.AddComponent<HorizontalLayoutGroup>();
                 rowLayout.childControlWidth = true;
@@ -157,6 +159,7 @@ namespace MarkdownToUnity.Runtime {
 
                     GameObject cellObject = new GameObject("TableCell", typeof(RectTransform));
                     cellObject.transform.SetParent(rowObject.transform);
+                    cellObject.transform.localScale = Vector3.one;
 
                     VerticalLayoutGroup cellLayout = cellObject.AddComponent<VerticalLayoutGroup>();
                     cellLayout.childControlWidth = true;
@@ -226,6 +229,7 @@ namespace MarkdownToUnity.Runtime {
         {
             var imageObject = new GameObject("ImageElement", typeof(RectTransform));
             imageObject.transform.SetParent(parent);
+            imageObject.transform.localScale = Vector3.one;
 
             var rawImage = imageObject.AddComponent<RawImage>();
             var aspectRatioFitter = imageObject.AddComponent<AspectRatioFitter>();
@@ -323,6 +327,7 @@ namespace MarkdownToUnity.Runtime {
         private static GameObject CreateVideoElement(UnityUIMarkdownTextAsset.VideoBlock videoBlock, Transform parent) {
             var videoObject = new GameObject("VideoElement", typeof(RectTransform));
             videoObject.transform.SetParent(parent);
+            videoObject.transform.localScale = Vector3.one;
 
             var videoPlayer = videoObject.AddComponent<VideoPlayer>();
             var rawImage = videoObject.AddComponent<RawImage>();
@@ -396,6 +401,8 @@ namespace MarkdownToUnity.Runtime {
             // Add a Button component to handle click events
             var pressObject = new GameObject("Button", typeof(RectTransform));
             pressObject.transform.SetParent(textComponent.transform);
+            pressObject.transform.localScale = Vector3.one;
+            pressObject.transform.localPosition = Vector3.zero;
 
             var button = pressObject.AddComponent<Button>();
             button.onClick.AddListener(() =>
@@ -416,10 +423,10 @@ namespace MarkdownToUnity.Runtime {
             button.targetGraphic = image;
 
             RectTransform rectTransform = pressObject.GetComponent<RectTransform>();
-            rectTransform.anchorMin = new Vector2(0, 0);
-            rectTransform.anchorMax = new Vector2(1, 1);
-            rectTransform.offsetMin = Vector2.zero;
-            rectTransform.offsetMax = Vector2.zero;
+            rectTransform.anchorMin = new Vector2(0, 0.5f);
+            rectTransform.anchorMax = new Vector2(0, 0.5f);
+            rectTransform.pivot = new Vector2(0, 0.5f);
+            rectTransform.sizeDelta = new Vector2(textComponent.preferredWidth, textComponent.preferredHeight);
 
             var layoutElement = textComponent.gameObject.AddComponent<LayoutElement>();
             layoutElement.preferredHeight = 40; 
