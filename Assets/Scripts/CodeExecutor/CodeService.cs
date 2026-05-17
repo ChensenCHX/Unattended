@@ -68,9 +68,6 @@ namespace CodeExecutor
                 .Append(Guid.NewGuid().ToString("D"))
                 .Append(".lua");
             
-            Debug.Log(info.ScriptPath);
-            Debug.Log(targetPath.ToString());
-            
             File.Move(info.ScriptPath , targetPath.ToString());
         }
         
@@ -316,7 +313,7 @@ public class ScriptWatcher
         if (!mainThreadQueue.TryDequeue(out var lastResult)) return;
         while (mainThreadQueue.TryDequeue(out var thisResult))
         {
-            if (thisResult.EventType == lastResult.EventType && thisResult.Name == lastResult.Name) { lastResult =  thisResult; return; }
+            if (thisResult.EventType == lastResult.EventType && thisResult.Name == lastResult.Name) { lastResult = thisResult; continue; }
             lastResult.Action.Invoke();
             lastResult = thisResult;
         }
@@ -338,6 +335,7 @@ public class ScriptWatcher
                 var textEditor = handler.GetTextEditor();
                 textEditor.CaretPosition = new TextPosition(0, 0);
                 textEditor.Text = File.ReadAllText(e.FullPath);
+                if (LuaVMLoader.Instance.LoadedScripts.Contains(handler)) CodeService.Instance.StopExecute();
             }
         });
     }
