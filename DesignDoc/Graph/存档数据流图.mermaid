@@ -1,0 +1,29 @@
+flowchart LR
+    subgraph SOURCE["数据源"]
+        EWM["EditorWindowManager"]
+        IWM["InfoWindowManager"]
+        GI["GlobalInfos"]
+        SET["系统设置"]
+    end
+
+    subgraph STORE["持久化存储"]
+        DIR[("Datas 目录")]
+        PREF[("PlayerPrefs")]
+    end
+
+    subgraph RESTORE["恢复目标"]
+        EWM_R["EditorWindowManager"]
+        IWM_R["InfoWindowManager"]
+        GI_R["GlobalInfos"]
+        SET_R["系统设置"]
+    end
+
+    EWM -->|"各窗口 SaveWindow#59; JsonConvert 序列化"| DIR
+    IWM -->|"各窗口 SaveWindow#59; JsonConvert 序列化"| DIR
+    GI -->|"JsonConvert.SerializeObject"| DIR
+    SET -->|"PlayerPrefs.Set*"| PREF
+
+    DIR -->|"Deserialize 反序列化#59; CreateEditorWindow 重建"| EWM_R
+    DIR -->|"Deserialize 反序列化#59; CreateWindow 重建"| IWM_R
+    DIR -->|"PopulateObject 填充"| GI_R
+    PREF -->|"启动时 Get* 读取"| SET_R

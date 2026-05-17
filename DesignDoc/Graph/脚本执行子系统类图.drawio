@@ -1,0 +1,208 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="executor-class" name="脚本执行子系统类图">
+    <mxGraphModel dx="229" dy="128" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="idbg" parent="1" style="swimlane;startSize=36;fillColor=#FFF9C4;strokeColor=#F9A825;fontStyle=1;fontSize=11;rounded=0;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&amp;lt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;&amp;lt;&lt;/span&gt;interface&amp;gt;&amp;gt;&lt;br&gt;IDebugger&lt;/font&gt;" vertex="1">
+          <mxGeometry height="100" width="220" x="330" y="750" as="geometry" />
+        </mxCell>
+        <mxCell id="idbg-m" parent="idbg" style="text;html=1;align=left;fontSize=9;spacingLeft=6;fillColor=none;strokeColor=none;" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;+ GetDebuggerCaps()&lt;br&gt;+ SetDebugService(svc)&lt;br&gt;+ SetSourceCode(src)&lt;br&gt;+ GetAction(ip, sref) : DebuggerAction&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="220" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="isl" parent="1" style="swimlane;startSize=36;fillColor=#FFF9C4;strokeColor=#F9A825;fontStyle=1;fontSize=11;rounded=0;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&amp;lt;&lt;span style=&quot;color: rgb(63, 63, 63); scrollbar-color: rgb(226, 226, 226) rgb(251, 251, 251);&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;interface&amp;gt;&lt;/span&gt;&amp;gt;&lt;br&gt;IScriptLoader&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="220" x="330" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="isl-m" parent="isl" style="text;html=1;align=left;fontSize=9;spacingLeft=6;fillColor=none;strokeColor=none;" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;+ LoadFile(name, ctx) : string&lt;/font&gt;" vertex="1">
+          <mxGeometry height="24" width="210" y="38" as="geometry" />
+        </mxCell>
+        <mxCell id="sw" parent="1" style="swimlane;startSize=26;fillColor=#FFF9C4;strokeColor=#F9A825;fontStyle=1;fontSize=11;rounded=0;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;ScriptWatcher&lt;/font&gt;" vertex="1">
+          <mxGeometry height="65" width="230" x="90" y="785" as="geometry" />
+        </mxCell>
+        <mxCell id="sw-a" parent="sw" style="text;html=1;align=left;fontSize=9;spacingLeft=6;fillColor=none;strokeColor=none;" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;- FileSystemWatcher watcher&lt;br&gt;- ConcurrentQueue queue&lt;/font&gt;" vertex="1">
+          <mxGeometry height="26" width="220" y="24.5" as="geometry" />
+        </mxCell>
+        <mxCell id="cs" parent="1" style="swimlane;startSize=26;fillColor=#FFF9C4;strokeColor=#F9A825;fontStyle=1;fontSize=11;rounded=0;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;CodeService&lt;/font&gt;" vertex="1">
+          <mxGeometry height="170" width="410" x="140" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-a" parent="cs" style="text;html=1;align=left;fontSize=9;spacingLeft=6;fillColor=none;strokeColor=none;" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;+ CurrentState : WorkingState&lt;br&gt;+ DisableFileSync : bool&lt;/font&gt;" vertex="1">
+          <mxGeometry height="30" width="350" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="cs-m" parent="cs" style="text;html=1;align=left;fontSize=9;spacingLeft=6;fillColor=none;strokeColor=none;" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;+ StartExecute(scriptName)&lt;br&gt;+ StopExecute()&lt;br&gt;+ AddBreakpoint(h, line)&lt;br&gt;+ RemoveBreakpoint(h, line)&lt;br&gt;+ GetScriptFilePath(h) : string&lt;br&gt;+ SaveScriptFile(h)&lt;br&gt;- Update() 每帧驱动&lt;/font&gt;" vertex="1">
+          <mxGeometry height="82" width="350" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="12" parent="cs" style="line;strokeWidth=1;html=1;fillColor=#fff2cc;strokeColor=light-dark(#f9a825, #6d5100);" value="" vertex="1">
+          <mxGeometry height="10" width="410" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="lvm" parent="1" style="swimlane;startSize=26;fillColor=#FFF9C4;strokeColor=#F9A825;fontStyle=1;fontSize=11;rounded=0;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;LuaVM&lt;/font&gt;" vertex="1">
+          <mxGeometry height="220" width="410" x="140" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="lvm-a" parent="lvm" style="text;html=1;align=left;fontSize=9;spacingLeft=6;fillColor=none;strokeColor=none;" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;- Script luaVM&lt;br&gt;- LuaVMInfoHook hook&lt;br&gt;- LuaVMConfigurer configurer&lt;br&gt;- Dictionary userThreads&lt;br&gt;+ State : RunningState&lt;/font&gt;" vertex="1">
+          <mxGeometry height="65" width="350" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="lvm-m" parent="lvm" style="text;html=1;align=left;fontSize=9;spacingLeft=6;fillColor=none;strokeColor=none;" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;+ AttachThread(coro, x, y)&lt;br&gt;+ ResumeUntilLimit(max)&lt;br&gt;+ ResumeUntilNextStmt(max) : bool&lt;br&gt;+ ResumeUntilBreakPoint(max) : bool&lt;br&gt;+ AddBreakPoint(name, line)&lt;br&gt;+ RemoveBreakPoint(name, line)&lt;br&gt;+ SetBreakPoints(name, lines)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="85" width="350" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="11" parent="lvm" style="line;strokeWidth=1;html=1;fillColor=#fff2cc;strokeColor=light-dark(#f9a825, #6d5100);" value="" vertex="1">
+          <mxGeometry height="10" width="410" y="105" as="geometry" />
+        </mxCell>
+        <mxCell id="lvc" parent="1" style="swimlane;startSize=26;fillColor=#FFF9C4;strokeColor=#F9A825;fontStyle=1;fontSize=11;rounded=0;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;LuaVMConfigurer&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="180" x="140" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="lvc-a" parent="lvc" style="text;html=1;align=left;fontSize=9;spacingLeft=6;fillColor=none;strokeColor=none;" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;- int coreModulesLevel&lt;/font&gt;" vertex="1">
+          <mxGeometry height="16" width="200" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="lvc-m" parent="lvc" style="text;html=1;align=left;fontSize=9;spacingLeft=6;fillColor=none;strokeColor=none;" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;+ OnThreadSwitch(vm, thread)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="18" width="200" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="10" parent="lvc" style="line;strokeWidth=1;html=1;fillColor=#fff2cc;strokeColor=light-dark(#f9a825, #6d5100);" value="" vertex="1">
+          <mxGeometry height="10" width="180" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="lva" parent="1" style="swimlane;startSize=36;fillColor=#FFF9C4;strokeColor=#F9A825;fontStyle=1;fontSize=11;rounded=0;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&amp;lt;&amp;lt;static&amp;gt;&amp;gt;&lt;br&gt;LuaVMAdaptorLib&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="220" x="330" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="lva-m" parent="lva" style="text;html=1;align=left;fontSize=9;spacingLeft=6;fillColor=none;strokeColor=none;" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;+ NewThread / AtomicCAS / Move&lt;br&gt;+ Build / Harvest / UseItem&lt;br&gt;+ GetPosition / InteractWith&lt;/font&gt;" vertex="1">
+          <mxGeometry height="34" width="210" y="38" as="geometry" />
+        </mxCell>
+        <mxCell id="lvh" parent="1" style="swimlane;startSize=26;fillColor=#FFF9C4;strokeColor=#F9A825;fontStyle=1;fontSize=11;rounded=0;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;LuaVMInfoHook&lt;/font&gt;" vertex="1">
+          <mxGeometry height="150" width="230" x="90" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="lvh-a" parent="lvh" style="text;html=1;align=left;fontSize=9;spacingLeft=6;fillColor=none;strokeColor=none;" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;- Dictionary codes&lt;br&gt;- DebugService dbgSvc&lt;/font&gt;" vertex="1">
+          <mxGeometry height="28" width="230" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="lvh-m" parent="lvh" style="text;html=1;align=left;fontSize=9;spacingLeft=6;fillColor=none;strokeColor=none;" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;+ Mode : InfoHookMode&lt;br&gt;+ MatchedBreakpoint : bool&lt;br&gt;+ StatementChanged : bool&lt;br&gt;+ AddLineBreakpoint(name, line)&lt;br&gt;+ RefreshState(thread)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="34" width="230" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="lvl" parent="1" style="swimlane;startSize=26;fillColor=#FFF9C4;strokeColor=#F9A825;fontStyle=1;fontSize=11;rounded=0;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;LuaVMLoader&lt;/font&gt;" vertex="1">
+          <mxGeometry height="70" width="220" x="330" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="lvl-a" parent="lvl" style="text;html=1;align=left;fontSize=9;spacingLeft=6;fillColor=none;strokeColor=none;" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;+ LoadedScripts&lt;/font&gt;" vertex="1">
+          <mxGeometry height="16" width="210" y="28" as="geometry" />
+        </mxCell>
+        <mxCell id="lvl-m" parent="lvl" style="text;html=1;align=left;fontSize=9;spacingLeft=6;fillColor=none;strokeColor=none;" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;+ LoadFile(name, ctx) : string&lt;/font&gt;" vertex="1">
+          <mxGeometry height="18" width="210" y="44" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="isl" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#333333;endArrow=block;endFill=0;endSize=12;exitX=1;exitY=0.25;entryX=1;entryY=0.75;entryDx=0;entryDy=0;exitDx=0;exitDy=0;" target="lvl">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="610" y="685" />
+              <mxPoint x="610" y="633" />
+              <mxPoint x="550" y="633" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="lvm" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#333333;endArrow=open;endSize=10;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" target="cs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="13" connectable="0" parent="e3" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;span style=&quot;font-size: 12px;&quot;&gt;创建/驱动&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.1294" y="-2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="cs" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#333333;endArrow=open;endSize=10;exitX=0;exitY=0.5;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" target="sw">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="40" y="105" />
+              <mxPoint x="40" y="801" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="25" connectable="0" parent="e4" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;文件&lt;/font&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-size: 12px; background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;监听&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.9118" y="1" as="geometry">
+            <mxPoint x="-12" y="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="lvm" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#333333;endArrow=open;endSize=10;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" target="10">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="100" y="330" />
+              <mxPoint x="100" y="525" />
+            </Array>
+            <mxPoint x="150" y="310" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="15" connectable="0" parent="e5" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;div&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;&lt;span style=&quot;color: rgb(63, 63, 63);&quot;&gt;配置&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;模块&lt;/font&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.1762" y="1" as="geometry">
+            <mxPoint y="15" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="lvm-a" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#333333;endArrow=open;endSize=10;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" target="lvh">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="60" y="301" />
+              <mxPoint x="60" y="617" />
+            </Array>
+            <mxPoint x="130" y="330" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="20" connectable="0" parent="e6" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;挂载&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;调试器&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.8149" y="1" as="geometry">
+            <mxPoint x="-1" y="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="lvm" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#333333;endArrow=open;endSize=10;entryX=1;entryY=0.25;entryDx=0;entryDy=0;" target="lva">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="570" y="330" />
+              <mxPoint x="570" y="493" />
+            </Array>
+            <mxPoint x="550" y="340" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="17" connectable="0" parent="e7" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;注入&lt;br&gt;API&lt;/font&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.3706" y="1" as="geometry">
+            <mxPoint y="27" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="lvm" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#333333;endArrow=open;endSize=10;exitX=1;exitY=0.25;exitDx=0;exitDy=0;" target="lvl">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="590" y="295" />
+              <mxPoint x="590" y="590" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="16" connectable="0" parent="e8" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;脚本&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;加载&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.8972" y="-1" as="geometry">
+            <mxPoint x="21" y="34" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="lvh" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#333333;endArrow=open;endSize=10;exitX=0;exitY=0.5;" target="cs">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="50" y="655" />
+              <mxPoint x="50" y="140" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="23" connectable="0" parent="e9" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;执行&lt;/font&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-size: 12px; background-color: light-dark(#ffffff, var(--ge-dark-color, #121212));&quot;&gt;信息&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.8826" y="1" as="geometry">
+            <mxPoint x="-12" y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="lvl" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#333333;endArrow=open;endSize=10;exitX=1;exitY=0.5;entryX=1;entryY=0.5;" target="cs">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="610" y="615" />
+              <mxPoint x="610" y="105" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="18" connectable="0" parent="e10" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;解析&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;脚本源&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.3533" as="geometry">
+            <mxPoint y="11" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="14" edge="1" parent="1" source="idbg" style="edgeStyle=orthogonalEdgeStyle;html=1;dashed=1;strokeColor=#333333;endArrow=block;endFill=0;endSize=12;" target="lvh">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="205" y="770" />
+            </Array>
+            <mxPoint x="370" y="820" as="sourcePoint" />
+            <mxPoint x="380" y="800" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
