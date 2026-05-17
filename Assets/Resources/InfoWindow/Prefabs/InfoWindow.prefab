@@ -1355,6 +1355,7 @@ GameObject:
   - component: {fileID: 752812678419315542}
   - component: {fileID: 2209096939136513018}
   - component: {fileID: 2735822484236573358}
+  - component: {fileID: 5419429751055838866}
   - component: {fileID: 3257392729731267929}
   m_Layer: 6
   m_Name: InfoWindow
@@ -1426,6 +1427,46 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5419429751055838866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8071341930939248335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_StringReference:
+    m_TableReference:
+      m_TableCollectionName: GUID:fa62445edccc0c446843b40b8cbb3af1
+    m_TableEntryReference:
+      m_KeyId: 28756426427072512
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  m_FormatArguments: []
+  m_UpdateString:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3257392729731267929}
+        m_TargetAssemblyTypeName: UI.InGameUI.InfoWindow.InfoWindowHandler, Assembly-CSharp
+        m_MethodName: SetLanguageMarker
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  references:
+    version: 2
+    RefIds: []
 --- !u!114 &3257392729731267929
 MonoBehaviour:
   m_ObjectHideFlags: 0

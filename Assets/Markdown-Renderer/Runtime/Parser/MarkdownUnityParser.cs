@@ -138,7 +138,7 @@ namespace MarkdownToUnity.Runtime
 
                 if (languageMarker != null && !markdownFileEntry.FullName.Contains(languageMarker))
                 {
-                    Debug.LogError("No matching translation markdown file found in the ZIP archive.");
+                    Debug.LogError($"No matching translation({languageMarker}) markdown file found in the ZIP archive.");
                 }
             }
             else if (!markBook)
